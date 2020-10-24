@@ -1,0 +1,35 @@
+@page
+@model SinglePage<StandardPage>
+@{ ViewData["Title"] = Model.Data.Title;
+    var hasImage = Model.Data.PrimaryImage.HasValue;
+    @if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    {
+        Model.Data.Excerpt = string.Empty;
+    }
+}
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({ @Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400)) })" : "")>
+    <div class="dimmer"></div>
+    <div class="@(hasImage ? "container" : "") text-center">
+        <h1>@Model.Data.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
+        {
+<div class="row justify-content-center">
+    <div class="col-lg-8 lead">
+        @Html.Raw(Model.Data.Excerpt)
+    </div>
+</div>}
+    </div>
+</header>
+<main>
+    @foreach (var block in Model.Data.Blocks)
+    {
+<div class="block @block.CssName()">
+    <div class="container">
+        @Html.DisplayFor(m => block, block.GetType().Name)
+    </div>
+</div>}
+</main>
+@section head
+{
+    @WebApp.MetaTags(Model.Data, generator: false, opengraph: false)
+}

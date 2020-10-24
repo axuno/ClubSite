@@ -1,0 +1,72 @@
+@import './../bs_custom';
+
+body {
+    font-family: Lato,sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: Raleway,sans-serif;
+}
+article > header {  // blog teasers
+    // background-color: $body-bg;
+}
+blockquote {
+    color: #999;
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin: 3rem auto;
+    width: 80%;
+}
+.navbar-brand {
+    small {
+        font-family: Lato,sans-serif;
+        font-size: 75%;
+        font-weight: 400;
+        margin-left: .5rem;
+    }
+}
+.lead {
+    font-size: 1.2rem;
+}
+
+
+/**************************************************************
+* START: Override Bootstrap
+**************************************************************/
+
+.form-control {
+    font-size: 1.25rem;
+    padding: 0.25rem 0.5rem;
+}
+
+label {
+    //font-size: 1rem;
+    font-weight: normal;
+    color: theme-color("primary");
+    background-color: transparent;
+    margin-top: .75rem;
+    margin-bottom: .25rem;
+    display: block;
+}
+
+/**************************************************************
+* END: Override Bootstrap
+**************************************************************/
+
+.validation-summary-errors {
+    margin: 13px 0;
+    padding: 10px 10px 10px 10px;
+
+    & ul {
+        padding-left: 1rem !important;
+        margin-bottom: 0 !important;
+    }
+
+    & div:first-of-type {
+        margin-left: 1rem !important;
+    }
+}
+
+// class "validation-summary-valid" is set programmatically for "no errors"
+.validation-summary-valid {
+    display: none !important;
+}

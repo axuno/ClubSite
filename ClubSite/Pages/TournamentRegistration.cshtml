@@ -1,0 +1,128 @@
+﻿@page "/turnier-anmeldung"
+@model ClubSite.Pages.TournamentRegistrationModel
+
+@{
+    ViewData["Title"] = "Turnier-Registrierung";
+}
+
+<h1>Angemeldete Teams</h1>
+<table class="table-responsive">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].Guid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].TournamentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].Rank)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].TeamName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].ClubName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].Nickname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].Fone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].Message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].IsStandByRegistration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].RegisteredOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].RegCanceledOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentRegistration[0].ModifiedOn)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.TournamentRegistration) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Guid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TournamentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rank)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TeamName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClubName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nickname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsStandByRegistration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisteredOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegCanceledOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedOn)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

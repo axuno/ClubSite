@@ -1,0 +1,14 @@
+@using Piranha.Extend.Blocks
+@model ClubSite.Models.PersonProfileBlock
+<h3 class="h3">@Model.Title</h3>
+<div class="d-flex flex-row py-0">
+    @{ foreach (var item in Model.Items)
+                    {
+                        if (item is ImageBlock i)
+                        {
+        <div class="pl-0 pr-2 pt-2 pb-2"><img src="@Url.Content(WebApp.Media.ResizeImage(i, 100))" class="img-fluid"></div> }
+                        else if (item is HtmlBlock h)
+                        {
+        <div class="pl-0 pr-2 pt-2 pb-2">@Html.Raw(h.Body) </div>}
+                    } }
+</div>

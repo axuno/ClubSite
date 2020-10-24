@@ -1,0 +1,69 @@
+@page
+@model SuperPageModel
+@{
+    ViewData["Title"] = Model.Data.Title;
+}
+@section head
+{
+    @WebApp.MetaTags(Model.Data)
+}
+@{
+    var hasImage = Model.Data.PrimaryImage.HasValue;
+}
+    
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({ @Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400)) })" : "")>
+    <div class="dimmer"></div>
+    <div class="container text-center">
+        <h1>@Model.Data.Title</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
+        {
+<div class="row justify-content-center">
+    <div class="col-lg-8 lead">
+        @Html.Raw(Model.Data.Excerpt)
+    </div>
+</div>}
+    </div>
+</header>
+<div class="container body-container">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-xs-12">
+            @Html.DisplayFor(m => m.Data.Blocks)
+        </div>
+    </div>
+</div>
+
+@if (Model.Data.AllFields != null)
+{
+    <div class="container latest-post">
+        <div class="row">
+            <div class="col text-center">
+                <strong>@Html.Raw(Model.Data.AllFields.Markdown.ToHtml())</strong>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Data.Links != null)
+{
+    <div class="container latest-post">
+        <div class="row">
+            <div class="col text-center">
+                @{
+                    foreach (var link in Model.Data.Links)
+                    {
+                        <div><a href="@link.ButtonLink.Page.Permalink" class="btn btn-primary">@link.ButtonText.Value</a></div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<div>Some Text: @Model.Data.AllFields?.Text</div>
+<div>Some Number: @Model.Data.AllFields?.Number.Value</div>
+<div>Some Date: @Model.Data.AllFields?.Date.Value?.ToLongDateString()</div>
+<div>Content from another Document: @Html.Raw(Model.Data.AllFields?.Page.Page.Excerpt)</div>
+
+
+
+

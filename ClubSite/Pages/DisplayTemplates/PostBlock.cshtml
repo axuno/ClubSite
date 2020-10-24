@@ -1,0 +1,26 @@
+@model Piranha.Extend.Blocks.PostBlock
+@{
+    @if (string.IsNullOrWhiteSpace(Model.Body.Post.Excerpt.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    {
+        Model.Body.Post.Excerpt = string.Empty;
+    }
+}
+@if (Model.Body.Post != null)
+{
+    <div class="card">
+        @if (Model.Body.Post.PrimaryImage.HasValue)
+        {
+            <a href="@Model.Body.Post.Permalink">
+                <img class="card-img-top" src="@Url.Content(WebApp.Media.ResizeImage(Model.Body.Post.PrimaryImage, 540, 200))">
+            </a>
+        }
+        <div class="card-body">
+            <h5>@Model.Body.Post.Title</h5>
+            @if (!string.IsNullOrWhiteSpace(Model.Body.Post.Excerpt))
+            {
+                <p>@Html.Raw(Model.Body.Post.Excerpt)</p>
+            }
+            <a href="@Model.Body.Post.Permalink" class="btn btn-sm btn-primary">Mehr dazu</a>
+        </div>
+    </div>
+}

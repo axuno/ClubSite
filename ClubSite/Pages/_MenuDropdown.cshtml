@@ -1,0 +1,19 @@
+﻿@model Piranha.Models.SitemapItem
+@* The model contains the parent menu item *@
+@if (Model != null && !Model.IsHidden && Model.Items.Count != 0)
+{
+    <div class="dropdown-menu dropdown-menu-right" style="margin-top: 0.0rem">
+        @foreach (var childNode in Model.Items)
+        {
+            if (!childNode.IsHidden && childNode.Items.Count != 0)
+            {
+                <a href="@childNode.Permalink" class="dropdown-item@(childNode.Id == WebApp.PageId || childNode.HasChild(WebApp.PageId) ? " active" : "")">@childNode.MenuTitle</a>
+            }
+            else
+            {
+                <a href="@childNode.Permalink" class="dropdown-item@(childNode.Id == WebApp.PageId || childNode.HasChild(WebApp.PageId) ? " active" : "")">@childNode.MenuTitle</a>
+                <partial name="_MenuDropdown" model="@childNode"/> @* recursion *@
+            }
+        }
+    </div>
+}

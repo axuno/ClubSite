@@ -1,0 +1,108 @@
+// Bootstrap dependencies - javascript and fonts must be copied manually!!
+// font-awesome is included by site.scss
+// Helpful: https://pikock.github.io/bootstrap-magic/app/index.html#!/editor
+//
+@import '../../node_modules/tether/src/css/tether.sass';
+
+// Always required for Bootstrap
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+// Bootstrap overrides
+//
+// Copy variables from `_variables.scss` to this file to override default values
+// without modifying source files.
+
+//
+// Color system
+//
+
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #868e96;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000;
+
+$blue: #000BE2;
+$indigo: #00D7E2;
+$purple: #180088;
+$pink: #E20079;
+$red: #E2000B;
+$orange: #E26600;
+$yellow: #E2D700;
+$green: #00E266;
+$teal: #00E266;
+$cyan: #00D7E2;
+
+
+// Reassign color vars to semantic color scheme
+$theme-colors: ( primary: $blue, secondary: #5B506D, success: $green, info: $blue, warning: $orange, danger: $red, light: #E0D5D9, dark: #282840 );
+
+// Dropdowns
+//
+// Dropdown menu container and contents.
+
+//$dropdown-link-hover-bg: lighten($pink, 20%);
+$dropdown-link-hover-bg: darken($dropdown-link-hover-bg, 20%);
+
+$dropdown-link-active-bg: theme-color("primary");
+
+// Headings
+//
+$headings-color: $pink;
+
+
+// Body
+//
+// Settings for the `<body>` element.
+$body-bg: lighten(theme-color("dark"), 70%);
+$body-color: theme-color("dark");
+
+
+// Borders
+$border-radius: 0.4rem;
+
+// Links
+//
+// Style anchor elements.
+
+$link-color: $pink;
+$link-decoration: none;
+$link-hover-color: $link-color;
+$link-hover-decoration: underline;
+
+// Forms
+
+//$input-color: theme-color("primary");
+//$input-focus-color: theme-color("primary");
+$input-focus-bg: lighten(theme-color("primary"), 53%);
+
+// Navbar
+//
+// Navbar dark
+$navbar-dark-color: rgba(theme-color("light"), 0.75);
+$navbar-dark-hover-color: rgba(theme-color("light"), 0.9);
+$navbar-dark-active-color: rgba(theme-color("light"), 1);
+$navbar-dark-disabled-color: rgba(theme-color("light"), 0.25);
+$navbar-dark-toggler-border-color: rgba(theme-color("light"), 0.75);
+// Dropdowns
+//
+// Dropdown menu container and contents.
+$dropdown-link-hover-bg: lighten(theme-color("primary"), 40%);
+$dropdown-link-active-bg: theme-color("primary");
+$dropdown-link-active-color: rgba(theme-color("light"), 1);
+$dropdown-link-color: theme-color("primary");
+$dropdown-link-hover-color: $dropdown-link-color;
+$dropdown-item-padding-x: .75rem;
+$dropdown-bg: $body-bg;
+
+// Tables
+//
+$table-accent-bg: $body-bg;  // striped table background
