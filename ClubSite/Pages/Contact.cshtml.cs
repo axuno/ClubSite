@@ -92,6 +92,7 @@ namespace ClubSite.Pages
 
             try
             {
+                HttpContext.Session.Remove(CaptchaSvgGenerator.CaptchaSessionKeyName);
                 await _mailService.SendContactFormEmailAsync($"{FirstName.Trim()} {LastName.Trim()}", Email, Subject, GetFormMailMessage(), cancellation);
             }
             catch (Exception e)
