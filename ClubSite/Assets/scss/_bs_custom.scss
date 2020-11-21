@@ -18,7 +18,7 @@
 // Color system
 //
 
-$white: #fff;
+$white: #F3F6F7;
 $gray-100: #f8f9fa;
 $gray-200: #e9ecef;
 $gray-300: #dee2e6;
@@ -30,20 +30,20 @@ $gray-800: #343a40;
 $gray-900: #212529;
 $black: #000;
 
-$blue: #000BE2;
+$blue: #30405E;
 $indigo: #00D7E2;
 $purple: #180088;
-$pink: #E20079;
-$red: #E2000B;
-$orange: #E26600;
-$yellow: #E2D700;
-$green: #00E266;
+$pink: #ED3F47;
+$red: #f44336;
+$orange: #ee8416;
+$yellow: #ECB82B;
+$green: #71944e;
 $teal: #00E266;
-$cyan: #00D7E2;
+$cyan: #88BFC3;
 
 
 // Reassign color vars to semantic color scheme
-$theme-colors: ( primary: $blue, secondary: #5B506D, success: $green, info: $blue, warning: $orange, danger: $red, light: #E0D5D9, dark: #282840 );
+$theme-colors: ( primary: $blue, secondary: $yellow, success: $green, info: #2f3e5b, warning: $orange, danger: $red, light: $cyan, dark: $blue );
 
 // Dropdowns
 //
@@ -56,13 +56,13 @@ $dropdown-link-active-bg: theme-color("primary");
 
 // Headings
 //
-$headings-color: $pink;
+$headings-color: theme-color("secondary");
 
 
 // Body
 //
 // Settings for the `<body>` element.
-$body-bg: lighten(theme-color("dark"), 70%);
+$body-bg: lighten(theme-color("secondary"), 40%);
 $body-color: theme-color("dark");
 
 
@@ -73,7 +73,7 @@ $border-radius: 0.4rem;
 //
 // Style anchor elements.
 
-$link-color: $pink;
+$link-color: $red;
 $link-decoration: none;
 $link-hover-color: $link-color;
 $link-hover-decoration: underline;
@@ -82,22 +82,22 @@ $link-hover-decoration: underline;
 
 //$input-color: theme-color("primary");
 //$input-focus-color: theme-color("primary");
-$input-focus-bg: lighten(theme-color("primary"), 53%);
+$input-focus-bg: lighten(theme-color("secondary"), 40%);
 
 // Navbar
 //
 // Navbar dark
-$navbar-dark-color: rgba(theme-color("light"), 0.75);
-$navbar-dark-hover-color: rgba(theme-color("light"), 0.9);
-$navbar-dark-active-color: rgba(theme-color("light"), 1);
-$navbar-dark-disabled-color: rgba(theme-color("light"), 0.25);
-$navbar-dark-toggler-border-color: rgba(theme-color("light"), 0.75);
+$navbar-dark-color: rgba(theme-color("secondary"), 0.75);
+$navbar-dark-hover-color: rgba(theme-color("secondary"), 0.9);
+$navbar-dark-active-color: rgba(theme-color("secondary"), 1);
+$navbar-dark-disabled-color: rgba(theme-color("secondary"), 0.25);
+$navbar-dark-toggler-border-color: rgba(theme-color("secondary"), 0.75);
 // Dropdowns
 //
 // Dropdown menu container and contents.
-$dropdown-link-hover-bg: lighten(theme-color("primary"), 40%);
-$dropdown-link-active-bg: theme-color("primary");
-$dropdown-link-active-color: rgba(theme-color("light"), 1);
+$dropdown-link-hover-bg: lighten(theme-color("secondary"), 20%);
+$dropdown-link-active-bg: theme-color("secondary");
+$dropdown-link-active-color: theme-color("primary");
 $dropdown-link-color: theme-color("primary");
 $dropdown-link-hover-color: $dropdown-link-color;
 $dropdown-item-padding-x: .75rem;
@@ -106,3 +106,11 @@ $dropdown-bg: $body-bg;
 // Tables
 //
 $table-accent-bg: $body-bg;  // striped table background
+
+// Alerts
+//
+// Define alert colors, border radius, and padding.
+$alert-bg-level: -10; // = default
+$alert-border-level: 0;
+$alert-color-level: 0;
+

@@ -23,7 +23,7 @@ namespace ClubSite
             var logger = NLogBuilder
                 .ConfigureNLog($@"{currentDir}\{ConfigurationFolder}\NLog.Internal.config")
                 .GetCurrentClassLogger();
-
+                
             // Allows for <target name="file" xsi:type="File" fileName = "${var:logDirectory}logfile.log"... >
             NLog.LogManager.Configuration.Variables["logDirectory"] = currentDir + "\\";
 

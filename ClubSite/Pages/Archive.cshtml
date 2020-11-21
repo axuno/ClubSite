@@ -5,7 +5,7 @@
     var hasImage = Model.Data.PrimaryImage.HasValue;
 
     var posts = Model.Archive.Posts.Count;
-    @if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    @if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
     {
         Model.Data.Excerpt = string.Empty;
     }
@@ -42,7 +42,7 @@
                 @for (var i = n; i < Math.Min(posts, n + 2); i++)
                 {
                     var post = Model.Archive.Posts[i];
-                    @if (string.IsNullOrWhiteSpace(post.Excerpt.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+                    @if (string.IsNullOrWhiteSpace(post.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
                     {
                         post.Excerpt = string.Empty;
                     }
@@ -85,7 +85,7 @@
                                 {
                                     <p>@Html.Raw(post.Excerpt)</p>
                                 }
-                                <a href="@post.Permalink" class="btn btn-primary">Mehr dazu</a>
+                                <a href="@post.Permalink" class="btn btn-secondary">Mehr dazu</a>
                             </header>
                         </article>
                     </div>

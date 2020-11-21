@@ -1,9 +1,9 @@
-@page
+﻿@page
 @model SinglePostWithComments<StandardPost>
 @{ ViewData["Title"] = Model.Data.Title;
     var hasImage = Model.Data.PrimaryImage.HasValue;
     var archive = await WebApp.Api.Pages.GetByIdAsync(Model.Data.BlogId);
-    @if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    @if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
     {
         Model.Data.Excerpt = string.Empty;
     }
@@ -56,35 +56,35 @@
 <div id="comments" class="container comments">
     @if (Model.Data.IsCommentsOpen)
     {
-<div class="alert alert-comment mt-2 mb-5">
+<div class="comments alert mt-2 mb-2 col-lg-8">
     <form asp-page-handler="SaveComment" method="post">
         @Html.AntiForgeryToken()
         @Html.Hidden("Id", Model.Data.Id)
 
-        <h3 class="mb-3">Leave a comment</h3>
+        <h3 class="mb-3">Kommentar hinterlassen</h3>
         <p class="mb-4">
-            Please note that we won't show your email to others, or use it for sending
-            unwanted emails. We will only use it to render your Gravatar image and to
-            validate you as a real person.
+            Die E-Mail wird weder für Besucher angezeigt noch für ungewünschte Nachrichten verwendet.
+            Wir verwenden die E-Mail-Adresse nur, um das Gravatarbild anzuzeigen, und zu verfizieren,
+            dass es sich um eine natürliche Person handelt.
         </p>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <input name="CommentAuthor" type="text" class="form-control" placeholder="Your name">
+                    <input name="CommentAuthor" type="text" class="form-control" placeholder="Dein Name">
                 </div>
             </div>
             <div class="col-md-6">
-                <input name="CommentEmail" type="text" class="form-control" placeholder="Your email address">
+                <input name="CommentEmail" type="text" class="form-control" placeholder="Deine E-Mail-Adresse">
             </div>
         </div>
         <div class="form-group">
-            <input name="CommentUrl" type="text" class="form-control" placeholder="An (optional) URL to your website">
+            <input name="CommentUrl" type="text" class="form-control" placeholder="Eine (optionale) URL zu Deiner Website">
         </div>
         <div class="form-group">
-            <textarea name="CommentBody" rows="6" class="form-control" placeholder="Your awesome comment"></textarea>
+            <textarea name="CommentBody" rows="6" class="form-control" placeholder="Dein Kommentar"></textarea>
         </div>
         <div class="form-group text-left">
-            <button class="btn btn-success">Post Comment</button>
+            <button class="btn btn-secondary">Kommentar speichern</button>
         </div>
     </form>
 </div>}

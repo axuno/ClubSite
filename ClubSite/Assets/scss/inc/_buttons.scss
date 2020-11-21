@@ -1,3 +1,4 @@
+@import './../bs_custom';
 /*
 .btn {
     &.btn-primary {
@@ -12,3 +13,9 @@
     }
 }
 */
+
+.btn {
+    &.btn-secondary {
+        color: theme-color("dark");
+    }
+}

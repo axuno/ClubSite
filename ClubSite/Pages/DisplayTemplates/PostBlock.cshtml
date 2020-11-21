@@ -1,6 +1,6 @@
 @model Piranha.Extend.Blocks.PostBlock
 @{
-    @if (string.IsNullOrWhiteSpace(Model.Body.Post.Excerpt.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    @if (string.IsNullOrWhiteSpace(Model.Body.Post.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
     {
         Model.Body.Post.Excerpt = string.Empty;
     }
@@ -20,7 +20,7 @@
             {
                 <p>@Html.Raw(Model.Body.Post.Excerpt)</p>
             }
-            <a href="@Model.Body.Post.Permalink" class="btn btn-sm btn-primary">Mehr dazu</a>
+            <a href="@Model.Body.Post.Permalink" class="btn btn-sm btn-secondary">Mehr dazu</a>
         </div>
     </div>
 }

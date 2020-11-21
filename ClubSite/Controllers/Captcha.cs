@@ -19,8 +19,8 @@ namespace ClubSite.Controllers
 
         private Task<ContentResult> GetSvgContent()
         {
-            using var ci = new ClubSite.Library.CaptchaSvgGenerator(null, 151, 51, Color.FromArgb(0x0,0x0B,0xE2),
-                Color.FromArgb(0, 255, 255, 255), Color.FromArgb(0x0,0x0B,0xE2));
+            using var ci = new ClubSite.Library.CaptchaSvgGenerator(null, 151, 51, Color.FromArgb(0x30, 0x40, 0x5E),
+                Color.FromArgb(0xFF,0xFF,0xFF), Color.FromArgb(0x30, 0x40, 0x5E));
 
             var result = ci.SetTextWithMathCalc(5).ToString(); // GenerateRandomString(5)
             HttpContext.Session.SetString(CaptchaSessionKeyName, result);

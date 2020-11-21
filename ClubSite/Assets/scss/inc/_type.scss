@@ -12,7 +12,7 @@ article > header {  // blog teasers
 blockquote {
     color: #999;
     font-size: 1.5rem;
-    font-weight: 300;
+    font-weight: 400;
     margin: 3rem auto;
     width: 80%;
 }
@@ -26,10 +26,11 @@ blockquote {
 }
 .lead {
     font-size: 1.2rem;
+    font-weight: 400;
 }
 
 hr {
-    border: 1px solid $pink;
+    border: 2px solid theme-color("secondary");
 }
 
 /**************************************************************
