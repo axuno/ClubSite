@@ -25,7 +25,7 @@
             @if (Model.Data.IsPublished)
             {
 <span>
-    Ver&ouml;ffentlicht @Model.Data.Published.Value.ToShortDateString()
+    Ver&ouml;ffentlicht @Model.Data.Published?.ToShortDateString()
 </span>     }
             @if (Model.Data.EnableComments && Model.Data.CommentCount > 0)
             {
@@ -47,13 +47,13 @@
     @foreach (var block in Model.Data.Blocks)
     {
 <div class="block @block.CssName()">
-    <div class="container">
+    <div class="mx-3">
         @Html.DisplayFor(m => block, block.GetType().Name)
     </div>
 </div>}
     @if (Model.Data.EnableComments)
     {
-<div id="comments" class="container comments">
+<div id="comments" class="comments mx-3">
     @if (Model.Data.IsCommentsOpen)
     {
 <div class="comments alert mt-2 mb-2 col-lg-8">
@@ -84,7 +84,7 @@
             <textarea name="CommentBody" rows="6" class="form-control" placeholder="Dein Kommentar"></textarea>
         </div>
         <div class="form-group text-left">
-            <button class="btn btn-secondary">Kommentar speichern</button>
+            <button class="btn btn-primary">Kommentar speichern</button>
         </div>
     </form>
 </div>}

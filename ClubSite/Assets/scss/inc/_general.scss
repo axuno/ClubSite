@@ -1,14 +1,10 @@
 @import './../bs_custom';
 
-body {
-    padding-top: 3.25rem;
-}
-
-.main {
+.main { // _Layout
     background-color: #fff;
 }
 
-main {  // needed!
+main {  // needed for Post, Archive, Page
     padding: 2rem 0;
 }
 img {

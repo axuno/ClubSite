@@ -1,4 +1,7 @@
+@import './../bs_custom';
+
 .card {
+    background-color: $gray-100;
     .card-img, .card-img-top {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;

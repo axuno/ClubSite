@@ -26,13 +26,13 @@
     @await RenderSectionAsync("styles", required: false)
 </head>
 <body>
-    <menu>
-        <partial name="_MenuTopLevel.cshtml" />
-    </menu>
-    <div class="container main p-0 mb-2">
+    <div class="container-fluid main p-0 mb-2">
+        <menu>
+            <partial name="_MenuTopLevel.cshtml" />
+        </menu>
         @RenderBody()
+        <partial name="_Footer.cshtml" />
     </div>
-    <partial name="_Footer.cshtml" />
     @if (!Env.IsDevelopment())
     {
         <partial name="_GoogleAnalytics.cshtml" />

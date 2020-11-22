@@ -24,7 +24,7 @@
     @foreach (var block in Model.Data.Blocks)
     {
 <div class="block @block.CssName()">
-    <div class="container">
+    <div class="mx-3">
         @Html.DisplayFor(m => block, block.GetType().Name)
     </div>
 </div>}

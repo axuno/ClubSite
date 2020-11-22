@@ -30,12 +30,12 @@
     @foreach (var block in Model.Data.Blocks)
     {
         <div class="block @block.CssName()">
-            <div class="container">
+            <div class="mx-3">
                 @Html.DisplayFor(m => block, block.GetType().Name)
             </div>
         </div>
     }
-    <div class="container">
+    <div class="mx-3">
         @for (var n = 0; n < posts; n += 2)
         {
             <div class="row">
@@ -85,7 +85,7 @@
                                 {
                                     <p>@Html.Raw(post.Excerpt)</p>
                                 }
-                                <a href="@post.Permalink" class="btn btn-secondary">Mehr dazu</a>
+                                <a href="@post.Permalink" class="btn btn-primary">Mehr dazu</a>
                             </header>
                         </article>
                     </div>
