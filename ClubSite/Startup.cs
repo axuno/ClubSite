@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using ClubSite.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -157,6 +156,10 @@ namespace ClubSite
                 options.UseTinyMCE();
                 options.UseIdentity();
             });
+            // For static files using a content type provider:
+            var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+            // Make sure .webmanifest files don't cause a 404
+            provider.Mappings[".webmanifest"] = "application/manifest+json";
         }
     }
 }

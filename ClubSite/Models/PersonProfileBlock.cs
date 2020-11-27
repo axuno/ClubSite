@@ -9,7 +9,7 @@ using Piranha.Models;
 
 namespace ClubSite.Models
 {
-    [BlockGroupType(Name = "Person Profile Block", Category = "Media", Icon = "fas fa-images",Display = BlockDisplayMode.Vertical)]
+    [BlockGroupType(Name = "Person Profile", Category = "Content", Icon = "fas fa-images",Display = BlockDisplayMode.Horizontal)]
     [BlockItemType(Type = typeof(ImageBlock))]
     [BlockItemType(Type = typeof(Piranha.Extend.Blocks.HtmlBlock))]
     public class PersonProfileBlock : BlockGroup

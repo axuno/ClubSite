@@ -5,9 +5,16 @@
     var hasImage = Model.Data.PrimaryImage.HasValue;
 
     var posts = Model.Archive.Posts.Count;
-    @if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
     {
         Model.Data.Excerpt = string.Empty;
+    }
+    foreach (var post in Model.Archive.Posts)
+    {
+        if (string.IsNullOrWhiteSpace(post.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+        {
+            post.Excerpt = string.Empty;
+        }        
     }
 }
 
@@ -27,6 +34,7 @@
 </header>
 
 <main class="archive">
+    @* Display the blocks of the main Blog page *@
     @foreach (var block in Model.Data.Blocks)
     {
         <div class="block @block.CssName()">
@@ -35,59 +43,17 @@
             </div>
         </div>
     }
+    @* Display the teasers for Archive Blog posts *@
     <div class="mx-3">
-        @for (var n = 0; n < posts; n += 2)
+    @{
+        bool hideTeaser = false;
+        for (var n = 0; n < posts; n += 2)
         {
-            <div class="row">
+            <div class="row@(hideTeaser ? " collapse hide-teaser" : string.Empty)">
                 @for (var i = n; i < Math.Min(posts, n + 2); i++)
                 {
-                    var post = Model.Archive.Posts[i];
-                    @if (string.IsNullOrWhiteSpace(post.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
-                    {
-                        post.Excerpt = string.Empty;
-                    }
-
                     <div class="@(i == 0 ? "col-md-12" : "col-md-6")">
-                        <article>
-                            <header>
-                                @if (post.PrimaryImage.HasValue)
-                                {
-                                    <a href="@post.Permalink">
-                                        <img class="rounded mb-3" src="@Url.Content(WebApp.Media.ResizeImage(post.PrimaryImage, 1140, 450))" alt="@post.PrimaryImage.Media.AltText">
-                                    </a>
-                                }
-                                <h3>@post.Title</h3>
-                                <p class="post-meta">
-                                    <span>
-                                        In <a href="@Model.Data.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
-                                    </span>
-                                    <span>
-                                        Tags
-                                        @foreach (var tag in post.Tags)
-                                        {
-                                            <a href="@Model.Data.Permalink/tag/@tag.Slug">#@tag.Slug</a>
-                                        }
-                                    </span>
-                                    @if (post.IsPublished)
-                                    {
-                                        <span>
-                                            Ver&ouml;ffentlicht @post.Published.Value.ToShortDateString()
-                                        </span>
-                                    }
-                                    @if (post.EnableComments && post.CommentCount > 0)
-                                    {
-                                        <span>
-                                            <a href="@post.Permalink#comments">@post.CommentCount @(post.CommentCount == 1 ? "Kommentar" : "Kommentare")</a>
-                                        </span>
-                                    }
-                                </p>
-                                @if (!string.IsNullOrWhiteSpace(post.Excerpt))
-                                {
-                                    <p>@Html.Raw(post.Excerpt)</p>
-                                }
-                                <a href="@post.Permalink" class="btn btn-primary">Mehr dazu</a>
-                            </header>
-                        </article>
+                        <partial name="_ArchiveTeaser" model="(Model, Model.Archive.Posts[i])"/>
                     </div>
                     @if (i == 0)
                     {
@@ -96,6 +62,13 @@
                     }
                 }
             </div>
+            @if (!hideTeaser && n + 2 < posts && n == 3)
+            {
+                // if we have more than 5 teasers, we hide them until "show more" will be clicked
+                hideTeaser = true;
+                <button type="button" class="btn btn-secondary col-12 col-md-6 mt-3 collapse show hide-teaser" data-toggle="collapse" data-target=".hide-teaser">Mehr Posts anzeigen...</button>
+            }
         }
-    </div>
+    }
+</div>
 </main>
