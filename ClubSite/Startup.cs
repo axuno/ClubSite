@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 using Piranha;
 using Piranha.AttributeBuilder;
 using Piranha.AspNetCore.Identity.SQLServer;
@@ -156,10 +158,24 @@ namespace ClubSite
                 options.UseTinyMCE();
                 options.UseIdentity();
             });
+            
             // For static files using a content type provider:
             var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
             // Make sure .webmanifest files don't cause a 404
             provider.Mappings[".webmanifest"] = "application/manifest+json";
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ContentTypeProvider = provider,
+                OnPrepareResponse = ctx =>
+                {
+                    var headers = ctx.Context.Response.GetTypedHeaders();
+                    headers.CacheControl = new CacheControlHeaderValue
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromDays(5)
+                    };
+                }
+            });
         }
     }
 }

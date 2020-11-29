@@ -37,17 +37,17 @@ namespace ClubSite.Services
 
         public async Task SendTextEmailAsync(string toName, string toEmail, string subject, string plainBody, CancellationToken cancellationToken)
         {
-                var message = new MimeMessage();
-                message.Headers.Add(HeaderId.Organization, Settings.Message.Organization);
-                message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
-                message.To.Add(new MailboxAddress(toName, toEmail));
-                message.Subject = subject;
-                message.Body = new TextPart(TextFormat.Text)
-                {
-                    Text = plainBody
-                };
+            var message = new MimeMessage();
+            message.Headers.Add(HeaderId.Organization, Settings.Message.Organization);
+            message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
+            message.To.Add(new MailboxAddress(toName, toEmail));
+            message.Subject = subject;
+            message.Body = new TextPart(TextFormat.Text)
+            {
+                Text = plainBody
+            };
 
-                await SendEmailAsync(message, cancellationToken);
+            await SendEmailAsync(message, cancellationToken);
         }
 
         public async Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody, CancellationToken cancellationToken)
