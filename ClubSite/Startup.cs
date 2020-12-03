@@ -158,7 +158,7 @@ namespace ClubSite
             // Keep before .UsePiranha()
             app.UseSession();
 
-            #region *** Rewrite domains (even those without SSL certificate) to https://volleyballclub.de ***
+            #region *** Rewrite domains (even those without SSL certificate) to https://www.volleyballclub.de ***
             
             app.UseRewriter(new RewriteOptions()                
                 .AddRedirectToWwwPermanent()
