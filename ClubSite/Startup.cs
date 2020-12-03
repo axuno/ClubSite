@@ -17,6 +17,7 @@ using Piranha.AttributeBuilder;
 using Piranha.AspNetCore.Identity.SQLServer;
 using Piranha.Data.EF.SQLServer;
 using Piranha.Manager.Editor;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace ClubSite
 {
@@ -99,6 +100,11 @@ namespace ClubSite
                 })
                 .AddControllersAsServices();
 
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status301MovedPermanently;
+            });
+
             services.Configure<ConfigurationPoco.MailSettings>(
                 Configuration.GetSection(nameof(ConfigurationPoco.MailSettings)) ?? throw new ArgumentNullException($"Configuration section '{nameof(ConfigurationPoco.MailSettings)}' not found."));
             
@@ -151,6 +157,15 @@ namespace ClubSite
 
             // Keep before .UsePiranha()
             app.UseSession();
+
+            #region *** Rewrite domains (even those without SSL certificate) to https://volleyballclub.de ***
+            
+            app.UseRewriter(new RewriteOptions()                
+                .AddRedirectToWwwPermanent()
+                .AddRedirectToHttpsPermanent()
+            );
+            
+            #endregion
 
             // Middleware setup
             app.UsePiranha(options => {
