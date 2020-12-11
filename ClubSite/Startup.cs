@@ -115,12 +115,19 @@ namespace ClubSite
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
             var cultureInfo = new System.Globalization.CultureInfo("de-DE");
-            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
 
-            if (env.IsDevelopment())
+            if (false)
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseStatusCodePagesWithReExecute($"/Error/{{0}}");
+                app.UseExceptionHandler($"/Error/500");
+                // instruct the browsers to always access the site via HTTPS
+                app.UseHsts();
             }
             
             // Initialize Piranha

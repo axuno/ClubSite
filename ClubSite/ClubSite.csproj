@@ -31,4 +31,28 @@
     <PackageReference Include="Piranha.Manager.TinyMCE" Version="8.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\StatusCodes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StatusCodes.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\StatusDescriptions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StatusDescriptions.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\StatusCodes.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StatusCodes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StatusDescriptions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StatusDescriptions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
