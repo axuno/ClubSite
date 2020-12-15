@@ -1,6 +1,6 @@
 @model Piranha.Extend.Blocks.PostBlock
 @{
-    @if (string.IsNullOrWhiteSpace(Model.Body.Post.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    @if (ClubSite.Library.HtmlTool.IsEmptyHtml(Model.Body.Post.Excerpt ?? string.Empty))
     {
         Model.Body.Post.Excerpt = string.Empty;
     }

@@ -3,7 +3,7 @@
 @{ ViewData["Title"] = Model.Data.Title;
     var hasImage = Model.Data.PrimaryImage.HasValue;
     var archive = await WebApp.Api.Pages.GetByIdAsync(Model.Data.BlogId);
-    @if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    @if (ClubSite.Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
     {
         Model.Data.Excerpt = string.Empty;
     }

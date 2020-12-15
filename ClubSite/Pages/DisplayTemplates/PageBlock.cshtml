@@ -1,6 +1,6 @@
 @model Piranha.Extend.Blocks.PageBlock
 @{
-    @if (Model.Body.Page != null && string.IsNullOrWhiteSpace(Model.Body.Page?.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    @if (Model.Body.Page != null && ClubSite.Library.HtmlTool.IsEmptyHtml(Model.Body.Page.Excerpt ?? string.Empty))
     {
         Model.Body.Page.Excerpt = string.Empty;
     }

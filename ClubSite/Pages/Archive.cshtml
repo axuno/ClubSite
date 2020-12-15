@@ -5,13 +5,13 @@
     var hasImage = Model.Data.PrimaryImage.HasValue;
 
     var posts = Model.Archive.Posts.Count;
-    if (string.IsNullOrWhiteSpace(Model.Data?.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+    if (ClubSite.Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
     {
         Model.Data.Excerpt = string.Empty;
     }
     foreach (var post in Model.Archive.Posts)
     {
-        if (string.IsNullOrWhiteSpace(post.Excerpt?.Replace("&nbsp;", string.Empty).Replace("<br>", string.Empty)))
+        if (ClubSite.Library.HtmlTool.IsEmptyHtml(post.Excerpt ?? string.Empty))
         {
             post.Excerpt = string.Empty;
         }        
