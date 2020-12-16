@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/axuno/ClubSite/main/club-logo.png" alt="" />
+<img src="https://raw.githubusercontent.com/axuno/ClubSite/main/club-logo.png" width=100 height=100 alt="" />
 
 # ClubSite
 
