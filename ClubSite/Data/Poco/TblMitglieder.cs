@@ -1,4 +1,9 @@
-﻿using System;
+﻿//
+// Copyright (C) axuno gGmbH and other contributors.
+// Licensed under the MIT license.
+//
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;

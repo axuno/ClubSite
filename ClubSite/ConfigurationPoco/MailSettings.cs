@@ -1,4 +1,8 @@
-﻿
+﻿//
+// Copyright (C) axuno gGmbH and other contributors.
+// Licensed under the MIT license.
+//
+
 namespace ClubSite.ConfigurationPoco
 {
     public class MailSettings

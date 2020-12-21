@@ -1,3 +1,8 @@
+//
+// Copyright (C) axuno gGmbH and other contributors.
+// Licensed under the MIT license.
+//
+
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
