@@ -1,7 +1,7 @@
 // Copyright (C) axuno gGmbH and Contributors.
 // This software may be modified and distributed under the terms
 // of the MIT license. See the LICENSE file for details.
-// https://https://github.com/axuno/ClubSite
+// https://github.com/axuno/ClubSite
 
 using System;
 using System.Collections.Generic;
