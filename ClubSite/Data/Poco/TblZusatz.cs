@@ -1,7 +1,7 @@
-﻿//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+﻿// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Collections.Generic;
@@ -61,10 +61,10 @@ CREATE TABLE [dbo].[tblZusatz] (
     {
         [Key] public int AId { get; set; }
         public int? Id { get; set; }
-        [MaxLength(80)] public string Zusatz1 { get; set; } = string.Empty;  // Die Unberechenbaren
-        [MaxLength(80)] public string Zusatz2 { get; set; } = string.Empty;  // Unbelehrbare
-        [MaxLength(80)] public string Zusatz3 { get; set; } = string.Empty;  // Unersättliche
-        [MaxLength(80)] public string Zusatz4 { get; set; } = string.Empty;  // Unglaubliche
+        [MaxLength(80)] public string Zusatz1 { get; set; } = string.Empty; // Die Unberechenbaren
+        [MaxLength(80)] public string Zusatz2 { get; set; } = string.Empty; // Unbelehrbare
+        [MaxLength(80)] public string Zusatz3 { get; set; } = string.Empty; // Unersättliche
+        [MaxLength(80)] public string Zusatz4 { get; set; } = string.Empty; // Unglaubliche
         [MaxLength(80)] public string Zusatz5 { get; set; } = string.Empty;
         [MaxLength(80)] public string Zusatz6 { get; set; } = string.Empty;
         [MaxLength(80)] public string Zusatz7 { get; set; } = string.Empty;

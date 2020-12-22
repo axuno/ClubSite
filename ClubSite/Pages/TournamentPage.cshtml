@@ -5,7 +5,7 @@
 
     string GetDates()
     {
-        if ((!Definition.DateFrom.Value.HasValue || !Definition.DateTo.Value.HasValue))
+        if (!Definition.DateFrom.Value.HasValue || !Definition.DateTo.Value.HasValue)
         {
             return "Datum von oder Datum bis fehlt";
         }
@@ -17,17 +17,24 @@
         return Definition.DateFrom.Value?.ToLongDateString() + " bis " + Definition.DateTo.Value?.ToLongDateString();
     }
 }
+
 @section head
 {
     @WebApp.MetaTags(Model.Data)
 }
+
 @section styles
 {
     <style type="text/css">
-        th { width: 1%; vertical-align: top; }
+        th {
+            width: 1%;
+            vertical-align: top;
+        }
+
         tr { height: 2rem }
     </style>
 }
+
 <div class="mx-3 pt-2">
     <div class="mb-4">
         <h1>@Model.Data.TournamentDefinition.Name</h1>
@@ -99,7 +106,7 @@
             </tr>
         </table>
     </div>
-    
+
     <div class="pb-3">
         <h3>Angemeldete Teams</h3>
 

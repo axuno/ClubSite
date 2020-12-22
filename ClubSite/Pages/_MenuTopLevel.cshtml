@@ -1,7 +1,9 @@
 ﻿@inject Microsoft.AspNetCore.Authorization.IAuthorizationService Auth
 <div class="fixed-top">
     <nav class="navbar navbar-expand-md navbar-dark bg-primary p-0 pr-2 mx-1">
-        <a class="navbar-brand pl-2" href="~/"><img src="~/favicon/vcn-Logo.svg" style="width: 50px;" alt="Logo" /><span class="clubname pl-2 d-none d-lg-inline-block">Volleyballclub Neusäß<small>e. V.</small></span><span class="clubname pl-2 d-inline-block d-lg-none">VC Neusäß</span></a>
+        <a class="navbar-brand pl-2" href="~/">
+            <img src="~/favicon/vcn-Logo.svg" style="width: 50px;" alt="Logo"/><span class="clubname pl-2 d-none d-lg-inline-block">Volleyballclub Neusäß<small>e. V.</small></span><span class="clubname pl-2 d-inline-block d-lg-none">VC Neusäß</span>
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbars-club-default" aria-controls="navbars-club-default" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -13,16 +15,15 @@
                     {
                         <li class="nav-item@(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? " active" : "")">
                             <a class="nav-link" href="@item.Permalink">@item.MenuTitle@*item.Items.Count*@</a>
-                            <partial name="_MenuDropdown" model="item" />
+                            <partial name="_MenuDropdown" model="item"/>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item dropdown@(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? " active" : "")">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="@item.Permalink" role="button">@item.MenuTitle@*item.Items.Count*@</a>
-                            <partial name="_MenuDropdown" model="item" />
+                            <partial name="_MenuDropdown" model="item"/>
                         </li>
-
                     }
                 }
             </ul>

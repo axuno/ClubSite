@@ -1,7 +1,7 @@
-﻿//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+﻿// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Collections.Generic;
@@ -17,18 +17,19 @@ namespace ClubSite.Pages
 {
     public class TournamentRegistrationModel : PageModel
     {
-        private readonly ClubSite.Data.ClubDbContext _clubDbContext;
+        private readonly ClubDbContext _clubDbContext;
 
-        public TournamentRegistrationModel(ClubSite.Data.ClubDbContext context)
+        public TournamentRegistrationModel(ClubDbContext context)
         {
             _clubDbContext = context;
         }
 
         public IList<TournamentRegistration> TournamentRegistration { get; set; } = new List<TournamentRegistration>();
 
-        public async Task OnGetAsync()
+        async public Task OnGetAsync()
         {
-            TournamentRegistration = await _clubDbContext.TournamentRegistration.Where(tr => tr.TournamentDate.Year == 2020).ToListAsync();
+            TournamentRegistration = await _clubDbContext.TournamentRegistration
+                .Where(tr => tr.TournamentDate.Year == 2020).ToListAsync();
         }
     }
 }

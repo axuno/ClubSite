@@ -1,7 +1,7 @@
-//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -77,40 +77,36 @@ namespace ClubSite.Pages
             ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
         public string Captcha { get; set; } = string.Empty;
-        
+
         public void OnGet()
         {
         }
 
-        public async Task<IActionResult> OnPostAsync(CancellationToken cancellation)
+        async public Task<IActionResult> OnPostAsync(CancellationToken cancellation)
         {
             if (Captcha != HttpContext.Session.GetString(CaptchaSvgGenerator.CaptchaSessionKeyName))
-            {
                 ModelState.AddModelError(nameof(Captcha), "Ergebnis der Rechenaufgabe ist nicht korrekt");
-            }
 
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (!ModelState.IsValid) return Page();
 
             try
             {
                 HttpContext.Session.Remove(CaptchaSvgGenerator.CaptchaSessionKeyName);
-                await _mailService.SendContactFormEmailAsync($"{FirstName.Trim()} {LastName.Trim()}", Email, Subject, GetFormMailMessage(), cancellation);
+                await _mailService.SendContactFormEmailAsync($"{FirstName.Trim()} {LastName.Trim()}", Email, Subject,
+                    GetFormMailMessage(), cancellation);
             }
             catch (Exception e)
             {
                 _logger.LogCritical(e, "Sending mail to '{0}' failed.", Email);
             }
-            
+
             return RedirectToPage("ContactConfirmation");
         }
 
         private string GetFormMailMessage()
         {
-            return 
-$@"{(Gender == "f" ? "Frau" : "Herr")}
+            return
+                $@"{(Gender == "f" ? "Frau" : "Herr")}
 {FirstName} {LastName}
 Telefon: {(string.IsNullOrWhiteSpace(PhoneNumber) ? "-" : PhoneNumber)}
 E-Mail:  {Email}

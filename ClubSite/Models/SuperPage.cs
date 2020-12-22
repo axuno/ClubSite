@@ -1,7 +1,7 @@
-﻿//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+﻿// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,8 @@ namespace ClubSite.Models
     /// Test page using all field types
     /// </summary>
     [PageType(Title = "Super Page", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
-    [PageTypeRoute(Title = "Default", Route = "/superpage")] // Route is the base name of the Page name (SuperPage.cshtml)
+    [PageTypeRoute(Title = "Default",
+        Route = "/superpage")] // Route is the base name of the Page name (SuperPage.cshtml)
     public class SuperPage : Page<SuperPage>
     {
         /// <summary>
@@ -28,7 +29,8 @@ namespace ClubSite.Models
         public IList<Href> Links { get; set; } = new List<Href>();
 
         [Region(Title = "All fields")]
-        [RegionDescription("Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
+        [RegionDescription(
+            "Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
         public AllFields? AllFields { get; set; }
     }
 
@@ -44,7 +46,7 @@ namespace ClubSite.Models
         public PageField? ButtonLink { get; set; }
     }
 
-        /// <summary>
+    /// <summary>
     /// Test Field with all field types.
     /// </summary>
     public class AllFields
@@ -71,7 +73,8 @@ namespace ClubSite.Models
         public MediaField? Media { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        [FieldDescription("Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
+        [FieldDescription(
+            "Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
         public VideoField? Video { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]

@@ -1,34 +1,38 @@
 @page
 @model SinglePage<StandardPage>
-@{ ViewData["Title"] = Model.Data.Title;
+@{
+    ViewData["Title"] = Model.Data.Title;
     var hasImage = Model.Data.PrimaryImage.HasValue;
-    @if (ClubSite.Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
+    @if (Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
     {
         Model.Data.Excerpt = string.Empty;
     }
 }
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({ Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1240, 400)) })" : "")>
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1240, 400))})" : "")>
     <div class="dimmer"></div>
     <div class="@(hasImage ? "container" : "") text-center">
         <h1>@Model.Data.Title</h1>
         @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
         {
-<div class="row justify-content-center">
-    <div class="col-lg-8 lead">
-        @Html.Raw(Model.Data.Excerpt)
-    </div>
-</div>}
+            <div class="row justify-content-center">
+                <div class="col-lg-8 lead">
+                    @Html.Raw(Model.Data.Excerpt)
+                </div>
+            </div>
+        }
     </div>
 </header>
 <main>
     @foreach (var block in Model.Data.Blocks)
     {
-<div class="block @block.CssName()">
-    <div class="mx-3">
-        @Html.DisplayFor(m => block, block.GetType().Name)
-    </div>
-</div>}
+        <div class="block @block.CssName()">
+            <div class="mx-3">
+                @Html.DisplayFor(m => block, block.GetType().Name)
+            </div>
+        </div>
+    }
 </main>
+
 @section head
 {
     @WebApp.MetaTags(Model.Data, generator: false, opengraph: false)

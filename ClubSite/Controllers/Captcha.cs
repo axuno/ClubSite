@@ -1,7 +1,7 @@
-﻿//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+﻿// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Drawing;
@@ -16,16 +16,16 @@ namespace ClubSite.Controllers
     /// </summary>
     [Route("captcha")]
     public class Captcha : Controller
-	{
-		public async Task<IActionResult> Index()
+    {
+        async public Task<IActionResult> Index()
         {
             return await GetSvgContent();
         }
 
         private Task<ContentResult> GetSvgContent()
         {
-            using var ci = new ClubSite.Library.CaptchaSvgGenerator(null, 151, 51, Color.FromArgb(0x30, 0x40, 0x5E),
-                Color.FromArgb(0xFF,0xFF,0xFF), Color.FromArgb(0x30, 0x40, 0x5E));
+            using var ci = new Library.CaptchaSvgGenerator(null, 151, 51, Color.FromArgb(0x30, 0x40, 0x5E),
+                Color.FromArgb(0xFF, 0xFF, 0xFF), Color.FromArgb(0x30, 0x40, 0x5E));
 
             var result = ci.SetTextWithMathCalc(5).ToString(); // GenerateRandomString(5)
             HttpContext.Session.SetString(CaptchaSessionKeyName, result);
@@ -40,6 +40,6 @@ namespace ClubSite.Controllers
             return Task.FromResult(Content(ci.Image));
         }
 
-	    private string CaptchaSessionKeyName => ClubSite.Library.CaptchaSvgGenerator.CaptchaSessionKeyName;
-	}
+        private string CaptchaSessionKeyName => Library.CaptchaSvgGenerator.CaptchaSessionKeyName;
+    }
 }

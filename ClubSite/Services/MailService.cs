@@ -1,7 +1,7 @@
-﻿//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+﻿// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.IO;
@@ -20,8 +20,12 @@ namespace ClubSite.Services
 {
     public interface IMailService
     {
-        Task SendTextEmailAsync(string name, string email, string subject, string body, CancellationToken cancellationToken);
-        Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody, CancellationToken cancellationToken);
+        Task SendTextEmailAsync(string name, string email, string subject, string body,
+            CancellationToken cancellationToken);
+
+        Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
+            CancellationToken cancellationToken);
+
         Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken);
         MailSettings Settings { get; }
     }
@@ -40,51 +44,54 @@ namespace ClubSite.Services
 
         public MailSettings Settings { get; }
 
-        public async Task SendTextEmailAsync(string toName, string toEmail, string subject, string plainBody, CancellationToken cancellationToken)
+        async public Task SendTextEmailAsync(string toName, string toEmail, string subject, string plainBody,
+            CancellationToken cancellationToken)
         {
             var message = new MimeMessage();
             message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
             message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
             message.To.Add(new MailboxAddress(toName, toEmail));
             message.Subject = subject;
-            message.Body = new TextPart(TextFormat.Text)
-            {
+            message.Body = new TextPart(TextFormat.Text) {
                 Text = plainBody
             };
 
             await SendEmailAsync(message, cancellationToken);
         }
 
-        public async Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody, CancellationToken cancellationToken)
+        async public Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
+            CancellationToken cancellationToken)
         {
             var message = new MimeMessage();
             message.Headers.Add(HeaderId.Organization, Settings.Message?.Organization ?? string.Empty);
             message.From.Add(new MailboxAddress(fromName, fromEmail));
             if (Settings.Message != null)
                 foreach (var mailAddress in Settings.Message.ContactFormTo)
-                {
                     message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
-                }
 
             message.Subject = subject;
-            message.Body = new TextPart(TextFormat.Text)
-            {
+            message.Body = new TextPart(TextFormat.Text) {
                 Text = plainBody
             };
 
             await SendEmailAsync(message, cancellationToken);
         }
 
-        public async Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken)
+        async public Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken)
         {
             var messageOutput = _env.IsDevelopment() ? nameof(Sender.File) : nameof(Sender.Smtp);
             try
             {
                 if (messageOutput == nameof(Sender.Smtp))
                 {
-                    using var client = new SmtpClient {Timeout = Settings.Sender.Smtp.Timeout,ServerCertificateValidationCallback = (s, c, h, e) => true};
-                    await client.ConnectAsync(Settings.Sender.Smtp.Server, Settings.Sender.Smtp.Port, true, cancellationToken);
-                    await client.AuthenticateAsync(Settings.Sender.Smtp.Username, Settings.Sender.Smtp.Password, cancellationToken);
+                    using var client = new SmtpClient {
+                        Timeout = Settings.Sender.Smtp.Timeout,
+                        ServerCertificateValidationCallback = (s, c, h, e) => true
+                    };
+                    await client.ConnectAsync(Settings.Sender.Smtp.Server, Settings.Sender.Smtp.Port, true,
+                        cancellationToken);
+                    await client.AuthenticateAsync(Settings.Sender.Smtp.Username, Settings.Sender.Smtp.Password,
+                        cancellationToken);
                     await client.SendAsync(mimeMessage, cancellationToken);
                     await client.DisconnectAsync(true, cancellationToken);
                 }
@@ -93,8 +100,10 @@ namespace ClubSite.Services
                     var filename = Path.IsPathFullyQualified(Settings.Sender.File.Path)
                         ? Path.Combine(Settings.Sender.File.Path, mimeMessage.MessageId + ".eml")
                         : Path.Combine(_env.ContentRootPath, Settings.Sender.File.Path, mimeMessage.MessageId + ".eml");
-                    await mimeMessage.WriteToAsync(new FormatOptions{MaxLineLength = 100}, filename, cancellationToken);
+                    await mimeMessage.WriteToAsync(new FormatOptions {MaxLineLength = 100}, filename,
+                        cancellationToken);
                 }
+
                 _logger.LogInformation("Sending mail to '{0}' succeeded.\n{1}", messageOutput, mimeMessage.ToString());
             }
             catch (Exception e)

@@ -8,16 +8,18 @@
     <div class="pb-4">
         @if (Model.Exception == null)
         {
-            @Model.Description <text> (@Model.SentStatusCode)</text>
+            @Model.Description
+            <text> (@Model.SentStatusCode)</text>
         }
         else
         {
-            @Model.Description <text> @(Model.Exception == null ? string.Empty : "(E)")</text>
+            @Model.Description
+            <text> @(Model.Exception == null ? string.Empty : "(E)")</text>
         }
         @if (Model.Exception != null || Model.SentStatusCode == "500")
         {
             <div>
-                Wir bedauern die damit verbundenen Unannehmlichkeiten.<br />
+                Wir bedauern die damit verbundenen Unannehmlichkeiten.<br/>
                 Wir haben bereits eine Benachrichtigung zu dem Fehler erhalten.
             </div>
         }

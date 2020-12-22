@@ -3,25 +3,28 @@
 @{
     ViewData["Title"] = Model.Data.Title;
 }
+
 @section head
 {
     @WebApp.MetaTags(Model.Data)
 }
+
 @{
     var hasImage = Model.Data.PrimaryImage.HasValue;
 }
-    
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({ @Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400)) })" : "")>
+
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({@Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400))})" : "")>
     <div class="dimmer"></div>
     <div class="container text-center">
         <h1>@Model.Data.Title</h1>
         @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
         {
-<div class="row justify-content-center">
-    <div class="col-lg-8 lead">
-        @Html.Raw(Model.Data.Excerpt)
-    </div>
-</div>}
+            <div class="row justify-content-center">
+                <div class="col-lg-8 lead">
+                    @Html.Raw(Model.Data.Excerpt)
+                </div>
+            </div>
+        }
     </div>
 </header>
 <div class="container body-container">
@@ -53,7 +56,9 @@
                     {
                         if (link.ButtonLink?.Page?.Permalink != null && link.ButtonText != null)
                         {
-                            <div><a href="@link.ButtonLink.Page?.Permalink" class="btn btn-primary">@link.ButtonText.Value</a></div>
+                            <div>
+                                <a href="@link.ButtonLink.Page?.Permalink" class="btn btn-primary">@link.ButtonText.Value</a>
+                            </div>
                         }
                     }
                 }
@@ -66,7 +71,3 @@
 <div>Some Number: @Model.Data.AllFields?.Number?</div>
 <div>Some Date: @Model.Data.AllFields?.Date?.Value?.ToLongDateString()</div>
 <div>Content from another Document: @Html.Raw(Model.Data.AllFields?.Page?.Page?.Excerpt)</div>
-
-
-
-

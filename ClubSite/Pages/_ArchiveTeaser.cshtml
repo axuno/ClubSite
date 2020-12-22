@@ -6,8 +6,11 @@
         {
             <a href="@post.Permalink">
                 <img class="rounded mb-3" src="@Url.Content(WebApp.Media.ResizeImage(post.PrimaryImage, 1140, 450))" alt="@post.PrimaryImage.Media.AltText">
-            </a>}
-        <a href="@post.Permalink" style="text-decoration: none"><h3>@post.Title</h3></a>
+            </a>
+        }
+        <a href="@post.Permalink" style="text-decoration: none">
+            <h3>@post.Title</h3>
+        </a>
         <p class="post-meta">
             <span>
                 In <a href="@Model.ArchivePage.Data.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
@@ -16,18 +19,21 @@
                 Tags
                 @foreach (var tag in post.Tags)
                 {
-                    <a href="@Model.ArchivePage.Data.Permalink/tag/@tag.Slug">#@tag.Slug</a>}
+                    <a href="@Model.ArchivePage.Data.Permalink/tag/@tag.Slug">#@tag.Slug</a>
+                }
             </span>
             @if (post.IsPublished)
             {
                 <span>
                     Ver&ouml;ffentlicht @post.Published?.ToShortDateString()
-                </span>}
+                </span>
+            }
             @if (post.EnableComments && post.CommentCount > 0)
             {
                 <span>
                     <a href="@post.Permalink#comments">@post.CommentCount @(post.CommentCount == 1 ? "Kommentar" : "Kommentare")</a>
-                </span>}
+                </span>
+            }
         </p>
         @if (!string.IsNullOrWhiteSpace(post.Excerpt))
         {

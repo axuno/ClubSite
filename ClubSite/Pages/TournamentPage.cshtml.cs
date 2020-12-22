@@ -1,7 +1,7 @@
-//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Collections.Generic;
@@ -21,15 +21,16 @@ namespace ClubSite.Pages
     public class TournamentPageModel : SinglePage<TournamentPage>
     {
         private readonly IDb _db;
-        private readonly ClubSite.Data.ClubDbContext _clubDbContext;
+        private readonly Data.ClubDbContext _clubDbContext;
 
-        public TournamentPageModel(IApi api, IModelLoader loader, IDb db, ClubSite.Data.ClubDbContext clubDbContext) : base(api, loader)
+        public TournamentPageModel(IApi api, IModelLoader loader, IDb db, Data.ClubDbContext clubDbContext) : base(api,
+            loader)
         {
             _db = db;
             _clubDbContext = clubDbContext;
         }
 
-        public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
+        async public override Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
             var result = await base.OnGet(id, draft);
             Registrations = await _clubDbContext.TournamentRegistration.Where(tr =>

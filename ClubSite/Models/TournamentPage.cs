@@ -1,7 +1,7 @@
-﻿//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+﻿// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,8 @@ namespace ClubSite.Models
     /// Basic page with main content in markdown.
     /// </summary>
     [PageType(Title = "Turnier VC Neusäß", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
-    [PageTypeRoute(Title = "Default", Route = "/TournamentPage")] // Route is the base name of the Page name (TournamentPage.cshtml)
+    [PageTypeRoute(Title = "Default",
+        Route = "/TournamentPage")] // Route is the base name of the Page name (TournamentPage.cshtml)
     public class TournamentPage : Page<TournamentPage>
     {
         [Region(Title = "Turnierbeschreibung")]
@@ -112,7 +113,8 @@ namespace ClubSite.Models
         public MediaField? Media { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        [FieldDescription("Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
+        [FieldDescription(
+            "Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
         public VideoField? Video { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]

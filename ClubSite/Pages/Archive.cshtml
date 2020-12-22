@@ -5,20 +5,20 @@
     var hasImage = Model.Data.PrimaryImage.HasValue;
 
     var posts = Model.Archive.Posts.Count;
-    if (ClubSite.Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
+    if (Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
     {
         Model.Data.Excerpt = string.Empty;
     }
     foreach (var post in Model.Archive.Posts)
     {
-        if (ClubSite.Library.HtmlTool.IsEmptyHtml(post.Excerpt ?? string.Empty))
+        if (Library.HtmlTool.IsEmptyHtml(post.Excerpt ?? string.Empty))
         {
             post.Excerpt = string.Empty;
-        }        
+        }
     }
 }
 
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({ @Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400)) })" : "")>
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({@Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400))})" : "")>
     <div class="dimmer"></div>
     <div class="container text-center">
         <h1>@Model.Data.Title</h1>
@@ -45,30 +45,30 @@
     }
     @* Display the teasers for Archive Blog posts *@
     <div class="mx-3">
-    @{
-        bool hideTeaser = false;
-        for (var n = 0; n < posts; n += 2)
-        {
-            <div class="row@(hideTeaser ? " collapse hide-teaser" : string.Empty)">
-                @for (var i = n; i < Math.Min(posts, n + 2); i++)
-                {
-                    <div class="@(i == 0 ? "col-md-12" : "col-md-6")">
-                        <partial name="_ArchiveTeaser" model="(Model, Model.Archive.Posts[i])"/>
-                    </div>
-                    @if (i == 0)
-                    {
-                        n--;
-                        break;
-                    }
-                }
-            </div>
-            @if (!hideTeaser && n + 2 < posts && n == 3)
+        @{
+            var hideTeaser = false;
+            for (var n = 0; n < posts; n += 2)
             {
-                // if we have more than 5 teasers, we hide them until "show more" will be clicked
-                hideTeaser = true;
-                <button type="button" class="btn btn-secondary col-12 col-md-6 mt-3 collapse show hide-teaser" data-toggle="collapse" data-target=".hide-teaser">Mehr Posts anzeigen...</button>
+                <div class="row@(hideTeaser ? " collapse hide-teaser" : string.Empty)">
+                    @for (var i = n; i < Math.Min(posts, n + 2); i++)
+                    {
+                        <div class="@(i == 0 ? "col-md-12" : "col-md-6")">
+                            <partial name="_ArchiveTeaser" model="(Model, Model.Archive.Posts[i])"/>
+                        </div>
+                        @if (i == 0)
+                        {
+                            n--;
+                            break;
+                        }
+                    }
+                </div>
+                @if (!hideTeaser && n + 2 < posts && n == 3)
+                {
+                    // if we have more than 5 teasers, we hide them until "show more" will be clicked
+                    hideTeaser = true;
+                    <button type="button" class="btn btn-secondary col-12 col-md-6 mt-3 collapse show hide-teaser" data-toggle="collapse" data-target=".hide-teaser">Mehr Posts anzeigen...</button>
+                }
             }
         }
-    }
-</div>
+    </div>
 </main>

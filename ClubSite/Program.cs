@@ -1,7 +1,7 @@
-//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.IO;
@@ -21,6 +21,7 @@ namespace ClubSite
         /// Constant is also used in components where IWebHostEnvironment is injected
         /// </summary>
         public const string ConfigurationFolder = "Configuration";
+
         public static void Main(string[] args)
         {
             // NLog: setup the logger first to catch all errors
@@ -28,7 +29,7 @@ namespace ClubSite
             var logger = NLogBuilder
                 .ConfigureNLog($@"{currentDir}\{ConfigurationFolder}\NLog.Internal.config")
                 .GetCurrentClassLogger();
-                
+
             // Allows for <target name="file" xsi:type="File" fileName = "${var:logDirectory}logfile.log"... >
             NLog.LogManager.Configuration.Variables["logDirectory"] = currentDir + "\\";
 
@@ -49,28 +50,36 @@ namespace ClubSite
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
-                    var configPath = Path.Combine(hostingContext.HostingEnvironment.ContentRootPath, ConfigurationFolder);
+                    var configPath = Path.Combine(hostingContext.HostingEnvironment.ContentRootPath,
+                        ConfigurationFolder);
                     config.SetBasePath(configPath)
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                        .AddJsonFile(@"credentials.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"credentials.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile("appsettings.json", false, true)
+                        .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true,
+                            true)
+                        .AddJsonFile(@"credentials.json", false, true)
+                        .AddJsonFile($"credentials.{hostingContext.HostingEnvironment.EnvironmentName}.json", false,
+                            true)
                         .AddEnvironmentVariables()
                         .AddCommandLine(args);
 
-                    var secretsFolder = Path.Combine(configPath,  @"..\..\..\Secrets");
+                    var secretsFolder = Path.Combine(configPath, @"..\..\..\Secrets");
                     if (hostingContext.HostingEnvironment.IsDevelopment())
                     {
-                        if (!Directory.Exists(secretsFolder)) throw new DirectoryNotFoundException("Secrets folder not found");
+                        if (!Directory.Exists(secretsFolder))
+                            throw new DirectoryNotFoundException("Secrets folder not found");
                         config.AddJsonFile(Path.Combine(secretsFolder, @"credentials.json"), false);
-                        config.AddJsonFile(Path.Combine(secretsFolder, $"credentials.{hostingContext.HostingEnvironment.EnvironmentName}.json"), false);
+                        config.AddJsonFile(
+                            Path.Combine(secretsFolder,
+                                $"credentials.{hostingContext.HostingEnvironment.EnvironmentName}.json"), false);
                     }
 
-                    NLogBuilder.ConfigureNLog(Path.Combine(configPath, $"NLog.{hostingContext.HostingEnvironment.EnvironmentName}.config"));
+                    NLogBuilder.ConfigureNLog(Path.Combine(configPath,
+                        $"NLog.{hostingContext.HostingEnvironment.EnvironmentName}.config"));
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
@@ -82,6 +91,7 @@ namespace ClubSite
                     // Note: This logging configuration overrides any call to SetMinimumLevel!
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                 })
-                .UseNLog();  // NLog: Setup NLog for dependency injection;
+                .UseNLog(); // NLog: Setup NLog for dependency injection;
+        }
     }
 }

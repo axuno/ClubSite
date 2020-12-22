@@ -1,7 +1,7 @@
-//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using Microsoft.AspNetCore.Mvc;
@@ -14,18 +14,16 @@ namespace ClubSite.Pages
     {
         private readonly ILogger<ErrorModel> _logger;
 
-        public ErrorModel(ILogger<ErrorModel> logger) => _logger = logger;
+        public ErrorModel(ILogger<ErrorModel> logger)
+        {
+            _logger = logger;
+        }
 
-        [BindProperty]
-        public string? OrigPath { get; set; }
-        [BindProperty]
-        public Exception? Exception { get; set; }
-        [BindProperty]
-        public string? SentStatusCode { get; set; }
-        [BindProperty]
-        public string? SentStatusText { get; set; }
-        [BindProperty]
-        public string? Description { get; set; }
+        [BindProperty] public string? OrigPath { get; set; }
+        [BindProperty] public Exception? Exception { get; set; }
+        [BindProperty] public string? SentStatusCode { get; set; }
+        [BindProperty] public string? SentStatusText { get; set; }
+        [BindProperty] public string? Description { get; set; }
 
         public void OnGet(string? id = null)
         {
@@ -34,7 +32,7 @@ namespace ClubSite.Pages
 
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("de");
             System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("de");
-            
+
             // The StatusCodePagesMiddleware stores a request-feature with
             // the original path on the HttpContext, that can be accessed from the Features property.
             // Note: IExceptionHandlerFeature does not contain the path
@@ -55,8 +53,9 @@ namespace ClubSite.Pages
             }
 
             SentStatusCode = id;
-            SentStatusText = Resources.StatusCodes.ResourceManager.GetString("E"+id) ?? "Fehler";
-            Description = Resources.StatusDescriptions.ResourceManager.GetString("E"+id) ?? "Ein Fehler ist aufgetreten";
+            SentStatusText = Resources.StatusCodes.ResourceManager.GetString("E" + id) ?? "Fehler";
+            Description = Resources.StatusDescriptions.ResourceManager.GetString("E" + id) ??
+                          "Ein Fehler ist aufgetreten";
         }
     }
 }

@@ -1,14 +1,15 @@
 ﻿@page
 @model SinglePostWithComments<StandardPost>
-@{ ViewData["Title"] = Model.Data.Title;
+@{
+    ViewData["Title"] = Model.Data.Title;
     var hasImage = Model.Data.PrimaryImage.HasValue;
     var archive = await WebApp.Api.Pages.GetByIdAsync(Model.Data.BlogId);
-    @if (ClubSite.Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
+    @if (Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
     {
         Model.Data.Excerpt = string.Empty;
     }
 }
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({ @Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1240, 400)) })" : "")>
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({@Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1240, 400))})" : "")>
     <div class="dimmer"></div>
     <div class="@(hasImage ? "container" : "") text-center">
         <h1>@Model.Data.Title</h1>
@@ -20,77 +21,85 @@
                 Tags
                 @foreach (var tag in Model.Data.Tags)
                 {
-    <a href="@archive.Permalink/tag/@tag.Slug">#@tag.Slug</a>}
+                    <a href="@archive.Permalink/tag/@tag.Slug">#@tag.Slug</a>
+                }
             </span>
             @if (Model.Data.IsPublished)
             {
-<span>
-    Ver&ouml;ffentlicht @Model.Data.Published?.ToShortDateString()
-</span>     }
+                <span>
+                    Ver&ouml;ffentlicht @Model.Data.Published?.ToShortDateString()
+                </span>
+            }
             @if (Model.Data.EnableComments && Model.Data.CommentCount > 0)
             {
-<span>
-    <a href="#comments">@Model.Data.CommentCount @(Model.Data.CommentCount == 1 ? "Kommentar" : "Kommentare")</a>
-</span>     }
+                <span>
+                    <a href="#comments">@Model.Data.CommentCount @(Model.Data.CommentCount == 1 ? "Kommentar" : "Kommentare")</a>
+                </span>
+            }
         </p>
         @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
         {
-<div class="row justify-content-center">
-    <div class="col-lg-8 lead">
-        @Html.Raw(Model.Data.Excerpt)
-    </div>
-</div>}
+            <div class="row justify-content-center">
+                <div class="col-lg-8 lead">
+                    @Html.Raw(Model.Data.Excerpt)
+                </div>
+            </div>
+        }
     </div>
 </header>
 
 <main>
     @foreach (var block in Model.Data.Blocks)
     {
-<div class="block @block.CssName()">
-    <div class="mx-3">
-        @Html.DisplayFor(m => block, block.GetType().Name)
-    </div>
-</div>}
+        <div class="block @block.CssName()">
+            <div class="mx-3">
+                @Html.DisplayFor(m => block, block.GetType().Name)
+            </div>
+        </div>
+    }
     @if (Model.Data.EnableComments)
     {
-<div id="comments" class="comments mx-3">
-    @if (Model.Data.IsCommentsOpen)
-    {
-<div class="comments alert mt-2 mb-2 col-lg-8">
-    <form asp-page-handler="SaveComment" method="post">
-        @Html.AntiForgeryToken()
-        @Html.Hidden("Id", Model.Data.Id)
+        <div id="comments" class="comments mx-3">
+            @if (Model.Data.IsCommentsOpen)
+            {
+                <div class="comments alert mt-2 mb-2 col-lg-8">
+                    <form asp-page-handler="SaveComment" method="post">
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("Id", Model.Data.Id)
 
-        <h3 class="mb-3">Kommentar hinterlassen</h3>
-        <p class="mb-4">
-            Die E-Mail wird weder für Besucher angezeigt noch für ungewünschte Nachrichten verwendet.
-            Wir verwenden die E-Mail-Adresse nur, um das Gravatarbild anzuzeigen, und zu verfizieren,
-            dass es sich um eine natürliche Person handelt.
-        </p>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <input name="CommentAuthor" type="text" class="form-control" placeholder="Dein Name">
+                        <h3 class="mb-3">Kommentar hinterlassen</h3>
+                        <p class="mb-4">
+                            Die E-Mail wird weder für Besucher angezeigt noch für ungewünschte Nachrichten verwendet.
+                            Wir verwenden die E-Mail-Adresse nur, um das Gravatarbild anzuzeigen, und zu verfizieren,
+                            dass es sich um eine natürliche Person handelt.
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input name="CommentAuthor" type="text" class="form-control" placeholder="Dein Name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <input name="CommentEmail" type="text" class="form-control" placeholder="Deine E-Mail-Adresse">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input name="CommentUrl" type="text" class="form-control" placeholder="Eine (optionale) URL zu Deiner Website">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="CommentBody" rows="6" class="form-control" placeholder="Dein Kommentar"></textarea>
+                        </div>
+                        <div class="form-group text-left">
+                            <button class="btn btn-primary">Kommentar speichern</button>
+                        </div>
+                    </form>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <input name="CommentEmail" type="text" class="form-control" placeholder="Deine E-Mail-Adresse">
-            </div>
+            }
+            @Html.DisplayFor(m => m.Comments)
         </div>
-        <div class="form-group">
-            <input name="CommentUrl" type="text" class="form-control" placeholder="Eine (optionale) URL zu Deiner Website">
-        </div>
-        <div class="form-group">
-            <textarea name="CommentBody" rows="6" class="form-control" placeholder="Dein Kommentar"></textarea>
-        </div>
-        <div class="form-group text-left">
-            <button class="btn btn-primary">Kommentar speichern</button>
-        </div>
-    </form>
-</div>}
-    @Html.DisplayFor(m => m.Comments)
-</div>}
+    }
 </main>
+
 @section head
 {
     @WebApp.MetaTags(Model.Data, generator: false, opengraph: false)

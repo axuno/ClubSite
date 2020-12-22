@@ -20,27 +20,26 @@
     <meta name="apple-mobile-web-app-title" content="Volleyballclub Neusäß">
     <meta name="application-name" content="Volleyballclub Neusäß">
     <!-- favicon [end] -->
-    <meta name="generator" value="axuno piranha cms @Piranha.Utils.GetAssemblyVersion(typeof (Piranha.App).Assembly) https://axuno.net" />
-    @await RenderSectionAsync("head", required: false)
+    <meta name="generator" value="axuno piranha cms @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.App).Assembly) https://axuno.net"/>
+    @await RenderSectionAsync("head", false)
     <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" asp-append-version="true">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Raleway:wght@700&display=swap">
     <link rel="stylesheet" href="~/assets/css/style.min.css" asp-append-version="true">
-    @await RenderSectionAsync("styles", required: false)
+    @await RenderSectionAsync("styles", false)
 </head>
 <body>
-    <div class="container-fluid main p-0 mb-2">
-        <menu>
-            <partial name="_MenuTopLevel.cshtml" />
-        </menu>
-        @RenderBody()
-        <partial name="_Footer.cshtml" />
-    </div>
-    @if (!Env.IsDevelopment())
-    {
-        <partial name="_GoogleAnalytics.cshtml" />
-    }
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>    @await RenderSectionAsync("script", required: false)
+<div class="container-fluid main p-0 mb-2">
+    <menu>
+        <partial name="_MenuTopLevel.cshtml"/>
+    </menu>
+    @RenderBody()
+    <partial name="_Footer.cshtml"/>
+</div>
+@if (!Env.IsDevelopment())
+{
+    <partial name="_GoogleAnalytics.cshtml"/>}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script> @await RenderSectionAsync("script", false)
 </body>
 </html>

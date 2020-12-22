@@ -12,7 +12,7 @@
             else
             {
                 <a href="@childNode.Permalink" class="dropdown-item@(childNode.Id == WebApp.PageId || childNode.HasChild(WebApp.PageId) ? " active" : "")">@childNode.MenuTitle</a>
-                <partial name="_MenuDropdown" model="@childNode"/> @* recursion *@
+                <partial name="_MenuDropdown" model="@childNode"/>                                                                                                                                                                                                       @* recursion *@
             }
         }
     </div>

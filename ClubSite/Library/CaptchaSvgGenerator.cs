@@ -1,13 +1,11 @@
-﻿//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+﻿// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 
 namespace ClubSite.Library
@@ -18,8 +16,9 @@ namespace ClubSite.Library
     public class CaptchaSvgGenerator : IDisposable
     {
         // use characters well to distinguish by humans
-        private readonly char[] _captureChars = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'q', 's', 'u', 'v', 'w', 'x', 'y', 'z' };
-        
+        private readonly char[] _captureChars =
+            {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'k', 'm', 'n', 'o', 'p', 'q', 's', 'u', 'v', 'w', 'x', 'y', 'z'};
+
         /// <summary>
         /// CTOR.
         /// </summary>
@@ -84,14 +83,14 @@ namespace ClubSite.Library
         public int SetTextWithMathCalc(int calcRule = 1)
         {
             // For generating random numbers.
-            var random = new Random((int)DateTime.Now.Ticks);
+            var random = new Random((int) DateTime.Now.Ticks);
 
             int firstNum;
             int secondNum;
 
-            if (calcRule >= 5 ) calcRule = random.Next(1, 5);
+            if (calcRule >= 5) calcRule = random.Next(1, 5);
             if (calcRule < 0) calcRule = 1;
-            
+
             switch (calcRule)
             {
                 case 1: // add
@@ -183,7 +182,7 @@ namespace ClubSite.Library
             BackgroundColor = Color.FromArgb(0, 255, 255, 255); // transparent
             TextColor = Color.FromArgb(0, 0, 0);
         }
-        
+
         /// <summary>
         /// Destructor
         /// </summary>
@@ -205,7 +204,8 @@ namespace ClubSite.Library
         private void Dispose(bool disposing)
         {
             if (disposing)
-            { }
+            {
+            }
         }
 
         private void SetDimensions(int width, int height)
@@ -229,7 +229,7 @@ namespace ClubSite.Library
         /// <returns>Returns a string with the SVG content</returns>
         private string GenerateSvg()
         {
-            var xmlDoc = System.Xml.Linq.XDocument.Parse($@"
+            var xmlDoc = XDocument.Parse($@"
 <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
 <svg height='{Height}' width='{Width}' xmlns='http://www.w3.org/2000/svg' xml:space='preserve' version='1.1' style='shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd'>
     <defs>
@@ -243,7 +243,7 @@ namespace ClubSite.Library
     </defs>
     <rect height='{Height}' width='{Width}' fill='rgb({BackgroundColor.R}, {BackgroundColor.G}, {BackgroundColor.B})' fill-opacity='{(BackgroundColor.A / 255D).ToString("0.#", CultureInfo.InvariantCulture)}' />
     <rect height='{Height}' width='{Width}' fill='url(#smallGrid)' />
-    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='{FontFamilyName}' font-size='{FontSizePt.ToString("0.##", CultureInfo.InvariantCulture)}pt'><span style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(0,1)}</span><span style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(1)}</span></text>
+    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='{FontFamilyName}' font-size='{FontSizePt.ToString("0.##", CultureInfo.InvariantCulture)}pt'><span style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(0, 1)}</span><span style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(1)}</span></text>
 </svg>");
             return xmlDoc.ToString(SaveOptions.None);
         }

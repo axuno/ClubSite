@@ -5,11 +5,11 @@
 @inject ManagerLocalizer Localizer
 @{
     Layout = null;
-    var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
-    var prerelease = Piranha.Utils.IsPreRelease(typeof(Piranha.Manager.Module).Assembly) ? "pre-release" : "";
+    var module = App.Modules.Get<Module>();
+    var prerelease = Utils.IsPreRelease(typeof(Module).Assembly) ? "pre-release" : "";
 }
 <!doctype html>
-<html lang="en" style="min-height:100%">
+<html lang="en" style="min-height: 100%">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,16 +17,16 @@
     <link rel="stylesheet" href="~/manager/assets/css/slim.min.css">
     @foreach (var style in module.Styles)
     {
-        <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
+        <link href="@Url.Content(style)" rel="stylesheet" type="text/css"/>
     }
 
     <title>@Localizer.General["Login"]</title>
 </head>
 <body id="login" class="@prerelease">
-    @if (!string.IsNullOrEmpty(prerelease))
-    {
-        <div class="pre-release">Pre-release</div>
-    }
+@if (!string.IsNullOrEmpty(prerelease))
+{
+    <div class="pre-release">Pre-release</div>
+}
 <div class="container">
     <form method="post" class="needs-validation" novalidate>
         <div class="card card-login @(!Model.ModelState.IsValid ? "has-error" : "")">
@@ -34,7 +34,7 @@
                 <div class="logo"></div>
                 <p class="banner">
                     Piranha CMS
-                    <small>@Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.Manager.Module).Assembly)</small>
+                    <small>@Localizer.General["Version"] @Utils.GetAssemblyVersion(typeof(Module).Assembly)</small>
                 </p>
             </div>
 
@@ -59,26 +59,33 @@
         </div>
     </form>
     <div class="text-center" style="margin-top: 3rem">
-        <small style="text-transform: none; font-size: 0.8rem; margin-top: 0; color: gray">Design und Realisierung:<br/>
-            Norbert Bietsch, <a href="https://axuno.net/" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno gemeinnützige GmbH</a></small>
+        <small style="text-transform: none; font-size: 0.8rem; margin-top: 0; color: gray">
+            Design und Realisierung:<br/>
+            Norbert Bietsch, <a href="https://axuno.net/" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno gemeinnützige GmbH</a>
+        </small>
     </div>
 </div>
-    <script>
-        (function () {
-            'use strict';
-            window.addEventListener('load', function () {
+<script>
+    (function() {
+        'use strict';
+        window.addEventListener('load',
+            function() {
                 var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function (form) {
-                    form.addEventListener('submit', function (event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
+                var validation = Array.prototype.filter.call(forms,
+                    function(form) {
+                        form.addEventListener('submit',
+                            function(event) {
+                                if (form.checkValidity() === false) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                }
+                                form.classList.add('was-validated');
+                            },
+                            false);
+                    });
+            },
+            false);
+    })();
+</script>
 </body>
 </html>

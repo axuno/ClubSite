@@ -1,7 +1,7 @@
-//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.Collections.Generic;
@@ -26,12 +26,11 @@ namespace ClubSite.Pages
             _db = db;
         }
 
-        public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
+        async public override Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
             var result = await base.OnGet(id, draft);
-            
- 
- 
+
+
             return result;
         }
     }

@@ -1,7 +1,7 @@
-//
-// Copyright (C) axuno gGmbH and other contributors.
-// Licensed under the MIT license.
-//
+// Copyright (C) axuno gGmbH and Contributors.
+// This software may be modified and distributed under the terms
+// of the MIT license. See the LICENSE file for details.
+// https://https://github.com/axuno/ClubSite
 
 using System;
 using System.IO;
@@ -56,17 +56,17 @@ namespace ClubSite
             // required for cookies and session cookies (will throw CryptographicException without)
             services.AddDataProtection()
                 .SetApplicationName("ClubSite")
-                .SetDefaultKeyLifetime(System.TimeSpan.FromDays(360))
+                .SetDefaultKeyLifetime(TimeSpan.FromDays(360))
                 .PersistKeysToFileSystem(
                     new DirectoryInfo(Path.Combine(WebHostEnvironment.ContentRootPath, "DataProtectionKeys")))
-                .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration()
-                {
+                .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration() {
                     EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
                     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
                 });
-            
+
             // Make sure we can connect to the database
-            using (var connection = new Microsoft.Data.SqlClient.SqlConnection(Configuration.GetConnectionString("VolleyballClub")))
+            using (var connection =
+                new Microsoft.Data.SqlClient.SqlConnection(Configuration.GetConnectionString("VolleyballClub")))
                 try
                 {
                     connection.Open();
@@ -81,7 +81,7 @@ namespace ClubSite
             // Custom ClubSite db context
             services.AddDbContext<Data.ClubDbContext>((sp, options) =>
                 options.UseSqlServer(Configuration.GetConnectionString("VolleyballClub")));
-                
+
             // Piranha service setup
             services.AddPiranha(svcBuilder =>
             {
@@ -89,7 +89,7 @@ namespace ClubSite
 
                 svcBuilder.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
                 svcBuilder.UseImageSharp();
-                svcBuilder.UseManager(); // https://localhost:44306/manager/pages  user: admin, pw: password
+                svcBuilder.UseManager(); // https://localhost:44306/manager/ initial user: admin, pw: password
                 svcBuilder.UseTinyMCE();
                 svcBuilder.UseMemoryCache();
                 svcBuilder.UseEF<SQLServerDb>(db =>
@@ -102,12 +102,12 @@ namespace ClubSite
             // MUST be before AddMvc!
             services.AddSession(options =>
             {
-                options.IdleTimeout = System.TimeSpan.FromMinutes(60);
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.Name = ".sid";
                 options.Cookie.IsEssential = true;
             });
-            
+
             services.AddRazorPages().AddPiranhaManagerOptions();
 
             services.AddMvc()
@@ -123,8 +123,10 @@ namespace ClubSite
             });
 
             services.Configure<ConfigurationPoco.MailSettings>(
-                Configuration.GetSection(nameof(ConfigurationPoco.MailSettings)) ?? throw new ArgumentNullException($"Configuration section '{nameof(ConfigurationPoco.MailSettings)}' not found."));
-            
+                Configuration.GetSection(nameof(ConfigurationPoco.MailSettings)) ??
+                throw new ArgumentNullException(
+                    $"Configuration section '{nameof(ConfigurationPoco.MailSettings)}' not found."));
+
             services.AddTransient<Services.IMailService, Services.MailService>();
         }
 
@@ -132,13 +134,13 @@ namespace ClubSite
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
             var cultureInfo = new System.Globalization.CultureInfo("de-DE");
-            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
-            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture =
+                System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture =
+                System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
 
             if (false)
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseStatusCodePagesWithReExecute($"/Error/{{0}}");
@@ -146,7 +148,7 @@ namespace ClubSite
                 // instruct the browsers to always access the site via HTTPS
                 app.UseHsts();
             }
-            
+
             // Initialize Piranha
             App.Init(api);
 
@@ -155,7 +157,7 @@ namespace ClubSite
                 .AddAssembly(typeof(Startup).Assembly)
                 .Build()
                 .DeleteOrphans();
-            
+
             // Register custom blocks
             App.Blocks.Register<PersonProfileBlock>();
 
@@ -182,34 +184,33 @@ namespace ClubSite
             // Keep before .UsePiranha()
             app.UseSession();
 
-            #region *** Rewrite domains (even those without SSL certificate) to https://www.volleyballclub.de ***
-            
-            app.UseRewriter(new RewriteOptions()                
+            #region *** Rewrite domains (even those without SSL certificate) to https: //www.volleyballclub.de ***
+
+            app.UseRewriter(new RewriteOptions()
                 .AddRedirectToWwwPermanent()
                 .AddRedirectToHttpsPermanent()
             );
-            
+
             #endregion
 
             // Middleware setup
-            app.UsePiranha(options => {
+            app.UsePiranha(options =>
+            {
                 options.UseManager();
                 options.UseTinyMCE();
                 options.UseIdentity();
             });
-            
+
             // For static files using a content type provider:
             var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
             // Make sure .webmanifest files don't cause a 404
             provider.Mappings[".webmanifest"] = "application/manifest+json";
-            app.UseStaticFiles(new StaticFileOptions
-            {
+            app.UseStaticFiles(new StaticFileOptions {
                 ContentTypeProvider = provider,
                 OnPrepareResponse = ctx =>
                 {
                     var headers = ctx.Context.Response.GetTypedHeaders();
-                    headers.CacheControl = new CacheControlHeaderValue
-                    {
+                    headers.CacheControl = new CacheControlHeaderValue {
                         Public = true,
                         MaxAge = TimeSpan.FromDays(5)
                     };
