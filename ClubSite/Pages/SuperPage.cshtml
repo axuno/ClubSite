@@ -37,7 +37,7 @@
     <div class="container latest-post">
         <div class="row">
             <div class="col text-center">
-                <strong>@Html.Raw(Model.Data.AllFields.Markdown.ToHtml())</strong>
+                <strong>@Html.Raw(Model.Data.AllFields.Markdown?.ToHtml())</strong>
             </div>
         </div>
     </div>
@@ -51,7 +51,10 @@
                 @{
                     foreach (var link in Model.Data.Links)
                     {
-                        <div><a href="@link.ButtonLink.Page.Permalink" class="btn btn-primary">@link.ButtonText.Value</a></div>
+                        if (link.ButtonLink?.Page?.Permalink != null && link.ButtonText != null)
+                        {
+                            <div><a href="@link.ButtonLink.Page?.Permalink" class="btn btn-primary">@link.ButtonText.Value</a></div>
+                        }
                     }
                 }
             </div>
@@ -60,9 +63,9 @@
 }
 
 <div>Some Text: @Model.Data.AllFields?.Text</div>
-<div>Some Number: @Model.Data.AllFields?.Number.Value</div>
-<div>Some Date: @Model.Data.AllFields?.Date.Value?.ToLongDateString()</div>
-<div>Content from another Document: @Html.Raw(Model.Data.AllFields?.Page.Page.Excerpt)</div>
+<div>Some Number: @Model.Data.AllFields?.Number?</div>
+<div>Some Date: @Model.Data.AllFields?.Date?.Value?.ToLongDateString()</div>
+<div>Content from another Document: @Html.Raw(Model.Data.AllFields?.Page?.Page?.Excerpt)</div>
 
 
 

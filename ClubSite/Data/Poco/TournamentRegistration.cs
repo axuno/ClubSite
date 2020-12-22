@@ -405,18 +405,18 @@ GO
     public class TournamentRegistration
     {
         [Key] public long Id { get; set; }
-        [MaxLength(255)] public string Guid { get; set; }
+        [MaxLength(255)] public string Guid { get; set; } = string.Empty;
         [Column(TypeName = "date")]public DateTime TournamentDate { get; set; }
         public int? Rank { get; set; }
-        [MaxLength(255)][Display(Name = "Teamname")] public string TeamName { get; set; }
-        [MaxLength(255)][Display(Name = "Vereinsname")] public string ClubName { get; set; }
-        [MaxLength(1)][Display(Name = "Anrede")] public string Gender { get; set; }
-        [MaxLength(255)][Display(Name = "Vorname")] public string FirstName { get; set; }
-        [MaxLength(255)][Display(Name = "Familienname")] public string LastName { get; set; }
-        [MaxLength(255)][Display(Name = "Spitzname")] public string Nickname { get; set; }
-        [MaxLength(40)][Display(Name = "Telefon")] public string Fone { get; set; }
-        [MaxLength(100)][Display(Name = "E-Mail")] public string Email { get; set; }
-        [MaxLength(4000)][Display(Name = "Nachricht/Hinweis")] public string Message { get; set; }
+        [MaxLength(255)][Display(Name = "Teamname")] public string TeamName { get; set; } = string.Empty;
+        [MaxLength(255)][Display(Name = "Vereinsname")] public string ClubName { get; set; } = string.Empty;
+        [MaxLength(1)][Display(Name = "Anrede")] public string Gender { get; set; } = string.Empty;
+        [MaxLength(255)][Display(Name = "Vorname")] public string FirstName { get; set; } = string.Empty;
+        [MaxLength(255)][Display(Name = "Familienname")] public string LastName { get; set; } = string.Empty;
+        [MaxLength(255)][Display(Name = "Spitzname")] public string Nickname { get; set; } = string.Empty;
+        [MaxLength(40)][Display(Name = "Telefon")] public string Fone { get; set; } = string.Empty;
+        [MaxLength(100)][Display(Name = "E-Mail")] public string Email { get; set; } = string.Empty;
+        [MaxLength(4000)][Display(Name = "Nachricht/Hinweis")] public string Message { get; set; } = string.Empty;
         public bool IsStandByRegistration { get; set; }
         [Column(TypeName = "datetime")] public DateTime? RegisteredOn { get; set; }
         [Column(TypeName = "datetime")] public DateTime? RegCanceledOn { get; set; }

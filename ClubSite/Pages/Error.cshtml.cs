@@ -14,23 +14,20 @@ namespace ClubSite.Pages
     {
         private readonly ILogger<ErrorModel> _logger;
 
-        public ErrorModel(ILogger<ErrorModel> logger)
-        {
-            _logger = logger;
-        }
+        public ErrorModel(ILogger<ErrorModel> logger) => _logger = logger;
 
         [BindProperty]
-        public string OrigPath { get; set; }
+        public string? OrigPath { get; set; }
         [BindProperty]
-        public Exception Exception { get; set; }
+        public Exception? Exception { get; set; }
         [BindProperty]
-        public string SentStatusCode { get; set; }
+        public string? SentStatusCode { get; set; }
         [BindProperty]
-        public string SentStatusText { get; set; }
+        public string? SentStatusText { get; set; }
         [BindProperty]
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public void OnGet(string id = null)
+        public void OnGet(string? id = null)
         {
             id ??= string.Empty;
             id = id.Trim();

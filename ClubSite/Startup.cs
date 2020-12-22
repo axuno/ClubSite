@@ -65,27 +65,39 @@ namespace ClubSite
                     ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
                 });
             
+            // Make sure we can connect to the database
+            using (var connection = new Microsoft.Data.SqlClient.SqlConnection(Configuration.GetConnectionString("VolleyballClub")))
+                try
+                {
+                    connection.Open();
+                }
+                finally
+                {
+                    connection.Close();
+                }
+
             services.AddMemoryCache(); // Adds a default in-memory cache implementation
 
-            // Service setup
-            services.AddPiranha(options =>
+            // Custom ClubSite db context
+            services.AddDbContext<Data.ClubDbContext>((sp, options) =>
+                options.UseSqlServer(Configuration.GetConnectionString("VolleyballClub")));
+                
+            // Piranha service setup
+            services.AddPiranha(svcBuilder =>
             {
-                options.AddRazorRuntimeCompilation = WebHostEnvironment.IsDevelopment();
+                svcBuilder.AddRazorRuntimeCompilation = WebHostEnvironment.IsDevelopment();
 
-                options.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
-                options.UseImageSharp();
-                options.UseManager(); // https://localhost:44306/manager/pages  user: admin, pw: password
-                options.UseTinyMCE();
-                options.UseMemoryCache();
-                options.UseEF<SQLServerDb>(db =>
+                svcBuilder.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
+                svcBuilder.UseImageSharp();
+                svcBuilder.UseManager(); // https://localhost:44306/manager/pages  user: admin, pw: password
+                svcBuilder.UseTinyMCE();
+                svcBuilder.UseMemoryCache();
+                svcBuilder.UseEF<SQLServerDb>(db =>
                     db.UseSqlServer(Configuration.GetConnectionString("VolleyballClub")));
-                options.UseIdentityWithSeed<IdentitySQLServerDb>(db =>
+                svcBuilder.UseIdentityWithSeed<IdentitySQLServerDb>(db =>
                     db.UseSqlServer(Configuration.GetConnectionString("VolleyballClub")));
             });
             services.AddPiranhaApplication();
-
-            services.AddDbContext<Data.ClubDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("VolleyballClub")));
 
             // MUST be before AddMvc!
             services.AddSession(options =>

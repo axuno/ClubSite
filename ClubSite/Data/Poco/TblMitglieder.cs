@@ -124,84 +124,84 @@ CREATE TABLE [dbo].[tblMitglieder](
 
     public class TblMitglieder
     {
-        [Key] public int AId { get; set; }
+        [Key] public int AId { get; set; } = 0;
         public int? Id { get; set; }
-        [MaxLength(15)] public string MitglNr { get; set; }
-        [MaxLength(30)] public string MitglGrp { get; set; }
-        [MaxLength(20)] public string Anrede { get; set; }
-        [MaxLength(40)] public string Titel { get; set; }
-        [MaxLength(40)] public string Nachname { get; set; }
-        [MaxLength(40)] public string Vorname { get; set; }
-        [MaxLength(100)] public string Name { get; set; }
-        [MaxLength(50)] public string Zusatz { get; set; }
-        [MaxLength(50)] public string Strasse { get; set; }
-        [MaxLength(3)] public string Land { get; set; }
-        [MaxLength(8)] public string Plz { get; set; }
-        [MaxLength(50)] public string Ort { get; set; }
-        [MaxLength(80)] public string Briefanrede { get; set; }
-        [MaxLength(25)] public string Telefon1 { get; set; }
-        [MaxLength(25)] public string Telefon2 { get; set; }
-        [MaxLength(25)] public string Mobil { get; set; }
-        [MaxLength(25)] public string Fax { get; set; }
-        [MaxLength(100)] public string EMail { get; set; }
-        [MaxLength(100)] public string Internet { get; set; }
-        [MaxLength(20)] public string ZAnrede { get; set; }
-        [MaxLength(40)] public string ZTitel { get; set; }
-        [MaxLength(40)] public string ZNachname { get; set; }
-        [MaxLength(40)] public string ZVorname { get; set; }
-        [MaxLength(100)] public string ZName { get; set; }
-        [MaxLength(50)] public string ZZusatz { get; set; }
-        [MaxLength(50)] public string ZStrasse { get; set; }
-        [MaxLength(3)] public string ZLand { get; set; }
-        [MaxLength(8)] public string ZPlz { get; set; }
-        [MaxLength(50)] public string ZOrt { get; set; }
-        [Required] public bool ZAnschrift { get; set; }
-        [MaxLength(255)] public string Foto { get; set; }
-        [MaxLength(8)] public string Eintritt { get; set; }
-        [MaxLength(8)] public string Austritt { get; set; }
-        [MaxLength(8)] public string GebDatum { get; set; }
-        [MaxLength(1)] public string Geschlecht { get; set; }
-        [MaxLength(1)] public string AP { get; set; }
-        [MaxLength(50)] public string Betreuer { get; set; }
-        [MaxLength(50)] public string Funktion { get; set; }
-        [MaxLength(50)] public string SuchKrit { get; set; }
+        [MaxLength(15)] public string MitglNr { get; set; } = string.Empty;
+        [MaxLength(30)] public string MitglGrp { get; set; } = string.Empty;
+        [MaxLength(20)] public string Anrede { get; set; } = string.Empty;
+        [MaxLength(40)] public string Titel { get; set; } = string.Empty;
+        [MaxLength(40)] public string Nachname { get; set; } = string.Empty;
+        [MaxLength(40)] public string Vorname { get; set; } = string.Empty;
+        [MaxLength(100)] public string Name { get; set; } = string.Empty;
+        [MaxLength(50)] public string Zusatz { get; set; } = string.Empty;
+        [MaxLength(50)] public string Strasse { get; set; } = string.Empty;
+        [MaxLength(3)] public string Land { get; set; } = string.Empty;
+        [MaxLength(8)] public string Plz { get; set; } = string.Empty;
+        [MaxLength(50)] public string Ort { get; set; } = string.Empty;
+        [MaxLength(80)] public string Briefanrede { get; set; } = string.Empty;
+        [MaxLength(25)] public string Telefon1 { get; set; } = string.Empty;
+        [MaxLength(25)] public string Telefon2 { get; set; } = string.Empty;
+        [MaxLength(25)] public string Mobil { get; set; } = string.Empty;
+        [MaxLength(25)] public string Fax { get; set; } = string.Empty;
+        [MaxLength(100)] public string EMail { get; set; } = string.Empty;
+        [MaxLength(100)] public string Internet { get; set; } = string.Empty;
+        [MaxLength(20)] public string ZAnrede { get; set; } = string.Empty;
+        [MaxLength(40)] public string ZTitel { get; set; } = string.Empty;
+        [MaxLength(40)] public string ZNachname { get; set; } = string.Empty;
+        [MaxLength(40)] public string ZVorname { get; set; } = string.Empty;
+        [MaxLength(100)] public string ZName { get; set; } = string.Empty;
+        [MaxLength(50)] public string ZZusatz { get; set; } = string.Empty;
+        [MaxLength(50)] public string ZStrasse { get; set; } = string.Empty;
+        [MaxLength(3)] public string ZLand { get; set; } = string.Empty;
+        [MaxLength(8)] public string ZPlz { get; set; } = string.Empty;
+        [MaxLength(50)] public string ZOrt { get; set; } = string.Empty;
+        [Required] public bool ZAnschrift { get; set; } = false;
+        [MaxLength(255)] public string Foto { get; set; } = string.Empty;
+        [MaxLength(8)] public string Eintritt { get; set; } = string.Empty;
+        [MaxLength(8)] public string Austritt { get; set; } = string.Empty;
+        [MaxLength(8)] public string GebDatum { get; set; } = string.Empty;
+        [MaxLength(1)] public string Geschlecht { get; set; } = string.Empty;
+        [MaxLength(1)] public string AP { get; set; } = string.Empty;
+        [MaxLength(50)] public string Betreuer { get; set; } = string.Empty;
+        [MaxLength(50)] public string Funktion { get; set; } = string.Empty;
+        [MaxLength(50)] public string SuchKrit { get; set; } = string.Empty;
         public int? Familie { get; set; }
-        [MaxLength(255)] public string EMailNews { get; set; }
-        [Required] public bool VereinNews { get; set; }
-        [MaxLength(8)] public string BuchDat { get; set; }
+        [MaxLength(255)] public string EMailNews { get; set; } = string.Empty;
+        [Required] public bool VereinNews { get; set; } = false;
+        [MaxLength(8)] public string BuchDat { get; set; } = string.Empty;
         public int? ZArt { get; set; }
-        [MaxLength(1)] public string ZW { get; set; }
+        [MaxLength(1)] public string ZW { get; set; } = string.Empty;
         public int? FTag { get; set; }
         public int? VBank { get; set; }
         public int? Zahler { get; set; }
-        [MaxLength(30)] public string IBAN { get; set; }
-        [MaxLength(30)] public string BIC { get; set; }
-        [MaxLength(10)] public string Blz { get; set; }
-        [MaxLength(15)] public string KtoNr { get; set; }
-        [MaxLength(70)] public string KtoInh { get; set; }
-        [MaxLength(35)] public string MndtId { get; set; }
-        [MaxLength(8)] public string MndtDat { get; set; }
+        [MaxLength(30)] public string IBAN { get; set; } = string.Empty;
+        [MaxLength(30)] public string BIC { get; set; } = string.Empty;
+        [MaxLength(10)] public string Blz { get; set; } = string.Empty;
+        [MaxLength(15)] public string KtoNr { get; set; } = string.Empty;
+        [MaxLength(70)] public string KtoInh { get; set; } = string.Empty;
+        [MaxLength(35)] public string MndtId { get; set; } = string.Empty;
+        [MaxLength(8)] public string MndtDat { get; set; } = string.Empty;
         public int? SeqType { get; set; }
-        [MaxLength(50)] public string Bankname { get; set; }
-        [MaxLength(80)] public string Sonst1 { get; set; }
-        [MaxLength(80)] public string Sonst2 { get; set; }
-        [MaxLength(80)] public string Sonst3 { get; set; }
-        [MaxLength(80)] public string Sonst4 { get; set; }
-        [MaxLength(80)] public string Sonst5 { get; set; }
-        [MaxLength(80)] public string Sonst6 { get; set; }
-        [MaxLength(80)] public string Sonst7 { get; set; }
-        public string Memo { get; set; }
-        [Required] public bool EMailInfo { get; set; }
-        [Required] public bool FaxInfo { get; set; }
-        [Required] public bool Serienbrief { get; set; }
-        [Required] public bool Markiert { get; set; }
-        [MaxLength(255)] public string Abteilung { get; set; }
-        [MaxLength(2)] public string BKenn { get; set; }
-        [MaxLength(4)] public string GebTag { get; set; }
-        [Required] public bool bSpende { get; set; }
+        [MaxLength(50)] public string Bankname { get; set; } = string.Empty;
+        [MaxLength(80)] public string Sonst1 { get; set; } = string.Empty;
+        [MaxLength(80)] public string Sonst2 { get; set; } = string.Empty;
+        [MaxLength(80)] public string Sonst3 { get; set; } = string.Empty;
+        [MaxLength(80)] public string Sonst4 { get; set; } = string.Empty;
+        [MaxLength(80)] public string Sonst5 { get; set; } = string.Empty;
+        [MaxLength(80)] public string Sonst6 { get; set; } = string.Empty;
+        [MaxLength(80)] public string Sonst7 { get; set; } = string.Empty;
+        public string Memo { get; set; } = string.Empty;
+        [Required] public bool EMailInfo { get; set; } = false;
+        [Required] public bool FaxInfo { get; set; } = false;
+        [Required] public bool Serienbrief { get; set; } = false;
+        [Required] public bool Markiert { get; set; } = false;
+        [MaxLength(255)] public string Abteilung { get; set; } = string.Empty;
+        [MaxLength(2)] public string BKenn { get; set; } = string.Empty;
+        [MaxLength(4)] public string GebTag { get; set; } = string.Empty;
+        [Required] public bool bSpende { get; set; } = false;
         public int? MStufe { get; set; }
-        [MaxLength(8)] public string Mahndatum { get; set; }
-        [Required] public bool Recalc { get; set; }
+        [MaxLength(8)] public string Mahndatum { get; set; } = string.Empty;
+        [Required] public bool Recalc { get; set; } = false;
         public string? GesOffen { get; set; }
         public string? OffenJB { get; set; }
         public string? OffenMG { get; set; }
@@ -211,8 +211,8 @@ CREATE TABLE [dbo].[tblMitglieder](
         public string? GesBeitrag { get; set; }
         public string? GesZuZahlen { get; set; }
         public string? GesGezahlt { get; set; }
-        [Required] public bool NoMeldung { get; set; }
-        [MaxLength(40)] public string SoundEx { get; set; }
+        [Required] public bool NoMeldung { get; set; } = true;
+        [MaxLength(40)] public string SoundEx { get; set; } = string.Empty;
         public string? ZusZuZahlen { get; set; }
         public string? ZusGezahlt { get; set; }
         public string? ZusGesamt { get; set; }
@@ -221,14 +221,14 @@ CREATE TABLE [dbo].[tblMitglieder](
         public string? JBGesamt { get; set; }
         public string? OffenAG { get; set; }
         public string? Guthaben { get; set; }
-        [MaxLength(50)] public string SStrasse { get; set; }
+        [MaxLength(50)] public string SStrasse { get; set; } = string.Empty;
         public int? SHsNr { get; set; }
         public int? UserId { get; set; }
-        [MaxLength(50)] public string UserName { get; set; }
-        [MaxLength(15)] public string UserDateTime { get; set; }
+        [MaxLength(50)] public string UserName { get; set; } = string.Empty;
+        [MaxLength(15)] public string UserDateTime { get; set; } = string.Empty;
         public int? UserChangeId { get; set; }
-        [MaxLength(50)] public string UserChangeName { get; set; }
-        [MaxLength(15)] public string UserChangeDateTime { get; set; }
+        [MaxLength(50)] public string UserChangeName { get; set; } = string.Empty;
+        [MaxLength(15)] public string UserChangeDateTime { get; set; } = string.Empty;
         public int? DFBMeldung { get; set; }
     }
 }

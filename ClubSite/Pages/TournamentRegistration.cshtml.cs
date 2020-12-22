@@ -24,7 +24,7 @@ namespace ClubSite.Pages
             _clubDbContext = context;
         }
 
-        public IList<TournamentRegistration> TournamentRegistration { get;set; }
+        public IList<TournamentRegistration> TournamentRegistration { get; set; } = new List<TournamentRegistration>();
 
         public async Task OnGetAsync()
         {

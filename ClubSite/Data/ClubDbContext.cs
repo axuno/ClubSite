@@ -17,8 +17,8 @@ namespace ClubSite.Data
         {
         }
 
-        public DbSet<Poco.ClubMember> ClubMember { get; set; }
-        public DbSet<Poco.TournamentRegistration> TournamentRegistration { get; set; }
+        public DbSet<Poco.ClubMember>? ClubMember { get; set; }
+        public DbSet<Poco.TournamentRegistration>? TournamentRegistration { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

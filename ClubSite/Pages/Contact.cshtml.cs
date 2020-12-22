@@ -35,7 +35,7 @@ namespace ClubSite.Pages
         [Required(AllowEmptyStrings = false,
             ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(AllowEmptyStrings = false,
             ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
@@ -43,42 +43,41 @@ namespace ClubSite.Pages
         [DataType(DataType.Text)]
         [Display(Name = "Anrede")]
         [RegularExpression("[mfu]", ErrorMessage = "Ungültiger Schlüssel für 'Anrede'")]
-        public string Gender { get; set; }
+        public string Gender { get; set; } = string.Empty;
 
         [Required(AllowEmptyStrings = false,
             ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
         [DataType(DataType.Text)]
         [Display(Name = "Vorname")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
 
         [Required(AllowEmptyStrings = false,
             ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
         [DataType(DataType.Text)]
         [Display(Name = "Familienname")]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
 
         [DataType(DataType.Text)]
         [Display(Name = "Telefon")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Required(AllowEmptyStrings = false,
             ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
         [Display(Name = "Betreff")]
         [DataType(DataType.Text)]
-        public string Subject { get; set; }
+        public string Subject { get; set; } = string.Empty;
 
-        [Display(Name = "Nachricht")] public string Message { get; set; }
+        [Display(Name = "Nachricht")] public string? Message { get; set; }
 
         [Display(Name = "Ergebnis der Rechenaufgabe im Bild")]
         [Required(AllowEmptyStrings = false,
             ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
-        public string Captcha { get; set; }
-
-
+        public string Captcha { get; set; } = string.Empty;
+        
         public void OnGet()
         {
         }

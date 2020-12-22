@@ -7,41 +7,41 @@ namespace ClubSite.ConfigurationPoco
 {
     public class MailSettings
     {
-        public Sender Sender { get; set; }
-        public Message Message { get; set; }
+        public Sender Sender { get; set; } = new Sender();
+        public Message Message { get; set; } = new Message();
     }
 
     public class Sender
     {
-        public string MessageOutput { get; set; }
-        public Smtp Smtp { get; set; }
-        public File File { get; set; }
+        public string MessageOutput { get; set; } = string.Empty;
+        public Smtp Smtp { get; set; } = new Smtp();
+        public File File { get; set; } = new File();
     }
 
     public class Smtp
     {
-        public string Server { get; set; }
+        public string Server { get; set; } = string.Empty;
         public int Port { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public int Timeout { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public int Timeout { get; set; } = 30;
     }
 
     public class File
     {
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
     }
 
     public class Message
     {
-        public MailAddress DefaultFrom { get; set; }
-        public MailAddress[] ContactFormTo { get; set; }
-        public string Organization { get; set; }
+        public MailAddress DefaultFrom { get; set; } = new MailAddress();
+        public MailAddress[] ContactFormTo { get; set; } = { };
+        public string? Organization { get; set; }
     }
 
     public class MailAddress
     {
-        public string Name { get; set; }
-        public string Email { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
     }
 }

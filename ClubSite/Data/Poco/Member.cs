@@ -64,50 +64,50 @@ CREATE TABLE [Club_Member] (
     public class ClubMember
     {
         [Key] public int? Id { get; set; }
-        [MaxLength(50)] public string Guid { get; set; }
-        [MaxLength(20)] public string UserName { get; set; }
-        [MaxLength(70)] public string PasswordHash { get; set; }
+        [MaxLength(50)] public string Guid { get; set; } = string.Empty;
+        [MaxLength(20)] public string UserName { get; set; } = string.Empty;
+        [MaxLength(70)] public string PasswordHash { get; set; } = string.Empty;
         [Column(TypeName = "datetime")] public DateTime? LastLoginOn { get; set; }
         public int? AccessFailedCount { get; set; }
         [Column(TypeName = "datetime")] public DateTime? LockoutEndDateUtc { get; set; }
-        [MaxLength(14)] public string MembershipNo { get; set; }
-        [MaxLength(1)] public string Gender { get; set; }
-        [MaxLength(40)] public string Title { get; set; }
-        [MaxLength(40)] public string FirstName { get; set; }
-        [MaxLength(40)] public string MiddleName { get; set; }
-        [MaxLength(40)] public string LastName { get; set; }
-        [MaxLength(40)] public string Nickname { get; set; }
-        [MaxLength(50)] public string Street { get; set; }
-        [MaxLength(8)] public string PostalCode { get; set; }
-        [MaxLength(50)] public string City { get; set; }
-        [MaxLength(3)] public string CountryCode { get; set; }
-        [MaxLength(25)] public string PhoneNumber { get; set; }
-        [MaxLength(25)] public string PhoneNumber2 { get; set; }
-        [MaxLength(25)] public string Mobile { get; set; }
-        [MaxLength(25)] public string Fax { get; set; }
-        [MaxLength(100)] public string Email { get; set; }
-        [MaxLength(100)] public string Email2 { get; set; }
-        [MaxLength(255)] public string PhotoFilename { get; set; }
+        [MaxLength(14)] public string MembershipNo { get; set; } = string.Empty;
+        [MaxLength(1)] public string Gender { get; set; } = string.Empty;
+        [MaxLength(40)] public string Title { get; set; } = string.Empty;
+        [MaxLength(40)] public string FirstName { get; set; } = string.Empty;
+        [MaxLength(40)] public string MiddleName { get; set; } = string.Empty;
+        [MaxLength(40)] public string LastName { get; set; } = string.Empty;
+        [MaxLength(40)] public string Nickname { get; set; } = string.Empty;
+        [MaxLength(50)] public string Street { get; set; } = string.Empty;
+        [MaxLength(8)] public string PostalCode { get; set; } = string.Empty;
+        [MaxLength(50)] public string City { get; set; } = string.Empty;
+        [MaxLength(3)] public string CountryCode { get; set; } = string.Empty;
+        [MaxLength(25)] public string PhoneNumber { get; set; } = string.Empty;
+        [MaxLength(25)] public string PhoneNumber2 { get; set; } = string.Empty;
+        [MaxLength(25)] public string Mobile { get; set; } = string.Empty;
+        [MaxLength(25)] public string Fax { get; set; } = string.Empty;
+        [MaxLength(100)] public string Email { get; set; } = string.Empty;
+        [MaxLength(100)] public string Email2 { get; set; } = string.Empty;
+        [MaxLength(255)] public string PhotoFilename { get; set; } = string.Empty;
         [Column(TypeName = "datetime")] public DateTime? JoinedOn { get; set; }
         [Column(TypeName = "datetime")] public DateTime? SeparatedOn { get; set; }
         [Column(TypeName = "datetime")] public DateTime? Birthday { get; set; }
-        [MaxLength(1)] public string Status { get; set; }
+        [MaxLength(1)] public string Status { get; set; } = string.Empty;
         public int? HeadOfFamily { get; set; }
         public int? Payer { get; set; }
-        [MaxLength(30)] public string IBAN { get; set; }
-        [MaxLength(30)] public string BIC { get; set; }
-        [MaxLength(70)] public string AccountHolder { get; set; }
-        [MaxLength(15)] public string BankAccount { get; set; }
-        [MaxLength(10)] public string BankCode { get; set; }
-        [MaxLength(50)] public string BankName { get; set; }
-        [MaxLength(30)] public string MandateId { get; set; }
+        [MaxLength(30)] public string IBAN { get; set; } = string.Empty;
+        [MaxLength(30)] public string BIC { get; set; } = string.Empty;
+        [MaxLength(70)] public string AccountHolder { get; set; } = string.Empty;
+        [MaxLength(15)] public string BankAccount { get; set; } = string.Empty;
+        [MaxLength(10)] public string BankCode { get; set; } = string.Empty;
+        [MaxLength(50)] public string BankName { get; set; } = string.Empty;
+        [MaxLength(30)] public string MandateId { get; set; } = string.Empty;
         [Column(TypeName = "datetime")] public DateTime? MandateDate { get; set; }
         public int? SequenceType { get; set; }
         public int? PaymentMethod { get; set; }
-        [MaxLength(1)] public string PaymentTerm { get; set; }
+        [MaxLength(1)] public string PaymentTerm { get; set; } = string.Empty;
         [Column(TypeName = "datetime")] public DateTime? CreatedOn { get; set; }
-        [MaxLength(50)] public string CreatedBy { get; set; }
+        [MaxLength(50)] public string CreatedBy { get; set; } = string.Empty;
         [Column(TypeName = "datetime")] public DateTime? ModifiedOn { get; set; }
-        [MaxLength(50)] public string ModifiedBy { get; set; }
+        [MaxLength(50)] public string ModifiedBy { get; set; } = string.Empty;
     }
 }

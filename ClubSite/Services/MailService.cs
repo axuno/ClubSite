@@ -43,7 +43,7 @@ namespace ClubSite.Services
         public async Task SendTextEmailAsync(string toName, string toEmail, string subject, string plainBody, CancellationToken cancellationToken)
         {
             var message = new MimeMessage();
-            message.Headers.Add(HeaderId.Organization, Settings.Message.Organization);
+            message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
             message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
             message.To.Add(new MailboxAddress(toName, toEmail));
             message.Subject = subject;
@@ -58,13 +58,14 @@ namespace ClubSite.Services
         public async Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody, CancellationToken cancellationToken)
         {
             var message = new MimeMessage();
-            message.Headers.Add(HeaderId.Organization, Settings.Message.Organization);
+            message.Headers.Add(HeaderId.Organization, Settings.Message?.Organization ?? string.Empty);
             message.From.Add(new MailboxAddress(fromName, fromEmail));
-            foreach (var mailAddress in Settings.Message.ContactFormTo)
-            {
-                message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
-            }
-            
+            if (Settings.Message != null)
+                foreach (var mailAddress in Settings.Message.ContactFormTo)
+                {
+                    message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
+                }
+
             message.Subject = subject;
             message.Body = new TextPart(TextFormat.Text)
             {

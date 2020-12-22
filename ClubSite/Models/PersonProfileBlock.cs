@@ -19,6 +19,6 @@ namespace ClubSite.Models
     [BlockItemType(Type = typeof(Piranha.Extend.Blocks.HtmlBlock))]
     public class PersonProfileBlock : BlockGroup
     {
-        public StringField Title { get; set; }
+        public StringField Title { get; set; } = new StringField();
     }
 }

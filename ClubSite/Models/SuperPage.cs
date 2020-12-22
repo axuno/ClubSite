@@ -29,7 +29,7 @@ namespace ClubSite.Models
 
         [Region(Title = "All fields")]
         [RegionDescription("Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
-        public AllFields AllFields { get; set; }
+        public AllFields? AllFields { get; set; }
     }
 
     /// <summary>
@@ -38,10 +38,10 @@ namespace ClubSite.Models
     public class Href
     {
         [Field(Title = "Button Text", Options = FieldOption.HalfWidth)]
-        public StringField ButtonText { get; set; }
+        public StringField? ButtonText { get; set; }
 
         [Field(Title = "Button Link", Options = FieldOption.HalfWidth)]
-        public PageField ButtonLink { get; set; }
+        public PageField? ButtonLink { get; set; }
     }
 
         /// <summary>
@@ -50,46 +50,46 @@ namespace ClubSite.Models
     public class AllFields
     {
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public AudioField Audio { get; set; }
+        public AudioField? Audio { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public CheckBoxField CheckBox { get; set; }
+        public CheckBoxField? CheckBox { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public DateField Date { get; set; }
+        public DateField? Date { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public HtmlField Html { get; set; }
+        public HtmlField? Html { get; set; }
 
         [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public DocumentField Document { get; set; }
+        public DocumentField? Document { get; set; }
 
         [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public ImageField Image { get; set; }
+        public ImageField? Image { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public MediaField Media { get; set; }
+        public MediaField? Media { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         [FieldDescription("Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
-        public VideoField Video { get; set; }
+        public VideoField? Video { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public MarkdownField Markdown { get; set; }
+        public MarkdownField? Markdown { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public NumberField Number { get; set; }
+        public NumberField? Number { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public PageField Page { get; set; }
+        public PageField? Page { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public PostField Post { get; set; }
+        public PostField? Post { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public StringField String { get; set; }
+        public StringField? String { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public TextField Text { get; set; }
+        public TextField? Text { get; set; }
     }
 }

@@ -41,6 +41,6 @@ namespace ClubSite.Pages
             return result;
         }
 
-        public IList<TournamentRegistration> Registrations { get; set; }
+        public IList<TournamentRegistration> Registrations { get; set; } = new List<TournamentRegistration>();
     }
 }

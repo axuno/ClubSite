@@ -5,16 +5,16 @@
 
     string GetDates()
     {
-        if (!Definition.DateFrom.Value.HasValue || !Definition.DateTo.Value.HasValue)
+        if ((!Definition.DateFrom.Value.HasValue || !Definition.DateTo.Value.HasValue))
         {
             return "Datum von oder Datum bis fehlt";
         }
-        if (Definition.DateFrom.Value.Value.Date == Definition.DateTo.Value.Value.Date)
+        if (Definition.DateTo.Value != null && Definition.DateFrom.Value != null && Definition.DateFrom.Value.Value.Date == Definition.DateTo.Value.Value.Date)
         {
             return Definition.DateFrom.Value.Value.ToLongDateString();
         }
 
-        return Definition.DateFrom.Value.Value.ToLongDateString() + " bis " + Definition.DateTo.Value.Value.ToLongDateString();
+        return Definition.DateFrom.Value?.ToLongDateString() + " bis " + Definition.DateTo.Value?.ToLongDateString();
     }
 }
 @section head
@@ -46,7 +46,7 @@
                     Uhrzeit:
                 </th>
                 <td>
-                    @Html.Raw(Definition.TimeFromTo)
+                    @Html.Raw(Definition.TimeFromTo.Value)
                 </td>
             </tr>
             <tr>
@@ -54,7 +54,7 @@
                     Besetzung:
                 </th>
                 <td>
-                    @Html.Raw(Definition.TeamComposition)
+                    @Html.Raw(Definition.TeamComposition.Value)
                 </td>
             </tr>
             <tr>
@@ -78,7 +78,7 @@
                     Adresse:
                 </th>
                 <td>
-                    @Html.Raw(Definition.Address)
+                    @Html.Raw(Definition.Address.Value)
                 </td>
             </tr>
             <tr>
@@ -86,7 +86,7 @@
                     Infos:
                 </th>
                 <td>
-                    @Html.Raw(Definition.Infos)
+                    @Html.Raw(Definition.Infos.Value)
                 </td>
             </tr>
             <tr>

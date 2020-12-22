@@ -23,7 +23,7 @@ namespace ClubSite.Models
     {
         [Region(Title = "Turnierbeschreibung")]
         [RegionDescription("Festlegung der Eckdaten des Turniers")]
-        public TournamentDefinition TournamentDefinition { get; set; }
+        public TournamentDefinition TournamentDefinition { get; set; } = new TournamentDefinition();
 
         /// <summary>
         /// Gets/sets the available links.
@@ -39,37 +39,37 @@ namespace ClubSite.Models
     public class TournamentDefinition
     {
         [Field(Title = "Turniername", Placeholder = "z.B. 28. Neusäßer Mixedturnier")]
-        public StringField Name { get; set; }
+        public StringField Name { get; set; } = new StringField();
 
         [Field(Title = "Datum von", Placeholder = "Datum")]
-        public DateField DateFrom { get; set; }
+        public DateField DateFrom { get; set; } = new DateField();
 
         [Field(Title = "Datum bis", Placeholder = "Datum")]
-        public DateField DateTo { get; set; }
+        public DateField DateTo { get; set; } = new DateField();
 
         [Field(Title = "Uhrzeit von/bis", Placeholder = "Uhrzeit")]
-        public StringField TimeFromTo { get; set; }
+        public StringField TimeFromTo { get; set; } = new StringField();
 
         [Field(Title = "Beginn der Anmeldefrist", Placeholder = "Datum")]
-        public DateField RegistrationStart { get; set; }
+        public DateField RegistrationStart { get; set; } = new DateField();
 
         [Field(Title = "Anmeldeschluss", Placeholder = "Datum")]
-        public DateField RegistrationDeadline { get; set; }
+        public DateField RegistrationDeadline { get; set; } = new DateField();
 
         [Field(Title = "Anzahl Teams", Placeholder = "Anzahl")]
-        public NumberField NumberOfTeams {get; set;}
+        public NumberField NumberOfTeams { get; set; } = new NumberField();
 
         [Field(Title = "Team-Zusammensetzung", Placeholder = "z.B. Anzahl Damen/Herren")]
-        public StringField TeamComposition {get; set;}
+        public StringField TeamComposition { get; set; } = new StringField();
 
         [Field(Title = "Startgeld", Placeholder = "Startgeld + ggf. Kaution")]
-        public StringField EntryFee {get; set;}
+        public StringField EntryFee { get; set; } = new StringField();
 
         [Field(Title = "Adresse", Placeholder = "Hallenadresse")]
-        public StringField Address {get; set;}
+        public StringField Address { get; set; } = new StringField();
 
         [Field(Title = "Infos", Placeholder = "Ablauf, Regeln, Infos")]
-        public HtmlField Infos {get; set;}
+        public HtmlField Infos { get; set; } = new HtmlField();
     }
 
 
@@ -79,10 +79,10 @@ namespace ClubSite.Models
     public class Href2
     {
         [Field(Title = "Button Text", Options = FieldOption.HalfWidth)]
-        public StringField ButtonText { get; set; }
+        public StringField ButtonText { get; set; } = new StringField();
 
         [Field(Title = "Button Link", Options = FieldOption.HalfWidth)]
-        public PageField ButtonLink { get; set; }
+        public PageField ButtonLink { get; set; } = new PageField();
     }
 
     /// <summary>
@@ -91,46 +91,46 @@ namespace ClubSite.Models
     public class AllFields2
     {
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public AudioField Audio { get; set; }
+        public AudioField? Audio { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public CheckBoxField CheckBox { get; set; }
+        public CheckBoxField? CheckBox { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public DateField Date { get; set; }
+        public DateField? Date { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public HtmlField Html { get; set; }
+        public HtmlField? Html { get; set; }
 
         [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public DocumentField Document { get; set; }
+        public DocumentField? Document { get; set; }
 
         [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public ImageField Image { get; set; }
+        public ImageField? Image { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public MediaField Media { get; set; }
+        public MediaField? Media { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         [FieldDescription("Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
-        public VideoField Video { get; set; }
+        public VideoField? Video { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public MarkdownField Markdown { get; set; }
+        public MarkdownField? Markdown { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public NumberField Number { get; set; }
+        public NumberField? Number { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public PageField Page { get; set; }
+        public PageField? Page { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public PostField Post { get; set; }
+        public PostField? Post { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public StringField String { get; set; }
+        public StringField? String { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public TextField Text { get; set; }
+        public TextField? Text { get; set; }
     }
 }
