@@ -23,6 +23,8 @@ using Piranha.AspNetCore.Identity.SQLServer;
 using Piranha.Data.EF.SQLServer;
 using Piranha.Manager.Editor;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 
 namespace ClubSite
 {
@@ -37,6 +39,11 @@ namespace ClubSite
         /// Gets the information about the web hosting environment of this application.
         /// </summary>
         public IWebHostEnvironment WebHostEnvironment { get; }
+        
+        /// <summary>
+        /// Gets the logger for class <see cref="Startup"/>.
+        /// </summary>
+        public ILogger<Startup> Logger { get; }
 
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
@@ -47,6 +54,13 @@ namespace ClubSite
         {
             Configuration = configuration;
             WebHostEnvironment = webHostEnvironment;
+
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder.AddNLog();                
+            });
+
+            Logger = loggerFactory.CreateLogger<Startup>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
