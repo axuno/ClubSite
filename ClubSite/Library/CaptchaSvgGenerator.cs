@@ -243,7 +243,7 @@ namespace ClubSite.Library
     </defs>
     <rect height='{Height}' width='{Width}' fill='rgb({BackgroundColor.R}, {BackgroundColor.G}, {BackgroundColor.B})' fill-opacity='{(BackgroundColor.A / 255D).ToString("0.#", CultureInfo.InvariantCulture)}' />
     <rect height='{Height}' width='{Width}' fill='url(#smallGrid)' />
-    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='{FontFamilyName}' font-size='{FontSizePt.ToString("0.##", CultureInfo.InvariantCulture)}pt'><span style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(0, 1)}</span><span style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(1)}</span></text>
+    <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='{FontFamilyName}' font-size='{FontSizePt.ToString("0.##", CultureInfo.InvariantCulture)}pt'><tspan style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(0, 1)}</tspan><tspan style='fill:rgb({TextColor.R}, {TextColor.G}, {TextColor.B});'>{Text?.Substring(1)}</tspan></text>
 </svg>");
             return xmlDoc.ToString(SaveOptions.None);
         }

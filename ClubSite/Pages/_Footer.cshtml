@@ -1,9 +1,6 @@
 ﻿<footer class="mb-2">
     <nav class="navbar navbar-expand-md navbar-dark bg-primary">
         <ul class="navbar-nav mx-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/kontakt">Kontakt</a>
-            </li>
             @foreach (var item in WebApp.Site.Sitemap.Where(i => i.IsHidden && i.MenuTitle.Contains("Fusszeile", StringComparison.InvariantCultureIgnoreCase)))
             {
                 foreach (var footerItem in item.Items.Where(i => !i.IsHidden))

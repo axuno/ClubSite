@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using ClubSite.Data.Poco;
 using ClubSite.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Piranha;
 using Piranha.AspNetCore.Models;
@@ -30,7 +29,7 @@ namespace ClubSite.Pages
             _clubDbContext = clubDbContext;
         }
 
-        async public override Task<IActionResult> OnGet(Guid id, bool draft = false)
+        public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
             var result = await base.OnGet(id, draft);
             Registrations = await _clubDbContext.TournamentRegistration.Where(tr =>

@@ -1,5 +1,5 @@
-﻿@page "/kontakt"
-@model ClubSite.Pages.ContactModel
+﻿@page
+@model ClubSite.Pages.ContactPageModel
 @{
 }
 <div class="mx-3 py-2">
@@ -78,7 +78,7 @@
                 <span asp-validation-for="Captcha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button type="submit" asp-page="contact" class="btn btn-lg btn-primary col-10">Nachricht senden</button>
+                <button type="submit" formaction="@Model.Data.Permalink" class="btn btn-lg btn-primary col-10">Nachricht senden</button>
             </div>
         </form>
     </div>

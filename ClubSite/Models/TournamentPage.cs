@@ -3,10 +3,6 @@
 // of the MIT license. See the LICENSE file for details.
 // https://github.com/axuno/ClubSite
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Piranha.AttributeBuilder;
 using Piranha.Extend;
 using Piranha.Extend.Fields;
@@ -15,7 +11,7 @@ using Piranha.Models;
 namespace ClubSite.Models
 {
     /// <summary>
-    /// Basic page with main content in markdown.
+    /// Custom <see cref="TournamentPage"/> definition.
     /// </summary>
     [PageType(Title = "Turnier VC Neusäß", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
     [PageTypeRoute(Title = "Default",
@@ -25,16 +21,6 @@ namespace ClubSite.Models
         [Region(Title = "Turnierbeschreibung")]
         [RegionDescription("Festlegung der Eckdaten des Turniers")]
         public TournamentDefinition TournamentDefinition { get; set; } = new TournamentDefinition();
-
-        /// <summary>
-        /// Gets/sets the available links.
-        /// </summary>
-        //[Region(ListTitle = "ButtonText", ListPlaceholder = "New Link", Icon = "fas fa-quote-right")]
-        //public IList<Href2> Links { get; set; } = new List<Href2>();
-
-        //[Region(Title = "All fields")]
-        //[RegionDescription("Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
-        //public AllFields2 AllFields { get; set; }
     }
 
     public class TournamentDefinition
@@ -71,68 +57,5 @@ namespace ClubSite.Models
 
         [Field(Title = "Infos", Placeholder = "Ablauf, Regeln, Infos")]
         public HtmlField Infos { get; set; } = new HtmlField();
-    }
-
-
-    /// <summary>
-    /// Simple link region.
-    /// </summary>
-    public class Href2
-    {
-        [Field(Title = "Button Text", Options = FieldOption.HalfWidth)]
-        public StringField ButtonText { get; set; } = new StringField();
-
-        [Field(Title = "Button Link", Options = FieldOption.HalfWidth)]
-        public PageField ButtonLink { get; set; } = new PageField();
-    }
-
-    /// <summary>
-    /// Test Field with all field types.
-    /// </summary>
-    public class AllFields2
-    {
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public AudioField? Audio { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public CheckBoxField? CheckBox { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public DateField? Date { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public HtmlField? Html { get; set; }
-
-        [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public DocumentField? Document { get; set; }
-
-        [Field(Options = FieldOption.HalfWidth, Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public ImageField? Image { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public MediaField? Media { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        [FieldDescription(
-            "Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
-        public VideoField? Video { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public MarkdownField? Markdown { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public NumberField? Number { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public PageField? Page { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public PostField? Post { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public StringField? String { get; set; }
-
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        public TextField? Text { get; set; }
     }
 }

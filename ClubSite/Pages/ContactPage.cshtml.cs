@@ -11,19 +11,21 @@ using ClubSite.Library;
 using ClubSite.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Piranha;
+using Piranha.AspNetCore.Models;
+using Piranha.AspNetCore.Services;
 
 namespace ClubSite.Pages
 {
     [BindProperties]
-    public class ContactModel : PageModel
+    public class ContactPageModel : SinglePage<Models.ContactPage>
     {
         private readonly Services.IMailService _mailService;
-        private readonly ILogger<ContactModel> _logger;
+        private readonly ILogger<ContactPageModel> _logger;
 
-        public ContactModel(Services.IMailService mailService, ILogger<ContactModel> logger)
+        public ContactPageModel(Services.IMailService mailService, IApi api, IModelLoader loader, ILogger<ContactPageModel> logger) : base(api, loader)
         {
             _mailService = mailService;
             _logger = logger;
@@ -78,11 +80,7 @@ namespace ClubSite.Pages
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
         public string Captcha { get; set; } = string.Empty;
 
-        public void OnGet()
-        {
-        }
-
-        async public Task<IActionResult> OnPostAsync(CancellationToken cancellation)
+        public async Task<IActionResult> OnPostAsync(CancellationToken cancellation)
         {
             if (Captcha != HttpContext.Session.GetString(CaptchaSvgGenerator.CaptchaSessionKeyName))
                 ModelState.AddModelError(nameof(Captcha), "Ergebnis der Rechenaufgabe ist nicht korrekt");
@@ -100,7 +98,7 @@ namespace ClubSite.Pages
                 _logger.LogCritical(e, "Sending mail to '{0}' failed.", Email);
             }
 
-            return RedirectToPage("ContactConfirmation");
+            return Redirect("/kontakt:nachricht-erhalten");
         }
 
         private string GetFormMailMessage()
