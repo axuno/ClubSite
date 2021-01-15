@@ -16,7 +16,7 @@ csharp_new_line_before_else = true
 #require members of object initializers to be on the same line
 csharp_new_line_before_members_in_object_initializers = false
 #require braces to be on a new line for object_collection_array_initializers, accessors, types, control_blocks, methods, lambdas, and properties (also known as "Allman" style)
-csharp_new_line_before_open_brace = object_collection_array_initializers, accessors, types, control_blocks, methods, lambdas, properties
+csharp_new_line_before_open_brace = accessors,anonymous_methods,control_blocks,events,indexers,lambdas,local_functions,methods,properties,types
 
 #Formatting - organize using options
 
@@ -59,13 +59,13 @@ csharp_prefer_braces = false:suggestion
 #Style - expression bodied member options
 
 #prefer block bodies for accessors
-csharp_style_expression_bodied_accessors = false:suggestion
+csharp_style_expression_bodied_accessors = true:suggestion
 #prefer block bodies for constructors
 csharp_style_expression_bodied_constructors = false:suggestion
 #prefer block bodies for methods
 csharp_style_expression_bodied_methods = false:suggestion
 #prefer expression-bodied members for properties when they will be a single line
-csharp_style_expression_bodied_properties = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
 
 #Style - expression level options
 
@@ -100,9 +100,6 @@ dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggest
 
 #Style - Modifier preferences
 
-#when this rule is set to a list of modifiers, prefer the specified ordering.
-# csharp_preferred_modifier_order = public,private,internal,static,readonly,override,new:suggestion
-
 #Style - Pattern matching
 
 #prefer pattern matching instead of is expression with type casts
@@ -120,5 +117,18 @@ dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_property = false:suggestion
 
 # Copyright file header
-file_header_template = Copyright (C) axuno gGmbH and Contributors.\nThis software may be modified and distributed under the terms\nof the MIT license. See the LICENSE file for details.\nhttps://github.com/axuno/ClubSite\n 
+file_header_template = Copyright (C) axuno gGmbH and Contributors.\nThis software may be modified and distributed under the terms\nof the MIT license. See the LICENSE file for details.\nhttps://github.com/axuno/ClubSite\n
 
+# Microsoft .NET properties
+csharp_preferred_modifier_order = public, private, protected, internal, new, abstract, virtual, sealed, override, static, readonly, extern, unsafe, volatile, async:suggestion
+dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:none
+dotnet_style_parentheses_in_other_binary_operators = never_if_unnecessary:none
+dotnet_style_parentheses_in_relational_binary_operators = never_if_unnecessary:none
+
+# ReSharper properties
+resharper_use_indent_from_vs = true
+
+[*.{appxmanifest,asax,ascx,aspx,axaml,axml,build,config,cs,cshtml,csproj,css,dbml,discomap,dtd,htm,html,js,json,jsproj,jsx,lsproj,master,njsproj,nuspec,paml,proj,props,proto,razor,resjson,resw,resx,skin,StyleCop,targets,tasks,ts,tsx,vb,vbproj,xaml,xamlx,xml,xoml,xsd}]
+indent_style = space
+indent_size = 4
+tab_width = 4
