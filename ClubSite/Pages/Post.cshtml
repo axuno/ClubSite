@@ -47,8 +47,8 @@
         }
     </div>
 </header>
-
 <main>
+    <partial name="_ShowEditLinkPartial" />
     @foreach (var block in Model.Data.Blocks)
     {
         <div class="block @block.CssName()">

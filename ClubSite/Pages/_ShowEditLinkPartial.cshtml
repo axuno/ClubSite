@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService Auth
+@* Show an 'Edit' button at the right top margin of every page and every post to authorized users *@
+<div class="position-relative">
+    @if (WebApp.CurrentPage != null && (await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded)
+    {
+        <div style="position: absolute; top: 0; right: 0;"><a target="_blank" href="~/manager/page/edit/@WebApp.CurrentPage.Id" class="btn btn-sm bg-danger stretched-link edit-icon">&nbsp;</a></div>
+    }
+    @if (WebApp.CurrentPost != null && (await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Posts)).Succeeded)
+    {
+        <div style="position: absolute; top: 0; right: 0;"><a target="_blank" href="~/manager/post/edit/@WebApp.CurrentPost.Id" class="btn btn-sm bg-danger stretched-link edit-icon">&nbsp;</a></div>
+    }  
+</div>
