@@ -20,6 +20,7 @@ using Piranha.AspNetCore.Services;
 namespace ClubSite.Pages
 {
     [BindProperties]
+    [ValidateAntiForgeryToken]
     public class ContactPageModel : SinglePage<Models.ContactPage>
     {
         private readonly Services.IMailService _mailService;
