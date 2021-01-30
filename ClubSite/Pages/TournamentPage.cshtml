@@ -2,6 +2,7 @@
 @model ClubSite.Pages.TournamentPageModel
 @{
     var Definition = Model.Data.TournamentDefinition;
+    var hasImage = Model.Data.TournamentDefinition.TopImage.HasValue;
 
     string GetDates()
     {
@@ -34,11 +35,22 @@
         tr { height: 2rem }
     </style>
 }
-
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({Url.Content(WebApp.Media.ResizeImage(Model.Data.TournamentDefinition.TopImage, 1000, 400))})" : "")>
+    <div class="dimmer"></div>
+    <div class="@(hasImage ? "container" : "") text-center">
+        @if (!string.IsNullOrWhiteSpace(Model.Data.TournamentDefinition.Name.Value))
+        {
+            <div class="row justify-content-center">
+                <div class="col-lg-8 lead">
+                    <h1>@Model.Data.TournamentDefinition.Name</h1>
+                    <h3 class="@(hasImage ? "text-white" : "")">Ausschreibung</h3>
+                </div>
+            </div>
+        }
+    </div>
+</header>
 <div class="mx-3 pt-2">
     <div class="mb-4">
-        <h1>@Model.Data.TournamentDefinition.Name</h1>
-        <h3>Ausschreibung</h3>
         <table id="tournament-description" class="table-responsive table-striped table-bordered rounded shadow">
             <tr>
                 <th>

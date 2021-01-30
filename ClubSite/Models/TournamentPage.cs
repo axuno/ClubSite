@@ -5,6 +5,7 @@
 
 using Piranha.AttributeBuilder;
 using Piranha.Extend;
+using Piranha.Extend.Blocks;
 using Piranha.Extend.Fields;
 using Piranha.Models;
 
@@ -25,6 +26,9 @@ namespace ClubSite.Models
 
     public class TournamentDefinition
     {
+        [Field(Title = "Primäres Bild", Placeholder = "Bild einsetzen")]
+        public ImageField TopImage { get; set; } = new ImageField();
+        
         [Field(Title = "Turniername", Placeholder = "z.B. 28. Neusäßer Mixedturnier")]
         public StringField Name { get; set; } = new StringField();
 
