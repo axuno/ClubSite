@@ -80,8 +80,10 @@ namespace ClubSite.Pages
             ErrorMessageResourceType = typeof(DataAnnotationResource))]
         public string Captcha { get; set; } = string.Empty;
 
-        public async Task<IActionResult> OnPostAsync(CancellationToken cancellation)
+        public async Task<IActionResult> OnPostAsync(Guid id, bool draft, CancellationToken cancellation)
         {
+            Data = await _loader.GetPageAsync<Models.ContactPage>(id, HttpContext.User, draft);
+
             if (Captcha != HttpContext.Session.GetString(CaptchaSvgGenerator.CaptchaSessionKeyName))
                 ModelState.AddModelError(nameof(Captcha), "Ergebnis der Rechenaufgabe ist nicht korrekt");
 

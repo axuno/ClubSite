@@ -26,3 +26,7 @@ a.link {
         display: inline;
     }
 }
+
+input[type="password"], input[type="text"]:required, input[type="email"]:required {
+    border-left: .5rem solid theme-color("secondary");
+}

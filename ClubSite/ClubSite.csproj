@@ -3,13 +3,12 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <Nullable>enable</Nullable>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
         <Authors>axuno gGmbH</Authors>
         <Description>The source code for https://www.volleyballclub.de/</Description>
         <Copyright>axuno gGmbH and Contributors</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
-
 
     <ItemGroup>
         <PackageReference Include="MailKit" Version="2.10.0" />
