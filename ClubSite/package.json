@@ -13,8 +13,9 @@
         "autoprefixer": "9.8.6",
         "pixrem": "5.0.0",
         "cssnano": "4.1.10",
-        "bootstrap": "4.5.2",
+        "bootstrap": "4.6.0",
         "font-awesome": "4.7.0",
+        "@fortawesome/fontawesome-free": "5.15.2",
         "tether": "1.4.7",
         "popper.js": "1.16.1",
         "jquery": "3.5.1"

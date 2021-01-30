@@ -25,16 +25,17 @@
     <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" asp-append-version="true">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Raleway:wght@700&display=swap">
     <link rel="stylesheet" href="~/assets/css/style.min.css" asp-append-version="true">
+    <link href="~/assets/css/fontawesome/fontawesome.min.css" asp-append-version="true" rel="stylesheet">
     @await RenderSectionAsync("styles", false)
 </head>
 <body>
-<div class="container-fluid main p-0 mb-2">
-    <menu>
-        <partial name="_MenuTopLevel.cshtml"/>
-    </menu>
-    @RenderBody()
-    <partial name="_Footer.cshtml"/>
-</div>
+    <div class="container-fluid main p-0 mb-2">
+        <menu>
+            <partial name="_MenuTopLevel.cshtml" />
+        </menu>
+        @RenderBody()
+        <partial name="_Footer.cshtml" />
+    </div>
 @if (!Env.IsDevelopment())
 {
     <partial name="_GoogleAnalytics.cshtml"/>}

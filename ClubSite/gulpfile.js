@@ -20,6 +20,16 @@ gulp.task("min",
                 suffix: ".min"
             }))
             .pipe(gulp.dest("wwwroot/assets/css"));
+        gulp.src("assets/scss/fontawesome-custom.scss")
+            .pipe(sass().on("error", sass.logError))
+            .pipe(cssmin())
+            .pipe(rename({
+                basename: "fontawesome",
+                suffix: ".min"
+            }))
+            .pipe(gulp.dest("wwwroot/assets/css/fontawesome"));
+        gulp.src("node_modules/@fortawesome/fontawesome-free/webfonts/*")
+            .pipe(gulp.dest("wwwroot/assets/css/fontawesome/webfonts"));  
         done();
     });
 
