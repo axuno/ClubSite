@@ -59,7 +59,7 @@ namespace ClubSite.Services
             await SendEmailAsync(message, cancellationToken);
         }
 
-        async public Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
+        public async Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
             CancellationToken cancellationToken)
         {
             var message = new MimeMessage();
@@ -77,7 +77,7 @@ namespace ClubSite.Services
             await SendEmailAsync(message, cancellationToken);
         }
 
-        async public Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken)
+        public async Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken)
         {
             var messageOutput = _env.IsDevelopment() ? nameof(Sender.File) : nameof(Sender.Smtp);
             try

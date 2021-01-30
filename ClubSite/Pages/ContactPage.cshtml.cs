@@ -83,9 +83,17 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnPostAsync(Guid id, bool draft, CancellationToken cancellation)
         {
-            Data = await _loader.GetPageAsync<Models.ContactPage>(id, HttpContext.User, draft);
-
-            if (Captcha != HttpContext.Session.GetString(CaptchaSvgGenerator.CaptchaSessionKeyName))
+            try
+            {
+                // The base model loads Data only during 'OnGetAsync'
+                Data = await _loader.GetPageAsync<Models.ContactPage>(id, HttpContext.User, draft);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
+            
+            if (Captcha != HttpContext.Session.GetString(CaptchaSvgGenerator.CaptchaSessionKeyName) && !string.IsNullOrEmpty(Captcha))
                 ModelState.AddModelError(nameof(Captcha), "Ergebnis der Rechenaufgabe ist nicht korrekt");
 
             if (!ModelState.IsValid) return Page();

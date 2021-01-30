@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Gender"></label>
-                <select asp-for="Gender" asp-items="GenderList()" class="custom-select col-md-6 d-block"></select>
+                <select asp-for="Gender" asp-items="GenderList()" class="custom-select col-md-6 d-block" required="required"></select>
                 <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -65,7 +65,7 @@
                 <div class="mt-2">
                     <img id="CaptchaImage" style="vertical-align: bottom; display: inline" src="@Url.Action(nameof(Controllers.Captcha.Index), nameof(Controllers.Captcha))@("?guid=" + Guid.NewGuid())" alt="Captcha" title="" />
                     <label class="d-inline" onclick="javascript:if (document.images) document.images.CaptchaImage.src = '@Url.Action(nameof(Controllers.Captcha.Index), nameof(Controllers.Captcha))?new=1&amp;time=' + new Date().getTime();" style="cursor: pointer">
-                        <i class="fa fa-sync-alt fa-2x" style="margin: 0 5px 0 5px;" title="Neu laden"></i>
+                        <i class="fas fa-sync-alt fa-2x" style="margin: 0 5px 0 5px;" title="Neu laden"></i>
                     </label><br />
                 </div>
                 <label asp-for="Captcha"></label>

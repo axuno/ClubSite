@@ -27,6 +27,6 @@ a.link {
     }
 }
 
-input[type="password"], input[type="text"]:required, input[type="email"]:required {
+input[type="password"], input[type="text"]:required, input[type="email"]:required, select:required {
     border-left: .5rem solid theme-color("secondary");
 }
