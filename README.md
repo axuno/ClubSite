@@ -3,6 +3,7 @@
 # ClubSite
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/axuno/MailMergeLib/blob/master/License.txt)
+![build + test](https://github.com/axuno/ClubSite/workflows/build%20+%20test/badge.svg?branch=main)
 
 ## About this project
 This is the source code for a sports club website. The C# AspNetCore project is using [PiranhaCMS](https://piranhacms.org/), 
