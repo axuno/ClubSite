@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore -nowarn:162,436
+      run: dotnet build --no-restore -nowarn:CS0162,CS0436
     - name: Test
       run: dotnet test --no-build --verbosity normal
