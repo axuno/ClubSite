@@ -1,8 +1,11 @@
 ﻿@page
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService Auth
 @model ClubSite.Pages.TournamentPageModel
 @{
     var Definition = Model.Data.TournamentDefinition;
     var hasImage = Model.Data.TournamentDefinition.TopImage.HasValue;
+    var isAuthenticated = (await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded;
 
     string GetDates()
     {
@@ -32,7 +35,9 @@
             vertical-align: top;
         }
 
-        tr { height: 2rem }
+        tr {
+            height: 2rem
+        }
     </style>
 }
 <header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({Url.Content(WebApp.Media.ResizeImage(Model.Data.TournamentDefinition.TopImage, 1000, 400))})" : "")>
@@ -113,22 +118,43 @@
                     <div class="pr-3">Anmeldefrist:</div>
                 </th>
                 <td>
-                    @Html.Raw(Definition.RegistrationStart.Value?.ToShortDateString()) bis @Html.Raw(Definition.RegistrationDeadline.Value?.ToShortDateString())
+                    @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue
+                       && Definition.RegistrationStart.Value.Value.Date <= DateTime.Now.Date && DateTime.Now.Date <= Definition.RegistrationDeadline.Value.Value.Date
+                       && Definition.DateFrom.Value != null)
+                    {
+                        <div>@Html.Raw(Definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(Definition.RegistrationDeadline.Value?.ToShortDateString())</div>
+                        <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
+                    }
+                    else
+                    {
+                        <div>@Html.Raw(Model.AllRegistrations.Any() ? "abgelaufen" : "Turnier ist abgesagt")</div>
+                    }
                 </td>
             </tr>
         </table>
     </div>
 
     <div class="pb-3">
-        <h3>Angemeldete Teams</h3>
+        <h3 class="text-primary">Angemeldete Teams</h3>
 
-        @if (Model.Registrations.Any())
+        @if (Model.AllRegistrations.Any(tr => !tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))
         {
-            <div class="mb-2"><strong>Anmeldungen, sortiert nach Teamname</strong><br/>Teamname, ggf. Verein, Kontaktperson</div>
+            <div class="mb-2 text-secondary">
+                <h4>Anmeldungen, sortiert nach Teamname</h4>
+                Teamname, ggf. Verein, Kontaktperson
+            </div>
             <ol>
-                @foreach (var item in Model.Registrations.Where(tr => !tr.IsStandByRegistration).OrderBy(tr => tr.TeamName))
+                @foreach (var item in Model.AllRegistrations.Where(tr => !tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue).OrderBy(tr => tr.TeamName))
                 {
-                    <li title="angemeldet am @(item.RegisteredOn?.ToString("dd.MM.yyyy"))" class="my-1"><strong>@item.GetTeamNameWithClub()</strong> von @item.GetCompleteName()</li>
+                <li title="angemeldet am @(item.RegisteredOn?.ToString("dd.MM.yyyy"))" class="my-1">
+                    <strong>@item.GetTeamNameWithClub()</strong> von @item.GetCompleteName()
+                    @{
+                        if (isAuthenticated)
+                        {
+                            <a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
+                        }
+                    }
+                </li>
                 }
             </ol>
         }
@@ -137,13 +163,41 @@
             <div>Es liegen noch keine Anmeldungen für das Turnier vor.</div>
         }
 
-        @if (Model.Registrations.Any(tr => tr.IsStandByRegistration))
+        @if (Model.AllRegistrations.Any(tr => tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))
         {
-            <div class="mb-2">Mannschaften, die sich als mögliche &quot;Nachrücker&quot; angemeldet haben,<br/>nachdem die max. Anzahl an Anmeldungen erreicht war:</div>
+            <div class="mb-2 text-secondary">
+                <h4>Mögliche &quot;Nachrücker&quot;</h4>
+                (Anmeldung, nachdem die max. Anzahl an Anmeldungen erreicht war)
+            </div>
             <ol>
-                @foreach (var item in Model.Registrations.Where(tr => tr.IsStandByRegistration))
+                @foreach (var item in Model.AllRegistrations.Where(tr => tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))
                 {
-                    <li title="angemeldet am @(item.RegisteredOn?.ToString("dd.MM.yyyy"))" class="mb-1"><strong>@item.GetTeamNameWithClub()</strong> von @item.GetCompleteName()</li>
+                    <li title="angemeldet am @(item.RegisteredOn?.ToString("dd.MM.yyyy"))" class="mb-1"><strong>@item.GetTeamNameWithClub()</strong> von @item.GetCompleteName()
+                        @{
+                            if (isAuthenticated)
+                            {
+                                <a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
+                            }
+                        }
+                    </li>
+                }
+            </ol>
+        }
+
+        @if (Model.AllRegistrations.Any(tr => tr.RegCanceledOn.HasValue))
+        {
+            <div class="mb-2 text-secondary"><h4>Mannschaften, die ihre Anmeldung zurückgezogen haben</h4></div>
+            <ol>
+                @foreach (var item in Model.AllRegistrations.Where(tr => tr.RegCanceledOn.HasValue))
+                {
+                    <li title="angemeldet am @(item.RegisteredOn?.ToString("dd.MM.yyyy")), zurückgezogen am @(item.RegCanceledOn?.ToString("dd.MM.yyyy"))" class="mb-1"><strong>@item.GetTeamNameWithClub()</strong> von @item.GetCompleteName()
+                        @{
+                            if (isAuthenticated)
+                            {
+                                <a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
+                            }
+                        }
+                    </li>
                 }
             </ol>
         }

@@ -1,129 +1,129 @@
-﻿@page "/turnier-anmeldung"
+﻿@page "/turnier-anmeldung/{dateTicks:long}/{registrationId:guid?}"
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService Auth
 @model ClubSite.Pages.TournamentRegistrationModel
-
 @{
-    ViewData["Title"] = "Turnier-Registrierung";
-}
-
-<h1>Angemeldete Teams</h1>
-<table class="table-responsive">
-    <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].Guid)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].TournamentDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].Rank)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].TeamName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].ClubName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].Gender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].Nickname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].Fone)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].Message)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].IsStandByRegistration)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].RegisteredOn)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].RegCanceledOn)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].CreatedOn)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentRegistration[0].ModifiedOn)
-        </th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model.TournamentRegistration)
+    ViewData["Title"] = "Turnier-Anmeldung";
+    var maxTeams = Model.TournamentPage.TournamentDefinition.NumberOfTeams.Value;
+    List<SelectListItem> GenderList()
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Guid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TournamentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rank)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TeamName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClubName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nickname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Message)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsStandByRegistration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegisteredOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegCanceledOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedOn)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+        return new List<SelectListItem>
+{
+            new SelectListItem {Value = string.Empty, Text = "Bitte auswählen"},
+            new SelectListItem {Value = "f", Text = "Frau"},
+            new SelectListItem {Value = "m", Text = "Herr"}
+        };
     }
-    </tbody>
-</table>
+}
+<div class="mx-3 pt-2 pb-4">
+    <h1>Anmeldung</h1>
+    <h4>@Model.TournamentPage.TournamentDefinition.Name.Value am @Model.TournamentPage.TournamentDefinition.DateFrom.Value?.ToShortDateString()</h4>
+    @if (Model.MaxRegistrationsReached && HttpContext.Request.Method.Equals("get", StringComparison.InvariantCultureIgnoreCase))
+    {
+        <div class="alert alert-dismissible alert-info border-info col-md-8 col-sm-10 col-12">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p>Die max. Anzahl von @(maxTeams) möglichen Anmeldungen ist bereits erreicht.</p>
+            <p>Falls ein Team noch absagt, und Ihr dann kurzfristig einspringen wollt, könnt Ihr Euch als &quot;Nachrücker&quot; registrieren.</p>
+            <p>Der aktuelle Stand zum Turnier ist immer auf der <a href="@Model.TournamentPage.Permalink" class="link" target="_blank">Ausschreibungsseite</a> zu finden.</p>
+        </div>
+    }
+    <div>
+        <form method="post" class="col-md-8 col-sm-10 col-12 pl-0" role="form" novalidate="novalidate">
+            <div asp-validation-summary="All" class="rounded alert alert-danger border-danger">
+            </div>
+            <input asp-for="TournamentDate" type="hidden" />
+            <input asp-for="Registration.RegistrationId" type="hidden" />
+            <div class="form-group">
+                <label asp-for="Registration.TeamName"></label>
+                <input asp-for="Registration.TeamName" type="text" required="required" class="form-control" />
+                <span asp-validation-for="Registration.TeamName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Registration.ClubName"></label>
+                <input asp-for="Registration.ClubName" type="text" class="form-control" aria-describedby="clubNameHelpBlock" />
+                <small id="clubNameHelpBlock" class="form-text text-muted">
+                    Nur bei Vereinsteams
+                </small>
+                <span asp-validation-for="Registration.ClubName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Registration.Email"></label>
+                <input asp-for="Registration.Email" type="text" required="required" class="form-control" />
+                <span asp-validation-for="Registration.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Registration.Gender"></label>
+                <select asp-for="Registration.Gender" asp-items="GenderList()" class="custom-select col-md-6 d-block" required="required"></select>
+                <span asp-validation-for="Registration.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Registration.FirstName"></label>
+                <input asp-for="Registration.FirstName" type="text" required="required" class="form-control" />
+                <span asp-validation-for="Registration.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Registration.LastName"></label>
+                <input asp-for="Registration.LastName" type="text" required="required" class="form-control" />
+                <span asp-validation-for="Registration.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Registration.Fone"></label>
+                <input asp-for="Registration.Fone" type="text" required="required" class="form-control" aria-describedby="foneHelpBlock" />
+                <small id="foneHelpBlock" class="form-text text-muted">
+                    Telefonnr. für evtl. Rückfragen
+                </small>
+                <span asp-validation-for="Registration.Fone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Registration.Message"></label>
+                <textarea asp-for="Registration.Message" required="required" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Registration.Message" class="text-danger"></span>
+            </div>
+            @{
+                if ((await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded)
+                {
+                    <div class="custom-control custom-checkbox">
+                        <input asp-for="Registration.IsStandByRegistration" type="checkbox" class="custom-control-input" />
+                        <label asp-for="Registration.IsStandByRegistration" class="custom-control-label"></label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Registration.RegCanceledOn"></label>
+                        <input asp-for="Registration.RegCanceledOn" type="text" class="form-control" placeholder="tt.mm.jjjj" aria-describedby="canceledHelpBlock" />
+                        <small id="canceledHelpBlock" class="form-text text-muted">
+                            Datum der Absage oder leer lassen
+                        </small>
+                        <span asp-validation-for="Registration.RegCanceledOn" class="text-danger"></span>
+                    </div>
+                    @if (Model.Registration.ModifiedOn.HasValue)
+                    {
+                        <div class="text-muted small">Letzte Änderung: @(Model.Registration.ModifiedOn.Value.ToString("g"))</div>
+                    }
+                }
+            }
+            <div class="form-group">
+                <div class="mt-2">
+                    <img id="CaptchaImage" style="vertical-align: bottom; display: inline" src="@Url.Action(nameof(Controllers.Captcha.Index), nameof(Controllers.Captcha))@("?guid=" + Guid.NewGuid())" alt="Captcha" title="" />
+                    <label class="d-inline" onclick="javascript:if (document.images) document.images.CaptchaImage.src = '@Url.Action(nameof(Controllers.Captcha.Index), nameof(Controllers.Captcha))?new=1&amp;time=' + new Date().getTime();" style="cursor: pointer">
+                        <i class="fas fa-sync-alt fa-2x" style="margin: 0 5px 0 5px;" title="Neu laden"></i>
+                    </label><br />
+                </div>
+                <label asp-for="Captcha"></label>
+                <div class="input-group">
+                    <input asp-for="Captcha" required="required" type="text" class="form-control" maxlength="7" autocomplete="off" aria-describedby="captchaHelpBlock" />
+                    <span class="input-group-append input-group-text">
+                        <strong style="font-size: 1rem">=</strong>
+                    </span>
+                </div>
+                <small id="captchaHelpBlock" class="form-text text-muted">
+                    Lösung der Rechenaufgabe im Bild oben
+                </small>
+                <span asp-validation-for="Captcha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-lg btn-primary col-10">@(Model.Registration.RegistrationId.Equals(new Guid()) ? "Anmeldung abschicken" : "Speichern")</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -32,15 +32,14 @@ namespace ClubSite.Pages
         public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
         {
             var result = await base.OnGet(id, draft);
-            Registrations = await _clubDbContext.TournamentRegistration.Where(tr =>
-                !tr.RegCanceledOn.HasValue &&
+            AllRegistrations = await _clubDbContext.TournamentRegistration?.Where(tr =>
                 tr.TournamentDate.Date ==
                 (Data.TournamentDefinition.DateFrom != null && Data.TournamentDefinition.DateFrom.Value.HasValue
                     ? Data.TournamentDefinition.DateFrom.Value.Value.Date
-                    : new DateTime())).ToListAsync();
+                    : new DateTime())).ToListAsync()! ?? new List<TournamentRegistration>();
             return result;
         }
 
-        public IList<TournamentRegistration> Registrations { get; set; } = new List<TournamentRegistration>();
+        public IList<TournamentRegistration> AllRegistrations { get; set; } = new List<TournamentRegistration>();
     }
 }

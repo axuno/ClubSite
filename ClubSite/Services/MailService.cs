@@ -25,6 +25,10 @@ namespace ClubSite.Services
 
         Task SendContactFormEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
             CancellationToken cancellationToken);
+        
+        Task SendTournamentRegistrationEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
+            CancellationToken cancellationToken);
+
 
         Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken);
         MailSettings Settings { get; }
@@ -44,7 +48,7 @@ namespace ClubSite.Services
 
         public MailSettings Settings { get; }
 
-        async public Task SendTextEmailAsync(string toName, string toEmail, string subject, string plainBody,
+        public async Task SendTextEmailAsync(string toName, string toEmail, string subject, string plainBody,
             CancellationToken cancellationToken)
         {
             var message = new MimeMessage();
@@ -63,11 +67,29 @@ namespace ClubSite.Services
             CancellationToken cancellationToken)
         {
             var message = new MimeMessage();
-            message.Headers.Add(HeaderId.Organization, Settings.Message?.Organization ?? string.Empty);
+            message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
             message.From.Add(new MailboxAddress(fromName, fromEmail));
-            if (Settings.Message != null)
-                foreach (var mailAddress in Settings.Message.ContactFormTo)
-                    message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
+
+            foreach (var mailAddress in Settings.Message.ContactFormTo)
+                message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
+
+            message.Subject = subject;
+            message.Body = new TextPart(TextFormat.Text) {
+                Text = plainBody
+            };
+
+            await SendEmailAsync(message, cancellationToken);
+        }
+
+        public async Task SendTournamentRegistrationEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
+            CancellationToken cancellationToken)
+        {
+            var message = new MimeMessage();
+            message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
+            message.From.Add(new MailboxAddress(fromName, fromEmail));
+            
+            foreach (var mailAddress in Settings.Message.ContactFormTo)
+                message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
 
             message.Subject = subject;
             message.Body = new TextPart(TextFormat.Text) {

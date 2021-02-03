@@ -8,6 +8,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ClubSite.Resources;
+using Microsoft.AspNetCore.Mvc;
+
+#nullable enable
 
 namespace ClubSite.Data.Poco
 {
@@ -405,63 +409,79 @@ GO
     public class TournamentRegistration
     {
         [Key] public long Id { get; set; }
-        [MaxLength(255)] public string Guid { get; set; } = string.Empty;
-        [Column(TypeName = "date")] public DateTime TournamentDate { get; set; }
+        [Column(TypeName = "identifier")] public Guid RegistrationId { get; set; }
+        [Column(TypeName = "datetime")] public DateTime TournamentDate { get; set; }
         public int? Rank { get; set; }
 
-        [MaxLength(255)]
+        [Required(AllowEmptyStrings = false,
+            ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
+            ErrorMessageResourceType = typeof(DataAnnotationResource))]
+        [DataType(DataType.Text)]
         [Display(Name = "Teamname")]
-        public string TeamName { get; set; } = string.Empty;
+        public string? TeamName { get; set; }
 
-        [MaxLength(255)]
         [Display(Name = "Vereinsname")]
-        public string ClubName { get; set; } = string.Empty;
+        public string? ClubName { get; set; }
 
-        [MaxLength(1)]
+        [RegularExpression("[mfu]", ErrorMessage = "Ungültiger Schlüssel für 'Anrede'")]
         [Display(Name = "Anrede")]
-        public string Gender { get; set; } = string.Empty;
+        [Required(AllowEmptyStrings = false,
+            ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
+            ErrorMessageResourceType = typeof(DataAnnotationResource))]
+        [DataType(DataType.Text)]
+        public string? Gender { get; set; }
 
-        [MaxLength(255)]
         [Display(Name = "Vorname")]
-        public string FirstName { get; set; } = string.Empty;
+        [Required(AllowEmptyStrings = false,
+            ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
+            ErrorMessageResourceType = typeof(DataAnnotationResource))]
+        [DataType(DataType.Text)]
+        public string? FirstName { get; set; }
 
-        [MaxLength(255)]
         [Display(Name = "Familienname")]
-        public string LastName { get; set; } = string.Empty;
+        [Required(AllowEmptyStrings = false,
+            ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
+            ErrorMessageResourceType = typeof(DataAnnotationResource))]
+        [DataType(DataType.Text)]
+        public string? LastName { get; set; }
 
-        [MaxLength(255)]
-        [Display(Name = "Spitzname")]
-        public string Nickname { get; set; } = string.Empty;
-
-        [MaxLength(40)]
         [Display(Name = "Telefon")]
-        public string Fone { get; set; } = string.Empty;
+        [Required(AllowEmptyStrings = false,
+            ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
+            ErrorMessageResourceType = typeof(DataAnnotationResource))]
+        [DataType(DataType.Text)]
+        public string? Fone { get; set; }
 
-        [MaxLength(100)]
         [Display(Name = "E-Mail")]
-        public string Email { get; set; } = string.Empty;
+        [EmailAddress(ErrorMessageResourceName = nameof(DataAnnotationResource.EmailAddressInvalid),
+            ErrorMessageResourceType = typeof(DataAnnotationResource))]
+        [Required(AllowEmptyStrings = false,
+            ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
+            ErrorMessageResourceType = typeof(DataAnnotationResource))]
+        public string? Email { get; set; }
 
-        [MaxLength(4000)]
         [Display(Name = "Nachricht/Hinweis")]
-        public string Message { get; set; } = string.Empty;
+        public string? Message { get; set; }
 
+        [Display(Name = "Kennzeichen \"Nachrücker\"")]
         public bool IsStandByRegistration { get; set; }
-        [Column(TypeName = "datetime")] public DateTime? RegisteredOn { get; set; }
+        
+        [Display(Name = "Datum Absage durch Team")]
         [Column(TypeName = "datetime")] public DateTime? RegCanceledOn { get; set; }
+        
+        [Column(TypeName = "datetime")] public DateTime? RegisteredOn { get; set; }
         [Column(TypeName = "datetime")] public DateTime? CreatedOn { get; set; }
         [Column(TypeName = "datetime")] public DateTime? ModifiedOn { get; set; }
 
         public string GetTeamNameWithClub()
         {
-            return string.Join(' ', TeamName.Trim(),
+            return string.Join(' ', (TeamName ?? string.Empty).Trim(),
                 !string.IsNullOrWhiteSpace(ClubName) ? "(" + ClubName.Trim() + ")" : string.Empty);
         }
 
         public string GetCompleteName()
         {
-            return !string.IsNullOrWhiteSpace(Nickname) && !Nickname.Trim().Equals(FirstName.Trim())
-                ? string.Join(' ', FirstName.Trim(), "(" + Nickname.Trim() + ")", LastName.Trim())
-                : string.Join(' ', FirstName.Trim(), LastName.Trim());
+            return string.Join(' ', (FirstName ?? string.Empty).Trim(), (LastName ?? string.Empty).Trim());
         }
     }
 }
