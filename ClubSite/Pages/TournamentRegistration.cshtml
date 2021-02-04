@@ -84,22 +84,25 @@
             @{
                 if ((await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded)
                 {
-                    <div class="custom-control custom-checkbox">
-                        <input asp-for="Registration.IsStandByRegistration" type="checkbox" class="custom-control-input" />
-                        <label asp-for="Registration.IsStandByRegistration" class="custom-control-label"></label>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Registration.RegCanceledOn"></label>
-                        <input asp-for="Registration.RegCanceledOn" type="text" class="form-control" placeholder="tt.mm.jjjj" aria-describedby="canceledHelpBlock" />
-                        <small id="canceledHelpBlock" class="form-text text-muted">
-                            Datum der Absage oder leer lassen
-                        </small>
-                        <span asp-validation-for="Registration.RegCanceledOn" class="text-danger"></span>
-                    </div>
-                    @if (Model.Registration.ModifiedOn.HasValue)
-                    {
-                        <div class="text-muted small">Letzte Änderung: @(Model.Registration.ModifiedOn.Value.ToString("g"))</div>
-                    }
+                    <fieldset class="border border-secondary rounded px-2 mb-3" style="">
+                        <legend class="small text-white bg-secondary px-2"><strong>Interne Bearbeitung</strong></legend>
+                        <div class="custom-control custom-checkbox">
+                            <input asp-for="Registration.IsStandByRegistration" type="checkbox" class="custom-control-input"/>
+                            <label asp-for="Registration.IsStandByRegistration" class="custom-control-label"></label>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Registration.RegCanceledOn"></label>
+                            <input asp-for="Registration.RegCanceledOn" type="text" class="form-control" placeholder="tt.mm.jjjj" aria-describedby="canceledHelpBlock"/>
+                            <small id="canceledHelpBlock" class="form-text text-muted">
+                                Datum der Absage oder leer lassen
+                            </small>
+                            <span asp-validation-for="Registration.RegCanceledOn" class="text-danger"></span>
+                        </div>
+                        @if (Model.Registration.ModifiedOn.HasValue)
+                        {
+                            <div class="text-muted small">Letzte Änderung: @(Model.Registration.ModifiedOn.Value.ToString("g"))</div>
+                        }
+                    </fieldset>
                 }
             }
             <div class="form-group">
@@ -122,7 +125,8 @@
                 <span asp-validation-for="Captcha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary col-10">@(Model.Registration.RegistrationId.Equals(new Guid()) ? "Anmeldung abschicken" : "Speichern")</button>
+                <button type="submit" class="btn btn-lg btn-primary col-12 col-md-6 mt-1">@(Model.Registration.RegistrationId.Equals(new Guid()) ? "Anmeldung abschicken" : "Speichern")</button>
+                <a href="@Model.TournamentPage.Permalink" class="btn btn-lg btn-light col-12 col-md-3 mt-1">Abbrechen</a>
             </div>
         </form>
     </div>

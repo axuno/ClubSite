@@ -53,8 +53,11 @@ namespace ClubSite.Models
         [Field(Title = "Team-Zusammensetzung", Placeholder = "z.B. Anzahl Damen/Herren")]
         public StringField TeamComposition { get; set; } = new StringField();
 
-        [Field(Title = "Startgeld", Placeholder = "Startgeld + ggf. Kaution")]
+        [Field(Title = "Startgeld", Placeholder = "Startgeld")]
         public StringField EntryFee { get; set; } = new StringField();
+
+        [Field(Title = "Bankverbindung")]
+        public TextField BankDetails { get; set; } = new TextField();
 
         [Field(Title = "Adresse", Placeholder = "Hallenadresse")]
         public StringField Address { get; set; } = new StringField();

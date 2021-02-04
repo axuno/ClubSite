@@ -160,7 +160,7 @@
         }
         else
         {
-            <div>Es liegen noch keine Anmeldungen für das Turnier vor.</div>
+            <div>Es liegen keine Anmeldungen für das Turnier vor.</div>
         }
 
         @if (Model.AllRegistrations.Any(tr => tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))
