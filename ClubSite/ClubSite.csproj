@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <Nullable>enable</Nullable>
-        <Version>1.2.0</Version>
+        <Version>1.2.1</Version>
         <Authors>axuno gGmbH</Authors>
         <Description>The source code for https://www.volleyballclub.de/</Description>
         <Copyright>axuno gGmbH and Contributors</Copyright>
