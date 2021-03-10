@@ -15,7 +15,7 @@ namespace ClubSite.Models
     /// Custom <see cref="TournamentPage"/> definition.
     /// </summary>
     [PageType(Title = "Contact", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
-    [PageTypeRoute(Title = "Default",
+    [ContentTypeRoute(Title = "Default",
         Route = "/ContactPage")] // Route is the base name of the Page name (ContactPage.cshtml)
     public class ContactPage : Page<ContactPage>
     {

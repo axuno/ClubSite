@@ -18,7 +18,7 @@ namespace ClubSite.Models
     /// Test page using all field types
     /// </summary>
     [PageType(Title = "Super Page", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
-    [PageTypeRoute(Title = "Default",
+    [ContentTypeRoute(Title = "Default",
         Route = "/superpage")] // Route is the base name of the Page name (SuperPage.cshtml)
     public class SuperPage : Page<SuperPage>
     {

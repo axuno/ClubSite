@@ -269,7 +269,7 @@ namespace ClubSite.Controllers
 
             await _api.Posts.SaveAsync(post3);
 
-            var comment = new Comment {
+            var comment = new PageComment() {
                 Author = "Håkan Edling",
                 Email = "hakan@tidyui.com",
                 Url = "http://piranhacms.org",

@@ -111,7 +111,7 @@ namespace ClubSite
                 svcBuilder.UseIdentityWithSeed<IdentitySQLServerDb>(db =>
                     db.UseSqlServer(Configuration.GetConnectionString("VolleyballClub")));
             });
-            services.AddPiranhaApplication();
+            services.AddPiranha();
 
             // MUST be before AddMvc!
             services.AddSession(options =>

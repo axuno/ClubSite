@@ -15,7 +15,7 @@ namespace ClubSite.Models
     /// Custom <see cref="TournamentPage"/> definition.
     /// </summary>
     [PageType(Title = "Turnier VC Neusäß", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
-    [PageTypeRoute(Title = "Default",
+    [ContentTypeRoute(Title = "Default",
         Route = "/TournamentPage")] // Route is the base name of the Page name (TournamentPage.cshtml)
     public class TournamentPage : Page<TournamentPage>
     {
