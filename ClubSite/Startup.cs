@@ -149,7 +149,12 @@ namespace ClubSite
             services.AddTransient<Services.IMailService, Services.MailService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">The <see cref="IApplicationBuilder"/></param>
+        /// <param name="env">The <see cref="IWebHostEnvironment"/></param>
+        /// <param name="api">The PiranhaCms <see cref="IApi"/></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
             var cultureInfo = new System.Globalization.CultureInfo("de-DE");
@@ -198,7 +203,7 @@ namespace ClubSite
              */
 
             // Configure Tiny MCE
-            EditorConfig.FromFile("editorconfig.json");
+            EditorConfig.FromFile($@"{Directory.GetCurrentDirectory()}{Path.DirectorySeparatorChar}{Program.ConfigurationFolder}{Path.DirectorySeparatorChar}editorconfig.json");
 
             // Keep before .UsePiranha()
             app.UseSession();

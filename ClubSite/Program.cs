@@ -27,11 +27,11 @@ namespace ClubSite
             // NLog: setup the logger first to catch all errors
             var currentDir = Directory.GetCurrentDirectory();
             var logger = NLogBuilder
-                .ConfigureNLog($@"{currentDir}\{ConfigurationFolder}\NLog.Internal.config")
+                .ConfigureNLog($@"{currentDir}{Path.DirectorySeparatorChar}{ConfigurationFolder}{Path.DirectorySeparatorChar}NLog.Internal.config")
                 .GetCurrentClassLogger();
 
             // Allows for <target name="file" xsi:type="File" fileName = "${var:logDirectory}logfile.log"... >
-            NLog.LogManager.Configuration.Variables["logDirectory"] = currentDir + "\\";
+            NLog.LogManager.Configuration.Variables["logDirectory"] = currentDir + Path.DirectorySeparatorChar;
 
             try
             {
@@ -67,7 +67,7 @@ namespace ClubSite
                         .AddEnvironmentVariables()
                         .AddCommandLine(args);
 
-                    var secretsFolder = Path.Combine(configPath, @"..\..\..\Secrets");
+                    var secretsFolder = Path.Combine(configPath, @$"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Secrets");
                     if (hostingContext.HostingEnvironment.IsDevelopment())
                     {
                         if (!Directory.Exists(secretsFolder))

@@ -3,6 +3,7 @@
     "toolbar":
         "bold italic | bullist numlist hr | alignleft aligncenter alignright | formatselect styleselect | piranhalink piranhaimage code",
     "blockformats": "Paragraph=p;Header 1=h1;Header 2=h2;Header 3=h3;Header 4=h4;Code=pre;Quote=blockquote",
+    "extendedvalidelements": "i[class]",
     "styleformats": [
         { "title": "Link", "tag": "a", "type": "inline", "classes": "link"  },
         { "title": "Small", "tag": "small", "type": "inline" },

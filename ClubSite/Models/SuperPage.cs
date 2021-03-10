@@ -28,7 +28,7 @@ namespace ClubSite.Models
         [Region(ListTitle = "ButtonText", ListPlaceholder = "New Link", Icon = "fas fa-quote-right")]
         public IList<Href> Links { get; set; } = new List<Href>();
 
-        [Region(Title = "All fields")]
+        [Region(Title = "All fields", Display = RegionDisplayMode.Setting)]
         [RegionDescription(
             "Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
         public AllFields? AllFields { get; set; }
@@ -56,6 +56,9 @@ namespace ClubSite.Models
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public CheckBoxField? CheckBox { get; set; }
+        
+        [Field(Title = "Color Field Title")]
+        public ColorField? ColorField { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public DateField? Date { get; set; }
