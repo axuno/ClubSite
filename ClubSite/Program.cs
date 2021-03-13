@@ -36,6 +36,9 @@ namespace ClubSite
             try
             {
                 logger.Trace($"Configuration of {nameof(WebHost)} starting.");
+                // http://zuga.net/articles/cs-how-to-determine-if-a-program-process-or-file-is-32-bit-or-64-bit/
+                logger.Info($"This app runs as {(System.Environment.Is64BitProcess ? "64-bit" : "32-bit")} process.\n\n");
+                
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception e)
