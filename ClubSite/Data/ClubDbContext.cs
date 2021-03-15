@@ -17,12 +17,10 @@ namespace ClubSite.Data
         {
         }
 
-        public DbSet<Poco.ClubMember>? ClubMember { get; set; }
         public DbSet<Poco.TournamentRegistration>? TournamentRegistration { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Poco.ClubMember>().ToTable("Club_Member");
             modelBuilder.Entity<Poco.TournamentRegistration>().ToTable("Club_TournamentRegistration");
         }
     }
