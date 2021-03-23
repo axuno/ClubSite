@@ -18,6 +18,7 @@
         "@fortawesome/fontawesome-free": "5.15.2",
         "tether": "1.4.7",
         "popper.js": "1.16.1",
-        "jquery": "3.5.1"
+        "jquery": "3.5.1",
+        "is-svg": ">=4.2.2"
     }
 }
