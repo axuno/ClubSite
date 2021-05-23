@@ -56,81 +56,83 @@
 </header>
 <div class="mx-3 pt-2">
     <div class="mb-4">
-        <table id="tournament-description" class="table-responsive table-striped table-bordered rounded shadow">
-            <tr>
-                <th>
-                    Datum:
-                </th>
-                <td>
-                    <b>@GetDates()</b>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Uhrzeit:
-                </th>
-                <td>
-                    @Html.Raw(Definition.TimeFromTo.Value)
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Besetzung:
-                </th>
-                <td>
-                    @Html.Raw(Definition.TeamComposition.Value)
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Anz. Teams:
-                </th>
-                <td>
-                    @Html.Raw(Definition.NumberOfTeams.Value)
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Startgeld:
-                </th>
-                <td>
-                    @Html.Raw(Definition.EntryFee.Value)
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Adresse:
-                </th>
-                <td>
-                    @Html.Raw(Definition.Address.Value)
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Infos:
-                </th>
-                <td>
-                    @Html.Raw(Definition.Infos.Value)
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <div class="pr-3">Anmeldefrist:</div>
-                </th>
-                <td>
-                    @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue
-                       && Definition.RegistrationStart.Value.Value.Date <= DateTime.Now.Date && DateTime.Now.Date <= Definition.RegistrationDeadline.Value.Value.Date
-                       && Definition.DateFrom.Value != null)
-                    {
-                        <div>@Html.Raw(Definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(Definition.RegistrationDeadline.Value?.ToShortDateString())</div>
-                        <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
-                    }
-                    else
-                    {
-                        <div>@Html.Raw(Model.AllRegistrations.Any() ? "abgelaufen" : "Turnier ist abgesagt")</div>
-                    }
-                </td>
-            </tr>
+        <table id="tournament-description" class="table table-responsive table-striped table-bordered rounded shadow">
+            <tbody>
+                <tr>
+                    <th>
+                        Datum:
+                    </th>
+                    <td>
+                        <b>@GetDates()</b>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Uhrzeit:
+                    </th>
+                    <td>
+                        @Html.Raw(Definition.TimeFromTo.Value)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Besetzung:
+                    </th>
+                    <td>
+                        @Html.Raw(Definition.TeamComposition.Value)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Anz. Teams:
+                    </th>
+                    <td>
+                        @Html.Raw(Definition.NumberOfTeams.Value)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Startgeld:
+                    </th>
+                    <td>
+                        @Html.Raw(Definition.EntryFee.Value)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Adresse:
+                    </th>
+                    <td>
+                        @Html.Raw(Definition.Address.Value)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Infos:
+                    </th>
+                    <td>
+                        @Html.Raw(Definition.Infos.Value)
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <div class="pr-3">Anmeldefrist:</div>
+                    </th>
+                    <td>
+                        @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue
+                            && Definition.RegistrationStart.Value.Value.Date <= DateTime.Now.Date && DateTime.Now.Date <= Definition.RegistrationDeadline.Value.Value.Date
+                            && Definition.DateFrom.Value != null)
+                        {
+                            <div>@Html.Raw(Definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(Definition.RegistrationDeadline.Value?.ToShortDateString())</div>
+                            <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
+                        }
+                        else
+                        {
+                            <div>@Html.Raw(Model.AllRegistrations.Any() ? "abgelaufen" : "Turnier ist abgesagt")</div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
