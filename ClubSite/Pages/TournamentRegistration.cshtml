@@ -21,7 +21,7 @@
     @if (Model.MaxRegistrationsReached && HttpContext.Request.Method.Equals("get", StringComparison.InvariantCultureIgnoreCase))
     {
         <div class="alert alert-dismissible alert-info border-info col-md-8 col-sm-10 col-12">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Schließen">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Schließen">
                 <span aria-hidden="true">&times;</span>
             </button>
             <p>Die max. Anzahl von @(maxTeams) möglichen Anmeldungen ist bereits erreicht.</p>
@@ -30,17 +30,17 @@
         </div>
     }
     <div>
-        <form method="post" class="col-md-8 col-sm-10 col-12 pl-0" role="form" novalidate="novalidate">
+        <form method="post" class="col-md-8 col-sm-10 col-12 ps-0" role="form" novalidate="novalidate">
             <div asp-validation-summary="All" class="rounded alert alert-danger border-danger">
             </div>
             <input asp-for="TournamentDate" type="hidden" />
             <input asp-for="Registration.RegistrationId" type="hidden" />
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.TeamName"></label>
                 <input asp-for="Registration.TeamName" type="text" required="required" class="form-control" />
                 <span asp-validation-for="Registration.TeamName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.ClubName"></label>
                 <input asp-for="Registration.ClubName" type="text" class="form-control" aria-describedby="clubNameHelpBlock" />
                 <small id="clubNameHelpBlock" class="form-text text-muted">
@@ -48,27 +48,27 @@
                 </small>
                 <span asp-validation-for="Registration.ClubName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.Email"></label>
                 <input asp-for="Registration.Email" type="text" required="required" class="form-control" />
                 <span asp-validation-for="Registration.Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.Gender"></label>
-                <select asp-for="Registration.Gender" asp-items="GenderList()" class="custom-select col-md-6 d-block" required="required"></select>
+                <select asp-for="Registration.Gender" asp-items="GenderList()" class="form-select col-md-6 d-block" required="required"></select>
                 <span asp-validation-for="Registration.Gender" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.FirstName"></label>
                 <input asp-for="Registration.FirstName" type="text" required="required" class="form-control" />
                 <span asp-validation-for="Registration.FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.LastName"></label>
                 <input asp-for="Registration.LastName" type="text" required="required" class="form-control" />
                 <span asp-validation-for="Registration.LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.Fone"></label>
                 <input asp-for="Registration.Fone" type="text" required="required" class="form-control" aria-describedby="foneHelpBlock" />
                 <small id="foneHelpBlock" class="form-text text-muted">
@@ -76,7 +76,7 @@
                 </small>
                 <span asp-validation-for="Registration.Fone" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div>
                 <label asp-for="Registration.Message"></label>
                 <textarea asp-for="Registration.Message" required="required" class="form-control" rows="2"></textarea>
                 <span asp-validation-for="Registration.Message" class="text-danger"></span>
@@ -86,11 +86,11 @@
                 {
                     <fieldset class="border border-secondary rounded px-2 mb-3" style="">
                         <legend class="small text-white bg-secondary px-2"><strong>Interne Bearbeitung</strong></legend>
-                        <div class="custom-control custom-checkbox">
-                            <input asp-for="Registration.IsStandByRegistration" type="checkbox" class="custom-control-input"/>
-                            <label asp-for="Registration.IsStandByRegistration" class="custom-control-label"></label>
+                        <div class="form-check">
+                            <input asp-for="Registration.IsStandByRegistration" type="checkbox" class="form-check-input"/>
+                            <label asp-for="Registration.IsStandByRegistration" class="form-check-label"></label>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label asp-for="Registration.RegCanceledOn"></label>
                             <input asp-for="Registration.RegCanceledOn" type="text" class="form-control" placeholder="tt.mm.jjjj" aria-describedby="canceledHelpBlock"/>
                             <small id="canceledHelpBlock" class="form-text text-muted">
@@ -105,7 +105,7 @@
                     </fieldset>
                 }
             }
-            <div class="form-group">
+            <div>
                 <div class="mt-2">
                     <img id="CaptchaImage" style="vertical-align: bottom; display: inline" src="@Url.Action(nameof(Controllers.Captcha.Index), nameof(Controllers.Captcha))@("?guid=" + Guid.NewGuid())" alt="Captcha" title="" />
                     <label class="d-inline" onclick="javascript:if (document.images) document.images.CaptchaImage.src = '@Url.Action(nameof(Controllers.Captcha.Index), nameof(Controllers.Captcha))?new=1&amp;time=' + new Date().getTime();" style="cursor: pointer">
@@ -115,7 +115,7 @@
                 <label asp-for="Captcha"></label>
                 <div class="input-group">
                     <input asp-for="Captcha" required="required" type="text" class="form-control" maxlength="7" autocomplete="off" aria-describedby="captchaHelpBlock" />
-                    <span class="input-group-append input-group-text">
+                    <span class="input-group-text">
                         <strong style="font-size: 1rem">=</strong>
                     </span>
                 </div>
@@ -124,9 +124,9 @@
                 </small>
                 <span asp-validation-for="Captcha" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary col-12 col-md-6 mt-1">@(Model.Registration.RegistrationId.Equals(new Guid()) ? "Anmeldung abschicken" : "Speichern")</button>
-                <a href="@Model.TournamentPage.Permalink" class="btn btn-lg btn-light col-12 col-md-3 mt-1">Abbrechen</a>
+            <div>
+                <button type="submit" class="btn-lg btn-primary col-12 col-md-6 mt-1">@(Model.Registration.RegistrationId.Equals(new Guid()) ? "Anmeldung abschicken" : "Speichern")</button>
+                <a href="@Model.TournamentPage.Permalink" class="btn-lg btn-light col-12 col-md-3 mt-1">Abbrechen</a>
             </div>
         </form>
     </div>
