@@ -42,7 +42,7 @@ blockquote {
 }
 
 hr {
-    border: 2px solid theme-color("secondary");
+    border: 2px solid $secondary;
 }
 
 .edit-icon {
@@ -64,7 +64,7 @@ hr {
 label {
     //font-size: 1rem;
     font-weight: normal;
-    color: theme-color("primary");
+    color: $primary;
     background-color: transparent;
     margin-top: .75rem;
     margin-bottom: .25rem;

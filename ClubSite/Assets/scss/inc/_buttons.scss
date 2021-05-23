@@ -16,6 +16,6 @@
 
 .btn {
     &.btn-secondary {
-        color: theme-color("dark");
+        color: $dark;
     }
 }

@@ -1,5 +1,5 @@
 var gulp = require("gulp"),
-    sass = require("gulp-sass");
+    sass = require("gulp-dart-sass");
 cssmin = require("gulp-cssmin");
 rename = require("gulp-rename");
 

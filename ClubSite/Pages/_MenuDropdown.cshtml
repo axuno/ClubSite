@@ -2,7 +2,7 @@
 @* The model contains the parent menu item *@
 @if (Model != null && !Model.IsHidden && Model.Items.Count != 0)
 {
-    <div class="dropdown-menu dropdown-menu-right" style="margin-top: 0.0rem">
+    <div class="dropdown-menu dropdown-menu-end" style="margin-top: 0.0rem">
         @foreach (var childNode in Model.Items)
         {
             if (!childNode.IsHidden && childNode.Items.Count != 0)

@@ -2,11 +2,11 @@
 // font-awesome is included by site.scss
 // Helpful: https://pikock.github.io/bootstrap-magic/app/index.html#!/editor
 //
-@import '../../node_modules/tether/src/css/tether.sass';
+//@import '../../node_modules/tether/src/css/tether.sass';
 
 // Always required for Bootstrap
 @import "../../node_modules/bootstrap/scss/functions";
-@import "../../node_modules/bootstrap/scss/variables";
+//@import "../../node_modules/bootstrap/scss/variables";
 @import "../../node_modules/bootstrap/scss/mixins";
 
 // Bootstrap overrides
@@ -41,29 +41,37 @@ $green: #71944e;
 $teal: #00E266;
 $cyan: #88BFC3;
 
+// Reassign standard theme color vars to semantic color scheme
 
+$primary: $blue;
+$secondary : $yellow;
+$success: $green;
+$info: #2f3e5b;
+$warning: $orange;
+$danger: $red;
+$light: $cyan;
+$dark: $blue;
+    
 // Reassign color vars to semantic color scheme
-$theme-colors: ( primary: $blue, secondary: $yellow, success: $green, info: #2f3e5b, warning: $orange, danger: $red, light: $cyan, dark: $blue );
+$theme-colors: ( "primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "dark": $dark );
 
 // Dropdowns
 //
 // Dropdown menu container and contents.
 
-//$dropdown-link-hover-bg: lighten($pink, 20%);
-$dropdown-link-hover-bg: darken($dropdown-link-hover-bg, 20%);
-
-$dropdown-link-active-bg: theme-color("primary");
+$dropdown-link-active-bg: $primary;
+$dropdown-link-hover-bg: shade-color($dropdown-link-active-bg, 20%);
 
 // Headings
 //
-$headings-color: theme-color("secondary");
+$headings-color: $secondary;
 
 
 // Body
 //
 // Settings for the `<body>` element.
-$body-bg: lighten(theme-color("secondary"), 40%);
-$body-color: theme-color("dark");
+$body-bg: tint-color($secondary, 90%);
+$body-color: $dark;
 
 
 // Borders
@@ -80,25 +88,27 @@ $link-hover-decoration: underline;
 
 // Forms
 
-//$input-color: theme-color("primary");
-//$input-focus-color: theme-color("primary");
-$input-focus-bg: lighten(theme-color("secondary"), 40%);
+// $input-color: $primary;
+// $input-focus-color: $primary;
+$input-focus-bg: tint-color($secondary, 85%);
+$input-bg: $gray-100;
 
 // Navbar
 //
 // Navbar dark
-$navbar-dark-color: rgba(theme-color("secondary"), 0.75);
-$navbar-dark-hover-color: rgba(theme-color("secondary"), 0.9);
-$navbar-dark-active-color: rgba(theme-color("secondary"), 1);
-$navbar-dark-disabled-color: rgba(theme-color("secondary"), 0.25);
-$navbar-dark-toggler-border-color: rgba(theme-color("secondary"), 0.75);
+$navbar-dark-color: rgba($secondary, 0.75);
+$navbar-dark-hover-color: rgba($secondary, 0.9);
+$navbar-dark-active-color: rgba($secondary, 1);
+$navbar-dark-disabled-color: rgba($secondary, 0.25);
+$navbar-dark-toggler-border-color: rgba($secondary, 0.75);
+
 // Dropdowns
 //
 // Dropdown menu container and contents.
-$dropdown-link-hover-bg: lighten(theme-color("secondary"), 20%);
-$dropdown-link-active-bg: theme-color("secondary");
-$dropdown-link-active-color: theme-color("primary");
-$dropdown-link-color: theme-color("primary");
+$dropdown-link-hover-bg: $secondary;
+$dropdown-link-active-bg: tint-color($secondary, 40%);
+$dropdown-link-active-color: $primary;
+$dropdown-link-color: $primary;
 $dropdown-link-hover-color: $dropdown-link-color;
 $dropdown-item-padding-x: .75rem;
 $dropdown-bg: $body-bg;
