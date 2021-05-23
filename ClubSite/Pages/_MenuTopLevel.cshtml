@@ -1,32 +1,34 @@
 ﻿@inject Microsoft.AspNetCore.Authorization.IAuthorizationService Auth
 <div class="fixed-top">
     <nav class="navbar navbar-expand-md navbar-dark bg-primary p-0 pe-2 mx-1">
-        <a class="navbar-brand ps-2" href="~/">
-            <img src="~/favicon/vcn-Logo.svg" style="width: 50px;" alt="Logo"/><span class="clubname ps-2 d-none d-lg-inline-block">Volleyballclub Neusäß<small>e. V.</small></span><span class="clubname ps-2 d-inline-block d-lg-none">VC Neusäß</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbars-club-default" aria-controls="navbars-club-default" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbars-club-default">
-            <ul class="navbar-nav ms-auto">
-                @foreach (var item in (await WebApp.Site.Sitemap.ForUserAsync(User, Auth)).Where(i => !i.IsHidden))
-                {
-                    if (item.Items.Count == 0)
+        <div class="container-fluid">
+            <a class="navbar-brand ps-2" href="~/">
+                <img src="~/favicon/vcn-Logo.svg" style="width: 50px;" alt="Logo" /><span class="clubname ps-2 d-none d-lg-inline-block">Volleyballclub Neusäß<small>e. V.</small></span><span class="clubname ps-2 d-inline-block d-lg-none">VC Neusäß</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbars-club-default" aria-controls="navbars-club-default" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbars-club-default">
+                <ul class="navbar-nav ms-auto">
+                    @foreach (var item in (await WebApp.Site.Sitemap.ForUserAsync(User, Auth)).Where(i => !i.IsHidden))
                     {
-                        <li class="nav-item@(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? " active" : "")">
-                            <a class="nav-link" href="@item.Permalink">@item.MenuTitle@*item.Items.Count*@</a>
-                            <partial name="_MenuDropdown" model="item"/>
-                        </li>
+                        if (item.Items.Count == 0)
+                        {
+                            <li class="nav-item@(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? " active" : "")">
+                                <a class="nav-link" href="@item.Permalink">@item.MenuTitle@*item.Items.Count*@</a>
+                                <partial name="_MenuDropdown" model="item" />
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown@(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? " active" : "")">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="@item.Permalink" role="button">@item.MenuTitle@*item.Items.Count*@</a>
+                                <partial name="_MenuDropdown" model="item" />
+                            </li>
+                        }
                     }
-                    else
-                    {
-                        <li class="nav-item dropdown@(item.Id == WebApp.PageId || item.HasChild(WebApp.PageId) ? " active" : "")">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="@item.Permalink" role="button">@item.MenuTitle@*item.Items.Count*@</a>
-                            <partial name="_MenuDropdown" model="item"/>
-                        </li>
-                    }
-                }
-            </ul>
+                </ul>
+            </div>
         </div>
     </nav>
 </div>
