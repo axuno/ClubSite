@@ -119,16 +119,15 @@
                         <div class="pr-3">Anmeldefrist:</div>
                     </th>
                     <td>
-                        @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue
-                            && Definition.RegistrationStart.Value.Value.Date <= DateTime.Now.Date && DateTime.Now.Date <= Definition.RegistrationDeadline.Value.Value.Date
-                            && Definition.DateFrom.Value != null)
+                        @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue)
                         {
                             <div>@Html.Raw(Definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(Definition.RegistrationDeadline.Value?.ToShortDateString())</div>
-                            <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
-                        }
-                        else
-                        {
-                            <div>@Html.Raw(Model.AllRegistrations.Any() ? "abgelaufen" : "Turnier ist abgesagt")</div>
+                            if (Definition.RegistrationStart.Value!.Value.Date >= DateTime.Now.Date && DateTime.Now.Date >= Definition.RegistrationDeadline.Value!.Value.Date
+                                && Definition.DateFrom.Value != null)
+
+                            {
+                                <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
+                            }
                         }
                     </td>
                 </tr>
