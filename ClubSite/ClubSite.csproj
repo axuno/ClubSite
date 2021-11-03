@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <Version>2.2.0</Version>
+        <Version>2.3.0</Version>
         <Authors>axuno gGmbH</Authors>
         <Description>The source code for https://www.volleyballclub.de/</Description>
         <Copyright>axuno gGmbH and Contributors</Copyright>
