@@ -10,20 +10,20 @@
         "gulp-cssmin": "^0.2.0",
         "gulp-rename": "^2.0.0",
         "gulp-dart-sass": "^1.0.2",
-        "autoprefixer": "10.3.1",
-        "postcss": "8.3.4",
+        "autoprefixer": "10.4.0",
+        "postcss": "8.4.4",
         "pixrem": "5.0.0",
-        "cssnano": "5.0.8",
-        "bootstrap": "5.1.0",
+        "cssnano": "5.0.12",
+        "bootstrap": "5.1.3",
         "font-awesome": "4.7.0",
-        "@fortawesome/fontawesome-free": "5.15.2",
+        "@fortawesome/fontawesome-free": "5.15.4",
         "tether": "2.0.0",
         "popper.js": "2.0.0-next.4",
         "jquery": "3.6.0",
         "is-svg": ">=4.2.2",
         "set-value": ">=4.0.1",
-        "css-what": ">=5.0.1",
-        "glob-parent": ">=5.1.2",
-        "trim-newlines": ">=3.0.1"
+        "css-what": ">=5.1.0",
+        "glob-parent": ">=6.0.2",
+        "trim-newlines": ">=4.0.2"
     }
 }
