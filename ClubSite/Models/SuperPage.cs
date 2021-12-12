@@ -28,9 +28,7 @@ namespace ClubSite.Models
         [Region(ListTitle = "ButtonText", ListPlaceholder = "New Link", Icon = "fas fa-quote-right")]
         public IList<Href> Links { get; set; } = new List<Href>();
 
-        [Region(Title = "All fields", Display = RegionDisplayMode.Setting)]
-        [RegionDescription(
-            "Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
+        [Region(Title = "All fields", Display = RegionDisplayMode.Setting, Description = "Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
         public AllFields? AllFields { get; set; }
     }
 
@@ -75,9 +73,7 @@ namespace ClubSite.Models
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
         public MediaField? Media { get; set; }
 
-        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]
-        [FieldDescription(
-            "Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
+        [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.", Description = "Duis mollis, est non <strong>commodo luctus</strong>, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.")]
         public VideoField? Video { get; set; }
 
         [Field(Placeholder = "Etiam porta sem malesuada magna mollis euismod.")]

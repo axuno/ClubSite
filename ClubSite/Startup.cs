@@ -101,6 +101,7 @@ namespace ClubSite
             {
                 svcBuilder.AddRazorRuntimeCompilation = WebHostEnvironment.IsDevelopment();
 
+                svcBuilder.UseCms();
                 svcBuilder.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
                 svcBuilder.UseImageSharp();
                 svcBuilder.UseManager(); // https://localhost:44306/manager/ initial user: admin, pw: password
@@ -111,8 +112,7 @@ namespace ClubSite
                 svcBuilder.UseIdentityWithSeed<IdentitySQLServerDb>(db =>
                     db.UseSqlServer(Configuration.GetConnectionString("VolleyballClub")));
             });
-            services.AddPiranha();
-
+            
             // MUST be before AddMvc!
             services.AddSession(options =>
             {

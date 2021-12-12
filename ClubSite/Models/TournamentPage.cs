@@ -19,8 +19,7 @@ namespace ClubSite.Models
         Route = "/TournamentPage")] // Route is the base name of the Page name (TournamentPage.cshtml)
     public class TournamentPage : Page<TournamentPage>
     {
-        [Region(Title = "Turnierbeschreibung")]
-        [RegionDescription("Festlegung der Eckdaten des Turniers")]
+        [Region(Title = "Turnierbeschreibung", Description = "Festlegung der Eckdaten des Turniers")]
         public TournamentDefinition TournamentDefinition { get; set; } = new TournamentDefinition();
     }
 
