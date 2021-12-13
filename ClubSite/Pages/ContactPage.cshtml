@@ -1,6 +1,11 @@
 ﻿@page
 @model ClubSite.Pages.ContactPageModel
 @{
+    // Disable caching in order to make AntiForgeryToken work
+    HttpContext.Response.Headers.Remove("Cache-Control");
+    HttpContext.Response.Headers.Remove("Pragma");
+    HttpContext.Response.Headers.TryAdd("Cache-Control", "no-store, no-cache, must-revalidate");
+    HttpContext.Response.Headers.TryAdd("Pragma", "no-cache");
 }
 <div class="mx-3 py-2">
     @{

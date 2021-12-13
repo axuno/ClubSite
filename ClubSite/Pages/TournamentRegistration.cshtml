@@ -3,6 +3,12 @@
 @inject IAuthorizationService Auth
 @model ClubSite.Pages.TournamentRegistrationModel
 @{
+    // Disable caching in order to make AntiForgeryToken work
+    HttpContext.Response.Headers.Remove("Cache-Control");
+    HttpContext.Response.Headers.Remove("Pragma");
+    HttpContext.Response.Headers.TryAdd("Cache-Control", "no-store, no-cache, must-revalidate");
+    HttpContext.Response.Headers.TryAdd("Pragma", "no-cache");
+
     ViewData["Title"] = "Turnier-Anmeldung";
     var maxTeams = Model.TournamentPage.TournamentDefinition.NumberOfTeams.Value;
     List<SelectListItem> GenderList()
