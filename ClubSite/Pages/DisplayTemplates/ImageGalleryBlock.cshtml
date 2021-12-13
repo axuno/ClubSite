@@ -1,7 +1,8 @@
 @model Piranha.Extend.Blocks.ImageGalleryBlock
 @using Piranha.Extend.Blocks
 @{
-    var unique = "gallery-" + Guid.NewGuid().ToString();
+    if (Model is null) return;
+    var unique = "gallery-" + Guid.NewGuid();
 }
 
 <div id="@unique" class="carousel slide gallery-block" data-bs-ride="carousel">

@@ -1,5 +1,6 @@
 @model Piranha.Extend.Blocks.PageBlock
 @{
+    if (Model is null) return;
     @if (Model.Body.Page != null && Library.HtmlTool.IsEmptyHtml(Model.Body.Page.Excerpt ?? string.Empty))
     {
         Model.Body.Page.Excerpt = string.Empty;

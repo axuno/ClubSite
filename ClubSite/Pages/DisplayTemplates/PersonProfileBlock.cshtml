@@ -1,5 +1,6 @@
 @using Piranha.Extend.Blocks
 @model ClubSite.Models.PersonProfileBlock
+@{ if (Model is null) return; }
 <h3 class="h3">@Model.Title</h3>
 <div class="d-flex flex-row py-0">
     @{

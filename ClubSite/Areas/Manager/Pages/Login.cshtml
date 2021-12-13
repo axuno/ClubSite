@@ -39,7 +39,7 @@
 
                 @if (!Model.ModelState.IsValid)
                 {
-                    <p class="error-message">@string.Join("\r\n", ModelState.SelectMany(p => p.Value.Errors).Select(e => e.ErrorMessage))</p>
+                    <p class="error-message">@string.Join("\r\n", ModelState.Where(p => p.Value != null).SelectMany(p => p.Value!.Errors).Select(e => e.ErrorMessage))</p>
                 }
 
                 <div class="card-body card-body-form">
@@ -58,6 +58,7 @@
             </div>
         </form>
         <div class="text-center" style="margin-top: 3rem">
+            <p style="text-transform: none; font-size: 1rem; margin-top: 0; color: gray"><a href="https://github.com/axuno/ClubSite" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno ClubSite, @Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(ClubSite.Startup).Assembly)</a></p>
             <small style="text-transform: none; font-size: 0.8rem; margin-top: 0; color: gray">
                 Design und Realisierung:<br/>
                 Norbert Bietsch, <a href="https://axuno.net/" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno gemeinnützige GmbH</a>

@@ -81,7 +81,7 @@ namespace ClubSite.Pages
             }
             catch (Exception e)
             {
-                _logger.LogCritical("Error setting up the model for date {0}", new DateTime(dateTicks), e);
+                _logger.LogCritical("Error setting up the model for date {new DateOnly(dateTicks)}", e);
             }
         }
 
@@ -94,7 +94,7 @@ namespace ClubSite.Pages
             }
             catch (Exception e)
             {
-                _logger.LogCritical("Error setting up the model for date {0}", new DateTime(TournamentDate), e);
+                _logger.LogCritical("Error setting up the model for date {new DateOnly(TournamentDate)}", e);
             }
             
             // Handle data annotation model binding errors
