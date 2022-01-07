@@ -122,7 +122,7 @@
                         @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue)
                         {
                             <div>@Html.Raw(Definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(Definition.RegistrationDeadline.Value?.ToShortDateString())</div>
-                            if (Definition.RegistrationStart.Value!.Value.Date >= DateTime.Now.Date && DateTime.Now.Date >= Definition.RegistrationDeadline.Value!.Value.Date
+                            if (DateTime.Now.Date >= Definition.RegistrationStart.Value!.Value.Date && DateTime.Now.Date <= Definition.RegistrationDeadline.Value!.Value.Date
                                 && Definition.DateFrom.Value != null)
 
                             {

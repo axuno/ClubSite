@@ -131,8 +131,8 @@
                 <span asp-validation-for="Captcha" class="text-danger"></span>
             </div>
             <div>
-                <button type="submit" class="btn-lg btn-primary col-12 col-md-6 mt-1">@(Model.Registration.RegistrationId.Equals(new Guid()) ? "Anmeldung abschicken" : "Speichern")</button>
-                <a href="@Model.TournamentPage.Permalink" class="btn-lg btn-light col-12 col-md-3 mt-1">Abbrechen</a>
+                <button type="submit" role="button" class="btn btn-primary btn-lg fs-4 col-12 col-md-6 mt-2">@(Model.Registration.RegistrationId.Equals(new Guid()) ? "Anmeldung abschicken" : "Speichern")</button>
+                <a href="@Model.TournamentPage.Permalink" role="button" class="btn btn-light btn-lg fs-4 col-12 col-md-3 mt-2">Abbrechen</a>
             </div>
         </form>
     </div>
