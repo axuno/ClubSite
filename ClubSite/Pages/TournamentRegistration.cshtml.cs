@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,6 +17,7 @@ using ClubSite.Data.Poco;
 using ClubSite.Library;
 using ClubSite.Models;
 using ClubSite.Resources;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -30,7 +32,7 @@ namespace ClubSite.Pages
     /// </summary>
     /// <remarks>
     /// For model binding, the properties of a model MUST NOT BE pre-initialized.
-    /// Pre-initialized fields makes these fields "required" and cause unexpected model errors.
+    /// Pre-initialized fields make these fields "required" and cause unexpected model errors.
     /// </remarks>
     [AutoValidateAntiforgeryToken]
     [Bind(nameof(TournamentDate), nameof(Captcha), nameof(Registration))]
@@ -73,15 +75,17 @@ namespace ClubSite.Pages
         [BindNever]
         public IList<TournamentRegistration> AllRegistrations { get; set; } = new List<TournamentRegistration>();
 
-        public async Task OnGetAsync(long dateTicks, Guid registrationId)
+        public async Task<IActionResult> OnGetAsync(long dateTicks, Guid registrationId)
         {
             try
             {
                 await SetupModel(dateTicks, registrationId);
+                return Page();
             }
             catch (Exception e)
             {
                 _logger.LogCritical("Error setting up the model for date {new DateOnly(dateTicks)}", e);
+                return NotFound();
             }
         }
 
@@ -95,6 +99,7 @@ namespace ClubSite.Pages
             catch (Exception e)
             {
                 _logger.LogCritical("Error setting up the model for date {new DateOnly(TournamentDate)}", e);
+                return NotFound();
             }
             
             // Handle data annotation model binding errors
