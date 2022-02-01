@@ -208,6 +208,8 @@ Datum:       {definition.DateFrom.Value!.Value.ToLongDateString()}
 Adresse:     {definition.Address.Value}
 Startgebühr: {definition.EntryFee.Value}
 
+Team:        {Registration.GetTeamNameWithClub()}
+
 Angemeldet von:
 Name:    {(Registration.Gender == "f" ? "Frau" : "Herrn")} {Registration.GetCompleteName()}
 Telefon: {Registration.Fone}
@@ -215,7 +217,7 @@ E-Mail:  {Registration.Email}
 
 Nachricht:
 ----------------------------------------
-{(string.IsNullOrWhiteSpace(Registration.Message) ? "(keine)" : "Message")}
+{(string.IsNullOrWhiteSpace(Registration.Message) ? "(keine)" : Registration.Message)}
 ----------------------------------------
 {(Registration.IsStandByRegistration ? "\n" : "\nBankverbindung für die Startgebühr:\n" + definition.BankDetails.Value + "\n" )}
 Vielen Dank!
