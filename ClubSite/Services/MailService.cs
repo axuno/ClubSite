@@ -68,7 +68,8 @@ namespace ClubSite.Services
         {
             var message = new MimeMessage();
             message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
-            message.From.Add(new MailboxAddress(fromName, fromEmail));
+            message.ReplyTo.Add(new MailboxAddress(fromName, fromEmail));
+            message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
 
             foreach (var mailAddress in Settings.Message.ContactFormTo)
                 message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
@@ -86,7 +87,8 @@ namespace ClubSite.Services
         {
             var message = new MimeMessage();
             message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
-            message.From.Add(new MailboxAddress(fromName, fromEmail));
+            message.ReplyTo.Add(new MailboxAddress(fromName, fromEmail));
+            message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
             
             foreach (var mailAddress in Settings.Message.ContactFormTo)
                 message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));

@@ -34,7 +34,7 @@ namespace ClubSite.ConfigurationPoco
 
     public class Message
     {
-        public MailAddress DefaultFrom { get; set; } = new MailAddress();
+        public MailAddress DefaultFrom { get; set; } = new ();
         public MailAddress[] ContactFormTo { get; set; } = { };
         public string? Organization { get; set; }
     }
