@@ -59,13 +59,13 @@ namespace ClubSite.Pages
                     TaskContinuationOptions.None,
                     TaskScheduler.Default)
                 .StartNew(() => api.Pages.GetAllAsync<TournamentPage>())
-                .Unwrap().GetAwaiter()
+                .Unwrap().ConfigureAwait(false).GetAwaiter()
                 .GetResult().FirstOrDefault();
         }
 
         public async Task<TournamentPage?> GetTournamentPageAsync()
         {
-            return (await _api.Pages.GetAllAsync<TournamentPage>()).FirstOrDefault();
+            return (await _api.Pages.GetAllAsync<TournamentPage>().ConfigureAwait(false)).FirstOrDefault();
         }
 
         [BindProperty]
@@ -205,7 +205,8 @@ namespace ClubSite.Pages
             var tournamentDate = new DateTime(date).Date;
             
             // Get the TournamentPage containing the definition for the given date
-            TournamentPage = (await _api.Pages.GetAllAsync<TournamentPage>()).FirstOrDefault(p =>
+            TournamentPage = (await _api.Pages.GetAllAsync<TournamentPage>()
+                                 .ConfigureAwait(false)).FirstOrDefault(p =>
                                  p.TournamentDefinition.DateFrom.Value.HasValue &&
                                  p.TournamentDefinition.DateFrom.Value.Value.Date.Equals(tournamentDate)) ??
                              throw new Exception($"{nameof(Models.TournamentPage)} for date '{tournamentDate}' not found");
