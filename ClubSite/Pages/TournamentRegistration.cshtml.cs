@@ -50,7 +50,7 @@ namespace ClubSite.Pages
             _mailService = mailService;
             _logger = logger;
             TournamentPage = new TournamentPage();
-            // Call async method from sync context
+            // Call async method from sync context - we need the permalink to the TournamentPage
             var p = new TaskFactory()
                 .StartNew(() => api.Pages.GetAllAsync<TournamentPage>())
                 .Unwrap().GetAwaiter()
@@ -72,7 +72,7 @@ namespace ClubSite.Pages
         [BindProperty] // hidden field
         public long TournamentDate { get; set; }
         
-        //[BindNever]
+        [BindNever]
         public TournamentPage TournamentPage { get; set; }
         
         [BindNever]
@@ -91,7 +91,7 @@ namespace ClubSite.Pages
         public async Task<IActionResult> OnGetAsync(long dateTicks, Guid registrationId)
         {
             // Redirect to the TournamentPage
-            //if (TournamentIsOver()) return Redirect(TournamentPage.Permalink ?? "/");
+            if (TournamentIsOver()) return Redirect(TournamentPage.Permalink ?? "/");
 
             try
             {
