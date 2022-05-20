@@ -51,7 +51,10 @@ namespace ClubSite.Pages
             _logger = logger;
             TournamentPage = new TournamentPage();
             // Call async method from sync context - we need the permalink to the TournamentPage
-            var p = new TaskFactory()
+            var p = new TaskFactory(CancellationToken.None,
+                    TaskCreationOptions.None,
+                    TaskContinuationOptions.None,
+                    TaskScheduler.Default)
                 .StartNew(() => api.Pages.GetAllAsync<TournamentPage>())
                 .Unwrap().GetAwaiter()
                 .GetResult().FirstOrDefault();
