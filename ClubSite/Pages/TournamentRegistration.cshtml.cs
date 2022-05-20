@@ -193,10 +193,7 @@ namespace ClubSite.Pages
             }
             
             // Redirect to the default TournamentPage
-            if (TournamentIsOver())
-            {
-                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
-            }           
+            return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");         
         }
 
         private async Task SetupModel(long date, Guid? registrationId)
