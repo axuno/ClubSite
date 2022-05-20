@@ -50,6 +50,12 @@ namespace ClubSite.Pages
             _mailService = mailService;
             _logger = logger;
             TournamentPage = new TournamentPage();
+            // Call async method from sync context
+            var p = new TaskFactory()
+                .StartNew(() => api.Pages.GetAllAsync<TournamentPage>())
+                .Unwrap().GetAwaiter()
+                .GetResult().FirstOrDefault();
+            TournamentPage.Permalink = p?.Permalink;
             Registration = new TournamentRegistration();
         }
 
@@ -66,7 +72,7 @@ namespace ClubSite.Pages
         [BindProperty] // hidden field
         public long TournamentDate { get; set; }
         
-        [BindNever]
+        //[BindNever]
         public TournamentPage TournamentPage { get; set; }
         
         [BindNever]
@@ -75,8 +81,18 @@ namespace ClubSite.Pages
         [BindNever]
         public IList<TournamentRegistration> AllRegistrations { get; set; } = new List<TournamentRegistration>();
 
+        private bool TournamentIsOver()
+        {
+            return TournamentPage.TournamentDefinition.DateFrom.Value == null 
+                   || (TournamentPage.TournamentDefinition.DateFrom.Value.Value.Date >=
+                       DateTime.Now.Date);
+        }
+
         public async Task<IActionResult> OnGetAsync(long dateTicks, Guid registrationId)
         {
+            // Redirect to the TournamentPage
+            //if (TournamentIsOver()) return Redirect(TournamentPage.Permalink ?? "/");
+
             try
             {
                 await SetupModel(dateTicks, registrationId);
@@ -91,6 +107,9 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
+            // Redirect to the TournamentPage
+            if (TournamentIsOver()) return Redirect(TournamentPage.Permalink ?? "/");
+
             try
             {
                 // Model must always be set up
