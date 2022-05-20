@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <Version>3.1.0</Version>
+        <Version>3.2.0</Version>
         <Authors>axuno gGmbH</Authors>
         <Description>The source code for https://www.volleyballclub.de/</Description>
         <Copyright>axuno gGmbH and Contributors</Copyright>
@@ -11,27 +11,27 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MailKit" Version="3.1.1" />
+        <PackageReference Include="MailKit" Version="3.2.0" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.2">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="4.14.0" />
-        <PackageReference Include="Piranha" Version="10.0.2" />
-        <PackageReference Include="Piranha.AspNetCore" Version="10.0.2" />
-        <PackageReference Include="Piranha.AspNetCore.Identity" Version="10.0.2" />
-        <PackageReference Include="Piranha.AspNetCore.Identity.SQLServer" Version="10.0.2" />
-        <PackageReference Include="Piranha.AspNetCore.SimpleSecurity" Version="10.0.2" />
-        <PackageReference Include="Piranha.AttributeBuilder" Version="10.0.2" />
-        <PackageReference Include="Piranha.Data.EF.SQLServer" Version="10.0.2" />
-        <PackageReference Include="Piranha.ImageSharp" Version="10.0.2" />
-        <PackageReference Include="Piranha.Local.FileStorage" Version="10.0.2" />
-        <PackageReference Include="Piranha.Manager" Version="10.0.2" />
-        <PackageReference Include="Piranha.Manager.TinyMCE" Version="10.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.5" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.0.0" />
+        <PackageReference Include="Piranha" Version="10.1.0" />
+        <PackageReference Include="Piranha.AspNetCore" Version="10.1.0" />
+        <PackageReference Include="Piranha.AspNetCore.Identity" Version="10.1.0" />
+        <PackageReference Include="Piranha.AspNetCore.Identity.SQLServer" Version="10.1.0" />
+        <PackageReference Include="Piranha.AspNetCore.SimpleSecurity" Version="10.1.0" />
+        <PackageReference Include="Piranha.AttributeBuilder" Version="10.1.0" />
+        <PackageReference Include="Piranha.Data.EF.SQLServer" Version="10.1.0" />
+        <PackageReference Include="Piranha.ImageSharp" Version="10.1.0" />
+        <PackageReference Include="Piranha.Local.FileStorage" Version="10.1.0" />
+        <PackageReference Include="Piranha.Manager" Version="10.1.0" />
+        <PackageReference Include="Piranha.Manager.TinyMCE" Version="10.1.0" />
     </ItemGroup>
 
     <ItemGroup>

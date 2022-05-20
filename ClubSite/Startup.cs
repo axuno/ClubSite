@@ -143,7 +143,7 @@ namespace ClubSite
 
             services.Configure<ConfigurationPoco.MailSettings>(
                 Configuration.GetSection(nameof(ConfigurationPoco.MailSettings)) ??
-                throw new ArgumentNullException(
+                throw new InvalidOperationException(
                     $"Configuration section '{nameof(ConfigurationPoco.MailSettings)}' not found."));
 
             services.AddTransient<Services.IMailService, Services.MailService>();
@@ -157,6 +157,7 @@ namespace ClubSite
         /// <param name="api">The PiranhaCms <see cref="IApi"/></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
+            _ = env.EnvironmentName;
             var cultureInfo = new System.Globalization.CultureInfo("de-DE");
             System.Globalization.CultureInfo.DefaultThreadCurrentCulture =
                 System.Globalization.CultureInfo.CurrentCulture = cultureInfo;

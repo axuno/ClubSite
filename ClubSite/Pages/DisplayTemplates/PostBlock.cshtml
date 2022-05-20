@@ -1,4 +1,4 @@
-@model Piranha.Extend.Blocks.PostBlock
+@model Piranha.Extend.Blocks.PostBlock?
 @{
     if (Model is null) return;
     @if (Library.HtmlTool.IsEmptyHtml(Model.Body.Post.Excerpt ?? string.Empty))

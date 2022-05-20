@@ -20,6 +20,13 @@
 
         return Definition.DateFrom.Value?.ToLongDateString() + " bis " + Definition.DateTo.Value?.ToLongDateString();
     }
+
+    bool IsOver()
+    {
+        return Definition != null && Definition.DateFrom.Value.HasValue
+               && Definition.DateFrom.Value.HasValue
+               && Definition.DateFrom.Value.Value.Date < DateTime.Now;
+    }
 }
 
 @section head
@@ -40,7 +47,7 @@
         }
     </style>
 }
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({Url.Content(WebApp.Media.ResizeImage(Model.Data.TournamentDefinition.TopImage, 1000, 400))})" : "")>
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({Url.Content(WebApp.Media.ResizeImage(Model.Data.TournamentDefinition.TopImage, 1000, 400))})" : string.Empty)>
     <div class="dimmer"></div>
     <div class="@(hasImage ? "container" : "") text-center">
         @if (!string.IsNullOrWhiteSpace(Model.Data.TournamentDefinition.Name.Value))
@@ -116,7 +123,7 @@
                 </tr>
                 <tr>
                     <th>
-                        <div class="pr-3">Anmeldefrist:</div>
+                        <div class="pe-3">Anmeldefrist:</div>
                     </th>
                     <td>
                         @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue)
@@ -136,17 +143,17 @@
     </div>
 
     <div class="pb-3">
-        <h3 class="text-primary">Angemeldete Teams
+        <h3 class="text-primary">@(IsOver() ? "Teilnehmer" : "Angemeldete Teams") 
             @if (isAuthenticated && Model.AllRegistrations.Any())
             {
-                <a href="@(Model.Data.Permalink + "?csv")" class="btn btn-outline-danger ml-3"><i class="fas fa-download d-inline-block"></i> CSV herunterladen</a>
+                <a href="@(Model.Data.Permalink + "?csv")" class="btn btn-outline-danger ms-3"><i class="fas fa-download d-inline-block"></i> CSV herunterladen</a>
             }
         </h3>
 
         @if (Model.AllRegistrations.Any(tr => !tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))
         {
             <div class="mb-2 text-secondary">
-                <h4>Anmeldungen, sortiert nach Teamname</h4>
+                <h4>@(IsOver() ? "Teilnehmer" : "Anmeldungen"), sortiert nach Teamname</h4>
                 Teamname, ggf. Verein, Kontaktperson
             </div>
             <ol>
@@ -166,7 +173,7 @@
         }
         else
         {
-            <div>Es liegen keine Anmeldungen für das Turnier vor.</div>
+            <div>Es liegen keine @(IsOver() ? "Teilnehmer" : "Anmeldungen") für das Turnier vor.</div>
         }
 
         @if (Model.AllRegistrations.Any(tr => tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))

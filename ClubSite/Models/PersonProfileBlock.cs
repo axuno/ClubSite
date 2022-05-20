@@ -5,21 +5,28 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Piranha.Extend;
 using Piranha.Extend.Blocks;
 using Piranha.Extend.Fields;
+using Piranha.Extend.Fields.Settings;
 using Piranha.Models;
 
 namespace ClubSite.Models
 {
-    [BlockGroupType(Name = "Person Profile", Category = "Content", Icon = "fas fa-images",
-        Display = BlockDisplayMode.Horizontal)]
-    [BlockItemType(Type = typeof(ImageBlock))]
-    [BlockItemType(Type = typeof(HtmlBlock))]
-    public class PersonProfileBlock : BlockGroup
+    [BlockType(Name = "Person Profile", Category = "Content", Icon = "fas fa-user")]
+    public class PersonProfileBlock : Block
     {
-        public StringField Title { get; set; } = new StringField();
+        [Field(Title = "Funktionsbezeichnung")] 
+        [StringFieldSettings(MaxLength = 30)]
+        public StringField Title { get; set; } = new();
+
+        [Field(Title = "Name, Kontaktdaten", Options = FieldOption.HalfWidth)]
+        public HtmlField? Contact { get; set; }
+
+        [Field(Title = "Foto", Options = FieldOption.HalfWidth)]
+        public ImageField? Photo { get; set; }
     }
 }

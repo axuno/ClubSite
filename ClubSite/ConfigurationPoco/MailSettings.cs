@@ -3,19 +3,21 @@
 // of the MIT license. See the LICENSE file for details.
 // https://github.com/axuno/ClubSite
 
+using System;
+
 namespace ClubSite.ConfigurationPoco
 {
     public class MailSettings
     {
-        public Sender Sender { get; set; } = new Sender();
-        public Message Message { get; set; } = new Message();
+        public Sender Sender { get; set; } = new ();
+        public Message Message { get; set; } = new ();
     }
 
     public class Sender
     {
         public string MessageOutput { get; set; } = string.Empty;
-        public Smtp Smtp { get; set; } = new Smtp();
-        public File File { get; set; } = new File();
+        public Smtp Smtp { get; set; } = new ();
+        public File File { get; set; } = new ();
     }
 
     public class Smtp
@@ -35,7 +37,7 @@ namespace ClubSite.ConfigurationPoco
     public class Message
     {
         public MailAddress DefaultFrom { get; set; } = new ();
-        public MailAddress[] ContactFormTo { get; set; } = { };
+        public MailAddress[] ContactFormTo { get; set; } = Array.Empty<MailAddress>();
         public string? Organization { get; set; }
     }
 
