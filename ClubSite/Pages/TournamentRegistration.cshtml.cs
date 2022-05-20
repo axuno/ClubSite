@@ -257,7 +257,7 @@ Nachricht:
 ----------------------------------------
 {(string.IsNullOrWhiteSpace(Registration.Message) ? "(keine)" : Registration.Message)}
 ----------------------------------------
-{(Registration.IsStandByRegistration ? "\n" : "\nBankverbindung für die Startgebühr:\n" + definition.BankDetails.Value + "\n" )}
+{(Registration.IsStandByRegistration ? "\n" : "\nBankverbindung zum Überweisen der Startgebühr:\n" + definition.BankDetails.Value + "\n" )}
 Vielen Dank!
 
 Volleyballclub Neusäß e.V.
