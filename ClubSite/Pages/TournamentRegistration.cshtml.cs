@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,7 +16,6 @@ using ClubSite.Data.Poco;
 using ClubSite.Library;
 using ClubSite.Models;
 using ClubSite.Resources;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -50,16 +48,24 @@ namespace ClubSite.Pages
             _mailService = mailService;
             _logger = logger;
             TournamentPage = new TournamentPage();
+            Registration = new TournamentRegistration();
+        }
+
+        public static TournamentPage? GetTournamentPage(IApi api)
+        {
             // Call async method from sync context - we need the permalink to the TournamentPage
-            var p = new TaskFactory(CancellationToken.None,
+            return new TaskFactory(CancellationToken.None,
                     TaskCreationOptions.None,
                     TaskContinuationOptions.None,
                     TaskScheduler.Default)
                 .StartNew(() => api.Pages.GetAllAsync<TournamentPage>())
                 .Unwrap().GetAwaiter()
                 .GetResult().FirstOrDefault();
-            TournamentPage.Permalink = p?.Permalink;
-            Registration = new TournamentRegistration();
+        }
+
+        public async Task<TournamentPage?> GetTournamentPageAsync()
+        {
+            return (await _api.Pages.GetAllAsync<TournamentPage>()).FirstOrDefault();
         }
 
         [BindProperty]
@@ -93,8 +99,11 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnGetAsync(long dateTicks, Guid registrationId)
         {
-            // Redirect to the TournamentPage
-            if (TournamentIsOver()) return Redirect(TournamentPage.Permalink ?? "/");
+            // Redirect to the default TournamentPage
+            if (TournamentIsOver())
+            {
+                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
+            }
 
             try
             {
@@ -110,8 +119,11 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
-            // Redirect to the TournamentPage
-            if (TournamentIsOver()) return Redirect(TournamentPage.Permalink ?? "/");
+            // Redirect to the default TournamentPage
+            if (TournamentIsOver())
+            {
+                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
+            }
 
             try
             {
@@ -180,8 +192,11 @@ namespace ClubSite.Pages
                 // Todo: Add notification for failure of saving on TournamentPage
             }
             
-            // Redirect to the TournamentPage
-            return Redirect(TournamentPage?.Permalink ?? "/");            
+            // Redirect to the default TournamentPage
+            if (TournamentIsOver())
+            {
+                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
+            }           
         }
 
         private async Task SetupModel(long date, Guid? registrationId)
@@ -191,9 +206,9 @@ namespace ClubSite.Pages
             
             // Get the TournamentPage containing the definition for the given date
             TournamentPage = (await _api.Pages.GetAllAsync<TournamentPage>()).FirstOrDefault(p =>
-                                  p.TournamentDefinition.DateFrom.Value.HasValue &&
-                                  p.TournamentDefinition.DateFrom.Value.Value.Date.Equals(tournamentDate)) ??
-                              throw new Exception($"{nameof(Models.TournamentPage)} for date '{tournamentDate}' not found");
+                                 p.TournamentDefinition.DateFrom.Value.HasValue &&
+                                 p.TournamentDefinition.DateFrom.Value.Value.Date.Equals(tournamentDate)) ??
+                             throw new Exception($"{nameof(Models.TournamentPage)} for date '{tournamentDate}' not found");
             
             var definition = TournamentPage.TournamentDefinition;
 
