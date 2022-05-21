@@ -90,17 +90,10 @@ namespace ClubSite.Pages
         [BindNever]
         public IList<TournamentRegistration> AllRegistrations { get; set; } = new List<TournamentRegistration>();
 
-        private bool TournamentIsOver()
-        {
-            return TournamentPage.TournamentDefinition.DateFrom.Value == null 
-                   || (TournamentPage.TournamentDefinition.DateFrom.Value.Value.Date >=
-                       DateTime.Now.Date);
-        }
-
         public async Task<IActionResult> OnGetAsync(long dateTicks, Guid registrationId)
         {
             // Redirect to the default TournamentPage
-            if (TournamentIsOver())
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now))
             {
                 return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
             }
@@ -120,7 +113,7 @@ namespace ClubSite.Pages
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
             // Redirect to the default TournamentPage
-            if (TournamentIsOver())
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now))
             {
                 return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
             }

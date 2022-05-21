@@ -30,9 +30,6 @@ namespace ClubSite.Pages
             id ??= string.Empty;
             id = id.Trim();
 
-            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("de");
-            System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("de");
-
             // The StatusCodePagesMiddleware stores a request-feature with
             // the original path on the HttpContext, that can be accessed from the Features property.
             // Note: IExceptionHandlerFeature does not contain the path

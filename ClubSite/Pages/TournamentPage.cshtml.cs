@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,11 +53,13 @@ namespace ClubSite.Pages
 
         private async Task GetRegistrations()
         {
-            AllRegistrations = await _clubDbContext.TournamentRegistration?.Where(tr =>
+            if (_clubDbContext.TournamentRegistration is null) return; // take the default empty list
+
+            AllRegistrations = await _clubDbContext.TournamentRegistration.Where(tr =>
                 tr.TournamentDate.Date ==
-                (Data.TournamentDefinition.DateFrom != null && Data.TournamentDefinition.DateFrom.Value.HasValue
+                (Data.TournamentDefinition.DateFrom.Value.HasValue
                     ? Data.TournamentDefinition.DateFrom.Value.Value.Date
-                    : new DateTime())).ToListAsync()! ?? new List<TournamentRegistration>();
+                    : new DateTime())).ToListAsync();
         }
 
         private void CreateCsv(Stream stream)

@@ -4,6 +4,7 @@
 // https://github.com/axuno/ClubSite
 
 using System;
+using System.Globalization;
 using System.IO;
 using ClubSite.Models;
 using Microsoft.AspNetCore.Builder;
@@ -67,6 +68,16 @@ namespace ClubSite
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Note: Piranha sets culture and language
+            // from table Piranha_Sites field Culture and the UI language
+            // from table Piranha_Sites field LanguageId (stored in table Piranha_Languages)
+            // This overrides the following settings:
+            var cultureInfo = CultureInfo.GetCultureInfo("de-DE");
+            CultureInfo.DefaultThreadCurrentCulture =
+                CultureInfo.CurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture =
+                CultureInfo.CurrentUICulture = cultureInfo;
+
             // required for cookies and session cookies (will throw CryptographicException without)
             services.AddDataProtection()
                 .SetApplicationName("ClubSite")
@@ -158,11 +169,7 @@ namespace ClubSite
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
             _ = env.EnvironmentName;
-            var cultureInfo = new System.Globalization.CultureInfo("de-DE");
-            System.Globalization.CultureInfo.DefaultThreadCurrentCulture =
-                System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
-            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture =
-                System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
+            app.UseHttpsRedirection();
 
             if (false)
                 app.UseDeveloperExceptionPage();

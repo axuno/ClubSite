@@ -3,29 +3,25 @@
 @inject IAuthorizationService Auth
 @model ClubSite.Pages.TournamentPageModel
 @{
-    var Definition = Model.Data.TournamentDefinition;
+    var definition = Model.Data.TournamentDefinition;
+    var isTournamentOver = definition.IsOver(DateTime.Now);
     var hasImage = Model.Data.TournamentDefinition.TopImage.HasValue;
     var isAuthenticated = (await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded;
 
     string GetDates()
     {
-        if (!Definition.DateFrom.Value.HasValue || !Definition.DateTo.Value.HasValue)
+        if (!(definition.DateFrom.Value.HasValue && definition.DateTo.Value.HasValue))
         {
             return "Datum von oder Datum bis fehlt";
         }
-        if (Definition.DateTo.Value != null && Definition.DateFrom.Value != null && Definition.DateFrom.Value.Value.Date == Definition.DateTo.Value.Value.Date)
+        if (definition.DateFrom.Value.Value.Date == definition.DateTo.Value.Value.Date)
         {
-            return Definition.DateFrom.Value.Value.ToLongDateString();
+            // date from/to are the same
+            return definition.DateFrom.Value.Value.ToLongDateString();
         }
 
-        return Definition.DateFrom.Value?.ToLongDateString() + " bis " + Definition.DateTo.Value?.ToLongDateString();
-    }
-
-    bool IsOver()
-    {
-        return Definition != null && Definition.DateFrom.Value.HasValue
-               && Definition.DateFrom.Value.HasValue
-               && Definition.DateFrom.Value.Value.Date < DateTime.Now;
+        // registration period
+        return definition.DateFrom.Value?.ToLongDateString() + " bis " + definition.DateTo.Value?.ToLongDateString();
     }
 }
 
@@ -78,7 +74,7 @@
                         Uhrzeit:
                     </th>
                     <td>
-                        @Html.Raw(Definition.TimeFromTo.Value)
+                        @Html.Raw(definition.TimeFromTo.Value)
                     </td>
                 </tr>
                 <tr>
@@ -86,7 +82,7 @@
                         Besetzung:
                     </th>
                     <td>
-                        @Html.Raw(Definition.TeamComposition.Value)
+                        @Html.Raw(definition.TeamComposition.Value)
                     </td>
                 </tr>
                 <tr>
@@ -94,7 +90,7 @@
                         Anz. Teams:
                     </th>
                     <td>
-                        @Html.Raw(Definition.NumberOfTeams.Value)
+                        @Html.Raw(definition.NumberOfTeams.Value)
                     </td>
                 </tr>
                 <tr>
@@ -102,7 +98,7 @@
                         Startgeld:
                     </th>
                     <td>
-                        @Html.Raw(Definition.EntryFee.Value)
+                        @Html.Raw(definition.EntryFee.Value)
                     </td>
                 </tr>
                 <tr>
@@ -110,7 +106,7 @@
                         Adresse:
                     </th>
                     <td>
-                        @Html.Raw(Definition.Address.Value)
+                        @Html.Raw(definition.Address.Value)
                     </td>
                 </tr>
                 <tr>
@@ -118,7 +114,7 @@
                         Infos:
                     </th>
                     <td>
-                        @Html.Raw(Definition.Infos.Value)
+                        @Html.Raw(definition.Infos.Value)
                     </td>
                 </tr>
                 <tr>
@@ -126,14 +122,12 @@
                         <div class="pe-3">Anmeldefrist:</div>
                     </th>
                     <td>
-                        @if (Definition.RegistrationStart.Value.HasValue && Definition.RegistrationDeadline.Value.HasValue)
+                        @if (definition.IsRegistrationPeriodSet())
                         {
-                            <div>@Html.Raw(Definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(Definition.RegistrationDeadline.Value?.ToShortDateString())</div>
-                            if (DateTime.Now.Date >= Definition.RegistrationStart.Value!.Value.Date && DateTime.Now.Date <= Definition.RegistrationDeadline.Value!.Value.Date
-                                && Definition.DateFrom.Value != null)
-
+                            <div>@Html.Raw(definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(definition.RegistrationDeadline.Value?.ToShortDateString())</div>
+                            if (definition.IsRegistrationAllowed(DateTime.Now))
                             {
-                                <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
+                                <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
                             }
                         }
                     </td>
@@ -143,7 +137,7 @@
     </div>
 
     <div class="pb-3">
-        <h3 class="text-primary">@(IsOver() ? "Teilnehmer" : "Angemeldete Teams") 
+        <h3 class="text-primary">@(isTournamentOver ? "Teilnehmer" : "Angemeldete Teams") 
             @if (isAuthenticated && Model.AllRegistrations.Any())
             {
                 <a href="@(Model.Data.Permalink + "?csv")" class="btn btn-outline-danger ms-3"><i class="fas fa-download d-inline-block"></i> CSV herunterladen</a>
@@ -153,7 +147,7 @@
         @if (Model.AllRegistrations.Any(tr => !tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))
         {
             <div class="mb-2 text-secondary">
-                <h4>@(IsOver() ? "Teilnehmer" : "Anmeldungen"), sortiert nach Teamname</h4>
+                <h4>@(isTournamentOver ? "Teilnehmer" : "Anmeldungen"), sortiert nach Teamname</h4>
                 Teamname, ggf. Verein, Kontaktperson
             </div>
             <ol>
@@ -164,7 +158,7 @@
                     @{
                         if (isAuthenticated)
                         {
-                            <a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
+                            <a asp-page="/TournamentRegistration" asp-route-dateticks="@definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
                         }
                     }
                 </li>
@@ -173,7 +167,7 @@
         }
         else
         {
-            <div>Es liegen keine @(IsOver() ? "Teilnehmer" : "Anmeldungen") für das Turnier vor.</div>
+            <div>Es liegen keine @(isTournamentOver ? "Teilnehmer" : "Anmeldungen") für das Turnier vor.</div>
         }
 
         @if (Model.AllRegistrations.Any(tr => tr.IsStandByRegistration && !tr.RegCanceledOn.HasValue))
@@ -189,7 +183,7 @@
                         @{
                             if (isAuthenticated)
                             {
-                                <a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
+                                <a asp-page="/TournamentRegistration" asp-route-dateticks="@definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ms-3"></i></a>
                             }
                         }
                     </li>
@@ -207,7 +201,7 @@
                         @{
                             if (isAuthenticated)
                             {
-                                <a asp-page="/TournamentRegistration" asp-route-dateticks="@Definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
+                                <a asp-page="/TournamentRegistration" asp-route-dateticks="@definition.DateFrom.Value!.Value.Date.Ticks" asp-route-registrationid="@item.RegistrationId"><i class="fas fa-edit d-inline-block ml-3"></i></a>
                             }
                         }
                     </li>
