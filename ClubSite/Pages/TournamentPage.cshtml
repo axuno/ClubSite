@@ -12,7 +12,7 @@
     {
         if (!(definition.DateFrom.Value.HasValue && definition.DateTo.Value.HasValue))
         {
-            return "Datum von oder Datum bis fehlt";
+            return "'Datum von' und/oder 'Datum bis' fehlt in den Turniereinstellungen";
         }
         if (definition.DateFrom.Value.Value.Date == definition.DateTo.Value.Value.Date)
         {
