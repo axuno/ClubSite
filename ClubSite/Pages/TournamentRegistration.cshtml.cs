@@ -16,6 +16,7 @@ using ClubSite.Data.Poco;
 using ClubSite.Library;
 using ClubSite.Models;
 using ClubSite.Resources;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -40,13 +41,15 @@ namespace ClubSite.Pages
         private readonly IApi _api;
         private readonly Services.IMailService _mailService;
         private readonly ILogger<TournamentRegistrationModel> _logger;
+        private IAuthorizationService _authorizationService;
         
-        public TournamentRegistrationModel(ClubDbContext context, IApi api, Services.IMailService mailService, ILogger<TournamentRegistrationModel> logger)
+        public TournamentRegistrationModel(ClubDbContext context, IApi api, Services.IMailService mailService, IAuthorizationService auth, ILogger<TournamentRegistrationModel> logger)
         {
             _clubDbContext = context;
             _api = api;
             _mailService = mailService;
             _logger = logger;
+            _authorizationService = auth;
             TournamentPage = new TournamentPage();
             Registration = new TournamentRegistration();
         }
@@ -92,8 +95,11 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnGetAsync(long dateTicks, Guid registrationId)
         {
+            var isAuthenticated = (await _authorizationService.AuthorizeAsync(User, Piranha.Manager.Permission.Pages))
+                .Succeeded;
+
             // Redirect to the default TournamentPage
-            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now))
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
             {
                 return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
             }
@@ -112,8 +118,11 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
+            var isAuthenticated = (await _authorizationService.AuthorizeAsync(User, Piranha.Manager.Permission.Pages))
+                .Succeeded;
+
             // Redirect to the default TournamentPage
-            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now))
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
             {
                 return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
             }
