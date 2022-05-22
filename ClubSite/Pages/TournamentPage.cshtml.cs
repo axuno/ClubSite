@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ClubSite.Data.Poco;
 using ClubSite.Models;
@@ -38,14 +37,17 @@ namespace ClubSite.Pages
             var result = await base.OnGet(id, draft);
             await GetRegistrations();
 
-            if (HttpContext.Request.Query.ContainsKey("csv"))
+            if (HttpContext.Request.Query.ContainsKey("download"))
             {
+                var date = Data.TournamentDefinition.DateFrom.Value.HasValue
+                    ? Data.TournamentDefinition.DateFrom.Value.Value.ToString("yyyy-MM-dd")
+                    : string.Empty;
                 var stream = new MemoryStream();
-                CreateCsv(stream);
+                CreateExcel(stream);
                 return File(
                     stream, 
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
-                    "Anmeldungen.xlsx");
+                    $"Anmeldungen_{date}.xlsx");
             }
             
             return result;
@@ -64,7 +66,7 @@ namespace ClubSite.Pages
                     : new DateTime())).ToListAsync();
         }
 
-        private void CreateCsv(Stream stream)
+        private void CreateExcel(Stream stream)
         {
             using var p = new ExcelPackage();
 
