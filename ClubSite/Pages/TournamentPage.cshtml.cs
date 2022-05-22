@@ -40,14 +40,14 @@ namespace ClubSite.Pages
             if (HttpContext.Request.Query.ContainsKey("download"))
             {
                 var date = Data.TournamentDefinition.DateFrom.Value.HasValue
-                    ? Data.TournamentDefinition.DateFrom.Value.Value.ToString("yyyy-MM-dd")
+                    ? Data.TournamentDefinition.DateFrom.Value.Value.ToString("_yyyy-MM-dd")
                     : string.Empty;
                 var stream = new MemoryStream();
-                CreateExcel(stream);
+                await CreateExcelAsync(stream);
                 return File(
                     stream, 
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
-                    $"Anmeldungen_{date}.xlsx");
+                    $"Anmeldungen{date}.xlsx");
             }
             
             return result;
@@ -66,7 +66,7 @@ namespace ClubSite.Pages
                     : new DateTime())).ToListAsync();
         }
 
-        private void CreateExcel(Stream stream)
+        private async Task CreateExcelAsync(Stream stream)
         {
             using var p = new ExcelPackage();
 
@@ -119,8 +119,8 @@ namespace ClubSite.Pages
             ws.Cells.AutoFitColumns();
             ws.Columns[11].Width = 40; // column width for optional message
 
-            p.SaveAs(stream);
-            stream.Flush();
+            await p.SaveAsAsync(stream);
+            await stream.FlushAsync();
             stream.Position = 0;
         }
     }
