@@ -8,7 +8,7 @@
     var hasImage = Model.Data.TournamentDefinition.TopImage.HasValue;
     var isAuthenticated = (await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded;
 
-    string GetDates()
+    string GetTournamentDates()
     {
         if (!(definition.DateFrom.Value.HasValue && definition.DateTo.Value.HasValue))
         {
@@ -66,7 +66,7 @@
                         Datum:
                     </th>
                     <td>
-                        <b>@GetDates()</b>
+                        <b>@GetTournamentDates()</b>
                     </td>
                 </tr>
                 <tr>
@@ -122,7 +122,11 @@
                         <div class="pe-3">Anmeldefrist:</div>
                     </th>
                     <td>
-                        @if (definition.IsRegistrationPeriodSet())
+                        @if (definition.IsOver(DateTime.Now))
+                        {
+                            <text>Ist abgelaufen</text>
+                        }
+                        else if (definition.IsRegistrationPeriodSet())
                         {
                             <div>@Html.Raw(definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(definition.RegistrationDeadline.Value?.ToShortDateString())</div>
                             if (definition.IsRegistrationAllowed(DateTime.Now))
