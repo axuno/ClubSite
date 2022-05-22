@@ -158,6 +158,9 @@ namespace ClubSite
                     $"Configuration section '{nameof(ConfigurationPoco.MailSettings)}' not found."));
 
             services.AddTransient<Services.IMailService, Services.MailService>();
+
+            // We use EPPlus in a noncommercial context according to the Polyform Noncommercial license:
+            OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
         }
 
         /// <summary>

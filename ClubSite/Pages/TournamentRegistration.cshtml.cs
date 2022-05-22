@@ -41,7 +41,7 @@ namespace ClubSite.Pages
         private readonly IApi _api;
         private readonly Services.IMailService _mailService;
         private readonly ILogger<TournamentRegistrationModel> _logger;
-        private IAuthorizationService _authorizationService;
+        private readonly IAuthorizationService _authorizationService;
         
         public TournamentRegistrationModel(ClubDbContext context, IApi api, Services.IMailService mailService, IAuthorizationService auth, ILogger<TournamentRegistrationModel> logger)
         {

@@ -40,13 +40,13 @@ namespace ClubSite.Pages
             {
                 OrigPath = exceptionFeature.Path;
                 Exception = exceptionFeature.Error;
-                _logger.LogCritical(Exception, "Path: {0}", OrigPath);
+                _logger.LogCritical(Exception, "Path: {OrigPath}", OrigPath);
             }
             else
             {
                 OrigPath = HttpContext.Features
                     .Get<Microsoft.AspNetCore.Diagnostics.IStatusCodeReExecuteFeature>()?.OriginalPath;
-                _logger.LogInformation("Path: {0}, StatusCode: {1}", OrigPath, id);
+                _logger.LogInformation("Path: {OrigPath}, StatusCode: {Id}", OrigPath, id);
             }
 
             SentStatusCode = id;
