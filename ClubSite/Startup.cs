@@ -115,7 +115,7 @@ namespace ClubSite
                 svcBuilder.UseCms();
                 svcBuilder.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
                 svcBuilder.UseImageSharp();
-                svcBuilder.UseManager(); // https://localhost:44306/manager/ initial user: admin, pw: password
+                svcBuilder.UseManager(); // https://localhost:44307/manager/ initial user: admin, pw: password
                 svcBuilder.UseTinyMCE();
                 svcBuilder.UseMemoryCache();
                 svcBuilder.UseEF<SQLServerDb>(db =>
@@ -195,6 +195,7 @@ namespace ClubSite
 
             // Register custom blocks
             App.Blocks.Register<PersonProfileBlock>();
+            App.Blocks.Register<BlogPostAlertBlock>();
 
             /* To build specific types:
              new Piranha.AttributeBuilder.PageTypeBuilder(api)

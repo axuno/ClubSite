@@ -7,6 +7,7 @@
     var isTournamentOver = definition.IsOver(DateTime.Now);
     var hasImage = Model.Data.TournamentDefinition.TopImage.HasValue;
     var isAuthenticated = (await Auth.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded;
+    ViewData["Title"] = Model.Data.Title;
 
     string GetTournamentDates()
     {

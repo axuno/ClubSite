@@ -23,14 +23,23 @@
             overflow: hidden;
         }
     }
-}
 
-// Medium devices (tablets, 768px and up)
-@media (min-width: 768px) {
-    .block {
-        &.column-block {
-            .col-md:not(:last-child) {
-                margin-bottom: 0;
+    &.separator-block {
+        padding: 0 0 .5rem
+    }
+
+    &.blog-post-alert-block {
+        padding: 0;
+        margin: 0;
+    }
+
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 768px) {
+        .block {
+            &.column-block {
+                .col-md:not(:last-child) {
+                    margin-bottom: 0;
+                }
             }
         }
     }

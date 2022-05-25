@@ -12,22 +12,22 @@
             <h3>@post.Title</h3>
         </a>
         <p class="post-meta">
+            @if (post.IsPublished)
+            {
+                <span>
+                    @post.Published?.ToString("M") <a href="@Model.ArchivePage.Data.Permalink/year/@post.Published?.Year">@post.Published?.Year</a>
+                </span>
+            }
             <span>
-                In <a href="@Model.ArchivePage.Data.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
+                Rubrik: <a href="@Model.ArchivePage.Data.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
             </span>
             <span>
-                Tags
+                Tags:
                 @foreach (var tag in post.Tags)
                 {
                     <a href="@Model.ArchivePage.Data.Permalink/tag/@tag.Slug">#@tag.Slug</a>
                 }
             </span>
-            @if (post.IsPublished)
-            {
-                <span>
-                    Ver&ouml;ffentlicht @post.Published?.ToShortDateString()
-                </span>
-            }
             @if (post.EnableComments && post.CommentCount > 0)
             {
                 <span>

@@ -1,0 +1,112 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ArchivePage<StandardArchive, Piranha.Models.PostInfo>
+@{
+    var showAll = Model.HttpContext?.Request.Query.ContainsKey("all") ?? false;
+    var filter = new List<string>();
+    if (Model.Archive.Year.HasValue) filter.Add($"das Jahr {Model.Archive.Year}");
+    if (Model.Archive.Month.HasValue) filter.Add($"Monat {Model.Archive.Month}");
+    if (Model.Archive.Category != null) filter.Add($"Rubrik '{Model.Archive.Category.Title}'");
+    if (Model.Archive.Tag != null) filter.Add($"Tag #{Model.Archive.Tag.Slug}");
+
+    string BlogLink(int page) => 
+        Model.Data.Permalink 
+        + (Model.Archive.Category != null ? $"/category/{Model.Archive.Category.Slug}" : string.Empty) 
+        + (Model.Archive.Tag != null ? $"/tag/{Model.Archive.Tag.Slug}" : string.Empty) 
+        + (Model.Archive.Year.HasValue ? $"/{Model.Archive.Year}" : string.Empty) 
+        + (Model.Archive.Month.HasValue ? $"/{Model.Archive.Month}" : string.Empty) 
+        + $"/page/{page}{(showAll ? "?all" : string.Empty)}";
+}
+<partial name="_ArchiveHeader" model="Model"/>
+<main class="archive">
+    @if (filter.Any())
+    {
+        <h4 class="text-primary mx-3 mb-3 text-center">
+            Beiträge für @string.Join(", ", filter)
+        </h4>
+    }
+    else
+    {
+        <h4 class="text-primary mx-3 mb-3 text-center">
+            Durch alle Beiträge blättern
+        </h4>
+    }
+    @if (Model.Archive.TotalPages > 1)
+    {
+        // This MUST be any positive ODD number
+        const int maxToShow = 5;
+        System.Diagnostics.Debug.Assert(maxToShow % 2 != 0);
+        const int delta = maxToShow / 2; // current page +/- delta
+        var startPage = Math.Min(
+            Math.Max(1, Model.Archive.CurrentPage - delta), // at the beginning of the list
+            Math.Max(1, Model.Archive.TotalPages - 2 * delta)); // at the end of the list
+        var lastPage = Math.Min(startPage + maxToShow - 1, Model.Archive.TotalPages);
+
+        <div class="row">
+            <div class="col-sm">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <a class="page-link" href="@BlogLink(1)">
+                                <span aria-hidden="true">《</span>
+                                <span class="sr-only">Zum Anfang</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@BlogLink(Math.Max(1, Model.Archive.CurrentPage - 1))">
+                                <span aria-hidden="true">〈</span>
+                                <span class="sr-only">Zurück</span>
+                            </a>
+                        </li>
+                        @for (var n = startPage; n <= lastPage; n++)
+                        {
+                            <li class="page-item @(Model.Archive.CurrentPage == n ? "active" : "")"><a class="page-link" href="@BlogLink(n)">@n</a></li>
+                        }
+                        <li class="page-item">
+                            <a class="page-link" href="@BlogLink(Math.Min(Model.Archive.TotalPages, Model.Archive.CurrentPage + 1))">
+                                <span aria-hidden="true">〉</span>
+                                <span class="sr-only">Vor</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="@BlogLink(Model.Archive.TotalPages)">
+                                <span aria-hidden="true">》</span>
+                                <span class="sr-only">Zum Ende</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    }
+    @* Display the teasers for Archive Blog posts *@
+    <div class="mx-3">
+        @{
+            var posts = Model.Archive.Posts.Count;
+            if (posts == 0)
+            {
+                <div>Keine Beiträge gefunden</div>
+            }
+
+            for (var n = 0; n < posts; n += 2)
+            {
+                <div class="row">
+                    @for (var i = n; i < Math.Min(posts, n + 2); i++)
+                    {
+                        <div class="@(i == 0 ? "col-md-12" : "col-md-6")">
+                            <partial name="_ArchiveTeaser" model="(Model, Model.Archive.Posts[i])"/>
+                        </div>
+                        @if (i == 0)
+                        {
+                            n--;
+                            break;
+                        }
+                    }
+                </div>
+            }
+            @if (filter.Any())
+            {
+                <a href="@(Model.Data.Permalink)?all" class="btn btn-secondary col-12 col-md-6 mt-3">Alle Beiträge anzeigen...</a>
+            }
+        }
+    </div>
+</main>

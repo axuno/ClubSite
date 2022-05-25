@@ -9,7 +9,7 @@
         Model.Data.Excerpt = string.Empty;
     }
 }
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({@Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1240, 400))})" : "")>
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({@Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1240, 400))})" : string.Empty)>
     <div class="dimmer"></div>
     <div class="@(hasImage ? "container" : "") text-center">
         <h1>@Model.Data.Title</h1>

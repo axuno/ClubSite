@@ -3,10 +3,7 @@
 // of the MIT license. See the LICENSE file for details.
 // https://github.com/axuno/ClubSite
 
-using System.Collections.Generic;
 using Piranha.AttributeBuilder;
-using Piranha.Extend;
-using Piranha.Extend.Fields;
 using Piranha.Models;
 
 namespace ClubSite.Models

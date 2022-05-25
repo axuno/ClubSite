@@ -9,7 +9,8 @@
     HttpContext.Response.Headers.TryAdd("Cache-Control", "no-store, no-cache, must-revalidate");
     HttpContext.Response.Headers.TryAdd("Pragma", "no-cache");
 
-    ViewData["Title"] = "Turnier-Anmeldung";
+    // Use the title from the TournamentPage for simplicity
+    ViewData["Title"] = Model.TournamentPage.Title;
     var maxTeams = Model.TournamentPage.TournamentDefinition.NumberOfTeams.Value;
     List<SelectListItem> GenderList()
     {

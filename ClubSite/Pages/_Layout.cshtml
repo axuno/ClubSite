@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Html
 @using Microsoft.Extensions.Hosting
 @inject IWebHostEnvironment Env
 <!doctype html>
@@ -22,6 +23,7 @@
     <!-- favicon [end] -->
     <meta name="generator" value="axuno piranha cms https://axuno.net (clubsite: @Piranha.Utils.GetAssemblyVersion(typeof(Program).Assembly), piranha: @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.App).Assembly))" />
     @await RenderSectionAsync("head", false)
+    @*PiranhaHtmlExtensions.MetaTags(WebApp, Model, generator: false);*@
     <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" asp-append-version="true">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Raleway:wght@700&display=swap">
     <link rel="stylesheet" href="~/assets/css/style.min.css" asp-append-version="true">
@@ -43,3 +45,4 @@
 @await RenderSectionAsync("script", false)
 </body>
 </html>
+
