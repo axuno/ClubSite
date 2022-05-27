@@ -18,8 +18,6 @@ namespace ClubSite.Models
     [BlockType(Name = "Latest Posts", Category = "References", Icon = "fas fa-link")]
     public class NewPostsBlock : Piranha.Extend.Block
     {
-        private bool _isInitialized = false;
-
         private const int NumOfDays = 30;
         private const int MaxPosts = 2;
         
@@ -37,10 +35,6 @@ namespace ClubSite.Models
         public PageInfo ArchivePage { get; set; } = new();
         public async Task Init(IDb db, IApi api)
         {
-            if (_isInitialized) return;
-
-            _isInitialized = true;
-
             var blogId = db.Set<Page>().First(p => p.PageTypeId == nameof(StandardArchive)).Id;
             // PageInfo will exclude all regions and blocks from the model, which we don't need here
             ArchivePage = await api.Pages.GetByIdAsync<PageInfo>(blogId);
