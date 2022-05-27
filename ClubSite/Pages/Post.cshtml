@@ -1,47 +1,48 @@
 ﻿@page
 @model SinglePostWithComments<StandardPost>
 @{
-    ViewData["Title"] = Model.Data.Title;
-    var hasImage = Model.Data.PrimaryImage.HasValue;
-    var archive = await WebApp.Api.Pages.GetByIdAsync(Model.Data.BlogId);
-    @if (Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
+    var post = Model.Data;
+    ViewData["Title"] = post.Title;
+    var hasImage = post.PrimaryImage.HasValue;
+    var archive = await WebApp.Api.Pages.GetByIdAsync<Piranha.Models.PageInfo>(Model.Data.BlogId);
+    @if (Library.HtmlTool.IsEmptyHtml(post.Excerpt ?? string.Empty))
     {
-        Model.Data.Excerpt = string.Empty;
+        post.Excerpt = string.Empty;
     }
 }
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({@Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1240, 400))})" : string.Empty)>
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({@Url.Content(WebApp.Media.ResizeImage(post.PrimaryImage, 1240, 400))})" : string.Empty)>
     <div class="dimmer"></div>
     <div class="@(hasImage ? "container" : "") text-center">
-        <h1>@Model.Data.Title</h1>
+        <h1>@post.Title</h1>
         <p class="post-meta">
+            @if (post.IsPublished)
+            {
+                <span>
+                    @post.Published?.ToString("M") <a href="@archive.Permalink/year/@post.Published?.Year">@post.Published?.Year</a>
+                </span>
+            }
             <span>
-                In <a href="@archive.Permalink/category/@Model.Data.Category.Slug">@Model.Data.Category.Title</a>
+                Rubrik: <a href="@archive.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
             </span>
             <span>
-                Tags
-                @foreach (var tag in Model.Data.Tags)
+                Tags:
+                @foreach (var tag in post.Tags)
                 {
                     <a href="@archive.Permalink/tag/@tag.Slug">#@tag.Slug</a>
                 }
             </span>
-            @if (Model.Data.IsPublished)
+            @if (post.EnableComments && post.CommentCount > 0)
             {
                 <span>
-                    Ver&ouml;ffentlicht @Model.Data.Published?.ToShortDateString()
-                </span>
-            }
-            @if (Model.Data.EnableComments && Model.Data.CommentCount > 0)
-            {
-                <span>
-                    <a href="#comments">@Model.Data.CommentCount @(Model.Data.CommentCount == 1 ? "Kommentar" : "Kommentare")</a>
+                    <a href="@post.Permalink#comments">@post.CommentCount @(post.CommentCount == 1 ? "Kommentar" : "Kommentare")</a>
                 </span>
             }
         </p>
-        @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
+        @if (!string.IsNullOrWhiteSpace(post.Excerpt))
         {
             <div class="row justify-content-center">
                 <div class="col-lg-8 lead">
-                    @Html.Raw(Model.Data.Excerpt)
+                    @Html.Raw(post.Excerpt)
                 </div>
             </div>
         }
@@ -49,7 +50,7 @@
 </header>
 <main>
     <partial name="_ShowEditLinkPartial" />
-    @foreach (var block in Model.Data.Blocks)
+    @foreach (var block in post.Blocks)
     {
         <div class="block @block.CssName()">
             <div class="mx-3">
@@ -57,15 +58,15 @@
             </div>
         </div>
     }
-    @if (Model.Data.EnableComments)
+    @if (post.EnableComments)
     {
         <div id="comments" class="comments mx-3">
-            @if (Model.Data.IsCommentsOpen)
+            @if (post.IsCommentsOpen)
             {
                 <div class="comments alert mt-2 mb-2 col-lg-8">
                     <form asp-page-handler="SaveComment" method="post">
                         @Html.AntiForgeryToken()
-                        @Html.Hidden("Id", Model.Data.Id)
+                        @Html.Hidden("Id", post.Id)
 
                         <h3 class="mb-3">Kommentar hinterlassen</h3>
                         <p class="mb-4">
@@ -102,5 +103,5 @@
 
 @section head
 {
-    @WebApp.MetaTags(Model.Data, generator: false, opengraph: false)
+    @WebApp.MetaTags(post, generator: false, opengraph: false)
 }

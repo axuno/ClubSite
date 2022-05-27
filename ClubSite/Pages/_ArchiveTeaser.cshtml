@@ -1,8 +1,11 @@
-﻿@model (ArchivePage<StandardArchive, Piranha.Models.PostInfo> ArchivePage, Piranha.Models.PostInfo Post)
-@{ var post = Model.Post; }
-<article>
-    <header>
-        @if (post.PrimaryImage.HasValue)
+﻿@model (Piranha.Models.PageInfo ArchiveInfo, Piranha.Models.PostInfo Post, bool ShowImage)
+@{
+    var post = Model.Post;
+    var archiveInfo = Model.ArchiveInfo;
+}
+<article class="h-100"> @* h-100 so header background-color fills full height *@
+    <header class="h-100">
+        @if (post.PrimaryImage.HasValue && Model.ShowImage)
         {
             <a href="@post.Permalink">
                 <img class="rounded mb-3" src="@Url.Content(WebApp.Media.ResizeImage(post.PrimaryImage, 1140, 450))" alt="@post.PrimaryImage.Media.AltText">
@@ -15,17 +18,17 @@
             @if (post.IsPublished)
             {
                 <span>
-                    @post.Published?.ToString("M") <a href="@Model.ArchivePage.Data.Permalink/year/@post.Published?.Year">@post.Published?.Year</a>
+                    @post.Published?.ToString("M") <a href="@archiveInfo.Permalink/year/@post.Published?.Year">@post.Published?.Year</a>
                 </span>
             }
             <span>
-                Rubrik: <a href="@Model.ArchivePage.Data.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
+                Rubrik: <a href="@archiveInfo.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
             </span>
             <span>
                 Tags:
                 @foreach (var tag in post.Tags)
                 {
-                    <a href="@Model.ArchivePage.Data.Permalink/tag/@tag.Slug">#@tag.Slug</a>
+                    <a href="@archiveInfo.Permalink/tag/@tag.Slug">#@tag.Slug</a>
                 }
             </span>
             @if (post.EnableComments && post.CommentCount > 0)

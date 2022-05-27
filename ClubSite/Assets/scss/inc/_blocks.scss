@@ -28,9 +28,13 @@
         padding: 0 0 .5rem
     }
 
-    &.blog-post-alert-block {
+    &.new-posts-block {
         padding: 0;
         margin: 0;
+        
+        article h3 {
+            font-size: 1.5rem !important;
+        }
     }
 
     // Medium devices (tablets, 768px and up)

@@ -2,12 +2,13 @@
 @model ArchivePage<StandardArchive, Piranha.Models.PostInfo>
 @{
     Model.ViewData["Title"] = Model.Data.Title;
-
+    var archiveInfo = await WebApp.Api.Pages.GetByIdAsync<Piranha.Models.PageInfo>(Model.Data.Id);
+    
     var showAll = HttpContext.Request.Query.ContainsKey("all");
     var showFiltered = Model.Archive.Year != null
                        || Model.Archive.Category != null
                        || Model.Archive.Tag != null;
-    var showMain = !(showAll || showFiltered);
+    var showMainPage = !(showAll || showFiltered);
     
     // Set Archive Excerpt to string.Empty if empty
     if (Library.HtmlTool.IsEmptyHtml(Model.Data.Excerpt ?? string.Empty))
@@ -23,13 +24,14 @@
         }
     }
 }
-@if (showMain)
+@if (showMainPage)
 {
-    <partial name="_ArchiveHeader" model="Model"/>
+    <partial name="_ArchiveHeader" model="archiveInfo"/>
     <partial name="_ArchiveMain" model="Model"/>
 }
 else
 {
+    <partial name="_ArchiveHeader" model="archiveInfo"/>
     <partial name="_ArchivePosts" model="Model"/>
 }
 @section head

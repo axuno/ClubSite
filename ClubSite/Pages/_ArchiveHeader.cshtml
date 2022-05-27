@@ -1,15 +1,15 @@
-﻿@model ArchivePage<StandardArchive, Piranha.Models.PostInfo>
-@{ var hasImage = Model.Data.PrimaryImage.HasValue; }
-<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({Url.Content(WebApp.Media.ResizeImage(Model.Data.PrimaryImage, 1920, 400))})" : string.Empty)>
+﻿@model Piranha.Models.PageInfo
+@{ var hasImage = Model.PrimaryImage.HasValue; }
+<header @(hasImage ? "class=has-image" : "") @(hasImage ? $"style=background-image:url({Url.Content(WebApp.Media.ResizeImage(Model.PrimaryImage, 1920, 400))})" : string.Empty)>
     <div class="dimmer"></div>
     <div class="container text-center">
-        <h1>@Model.Data.Title</h1>
+        <h1>@Model.Title</h1>
         @* Show the Excerpt if not empty *@
-        @if (!string.IsNullOrWhiteSpace(Model.Data.Excerpt))
+        @if (!string.IsNullOrWhiteSpace(Model.Excerpt))
         {
             <div class="row justify-content-center">
                 <div class="col-lg-8 lead">
-                    @Html.Raw(Model.Data.Excerpt)
+                    @Html.Raw(Model.Excerpt)
                 </div>
             </div>
         }

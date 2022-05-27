@@ -195,7 +195,7 @@ namespace ClubSite
 
             // Register custom blocks
             App.Blocks.Register<PersonProfileBlock>();
-            App.Blocks.Register<BlogPostAlertBlock>();
+            App.Blocks.Register<NewPostsBlock>();
 
             /* To build specific types:
              new Piranha.AttributeBuilder.PageTypeBuilder(api)
