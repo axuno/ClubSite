@@ -1,0 +1,58 @@
+﻿@model ClubSite.Models.NewPostsBlock?
+@{
+    if (Model is null
+        || Model.NumOfPostsToDisplay.Value is null
+        || Model.NumOfPostsToDisplay.Value.Value < 1
+        || Model.NumOfPostsToDisplay.Value.Value > 30
+        || Model.Posts.Count == 0)
+        return;
+
+    var posts = Model.Posts.Count;
+}
+<main class="archive px-3 pt-3 pb-0 mb-3 border border-secondary rounded">
+    @{
+        <div class="col-md-12">
+            <h3>
+                <i class="fas fa-comment fa-1x"></i>
+                @Model.Title
+            </h3>
+        </div>
+        for (var n = 0; n < posts; n += 2)
+        {
+            <div class="row">
+                @for (var i = n; i < Math.Min(posts, n + 2); i++)
+                {
+                    <div class="@(posts % 2 > 0 && i == 0 ? "col-md-12" : "col-md-6")">
+                        <partial name="_ArchiveTeaser" model="(Model.ArchivePage, Model.Posts[i], false)"/>
+                    </div>
+
+                    @if (posts % 2 > 0 && i == 0)
+                    {
+                        n--;
+                        break;
+                    }
+                }
+            </div>
+        }
+    }
+</main>
+
+@*
+<article class="pb-0 h-100"> * h-100, so header background-color fills full height *
+<header class="p-2 h-100">
+    <a href="@post.Permalink" style="text-decoration: none">
+        <h5>@post.Title</h5>
+    </a>
+    <p class="post-meta">
+        <span>
+            @post.Published?.ToString("M") <a href="@Model.ArchivePage?.Permalink/year/@post.Published?.Year">@post.Published?.Year</a>
+        </span>
+        <span>
+            <a href="@Model.ArchivePage?.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
+        </span>
+    </p>
+    <a href="@post.Permalink" class="btn btn-sm btn-primary">Mehr dazu</a>
+</header>
+</article>
+
+*@

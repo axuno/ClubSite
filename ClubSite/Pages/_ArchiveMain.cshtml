@@ -1,0 +1,45 @@
+﻿@model ArchivePage<StandardArchive, Piranha.Models.PostInfo>
+@{
+    // Show a maximum of 3 teaser posts
+    var postCount = Model.Archive.Posts.Count <= 3 ? Model.Archive.Posts.Count : 3;
+    var archiveInfo = await WebApp.Api.Pages.GetByIdAsync<Piranha.Models.PageInfo>(Model.Data.Id);
+}
+<main class="archive">
+    <partial name="_ShowEditLinkPartial" />
+    @* Display the blocks of the main Blog page *@
+    @foreach (var block in Model.Data.Blocks)
+    {
+        <div class="block @block.CssName()">
+            <div class="mx-3">
+                @Html.DisplayFor(m => block, block.GetType().Name)
+            </div>
+        </div>
+    }
+    @* Display the teasers for Archive Blog posts *@
+    <div class="mx-3 pb-3">
+        Letzte Beiträge im Blog:
+    </div>
+    <div class="mx-3">
+        @{
+            for (var n = 0; n < postCount; n += 2)
+            {
+                <div class="row">
+                    @for (var i = n; i < Math.Min(postCount, n + 2); i++)
+                    {
+                        <div class="@(i == 0 ? "col-md-12" : "col-md-6")">
+                            <partial name="_ArchiveTeaser" model="(archiveInfo, Model.Archive.Posts[i], true)"/>
+                        </div>
+                        @if (i == 0)
+                        {
+                            n--;
+                            break;
+                        }
+                    }
+                </div>
+            }
+            // (in case the page argument is invalid, this will be auto-corrected)
+            // Query string "all" shows all blog posts unfiltered
+            <a href="@(archiveInfo.Permalink)/?all" class="btn btn-secondary col-12 col-md-6 mt-3">Mehr Beiträge anzeigen...</a>
+        }
+    </div>
+</main>

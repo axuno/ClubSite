@@ -128,11 +128,11 @@ namespace ClubSite.Services
                         cancellationToken);
                 }
 
-                _logger.LogInformation("Sending mail to '{0}' succeeded.\n{1}", messageOutput, mimeMessage.ToString());
+                _logger.LogInformation("Sending mail to '{messageOutput}' succeeded.\n{mimeMessage}", messageOutput, mimeMessage.ToString());
             }
             catch (Exception e)
             {
-                _logger.LogCritical(e, "Sending mail to '{0}' failed.\n{1}", messageOutput, mimeMessage.ToString());
+                _logger.LogCritical(e, "Sending mail to '{messageOutput}' failed.\n{mimeMessage}", messageOutput, mimeMessage.ToString());
                 throw;
             }
         }

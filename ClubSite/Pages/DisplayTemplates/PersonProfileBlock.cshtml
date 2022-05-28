@@ -1,21 +1,20 @@
-@using Piranha.Extend.Blocks
-@model ClubSite.Models.PersonProfileBlock
-@{ if (Model is null) return; }
+@model ClubSite.Models.PersonProfileBlock?
+@{ if (Model is null || Model.Contact?.Value.Length < 10) return; }
 <h3 class="h3">@Model.Title</h3>
-<div class="d-flex flex-row py-0">
-    @{
-        foreach (var item in Model.Items)
-        {
-            if (item is ImageBlock i)
+<div id="content" class="container-fluid rounded">
+    <div class="d-flex flex-row">
+        <div class="p-2">
+            @if (Model.Photo is null || !Model.Photo.HasValue)
             {
-                <div class="ps-0 pe-2 pt-2 pb-2">
-                    <img src="@Url.Content(WebApp.Media.ResizeImage(i, 100))" class="img-fluid">
-                </div>
+                <img src="@Url.Content("~/assets/svg/user-thin.svg")" width="150" alt="Platzhalterbild"/>
             }
-            else if (item is HtmlBlock h)
+            else
             {
-                <div class="ps-0 pe-2 pt-2 pb-2">@Html.Raw(h.Body) </div>
+                <img src="@Url.Content(WebApp.Media.ResizeImage(Model.Photo, 150))" alt="Foto"/>
             }
-        }
-    }
+        </div>
+        <div class="p-2">
+            @Html.Raw(Model.Contact)
+        </div>
+    </div>
 </div>

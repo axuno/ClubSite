@@ -4,6 +4,7 @@
 // https://github.com/axuno/ClubSite
 
 using System;
+using System.Globalization;
 using System.IO;
 using ClubSite.Models;
 using Microsoft.AspNetCore.Builder;
@@ -67,6 +68,16 @@ namespace ClubSite
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Note: Piranha sets culture and language
+            // from table Piranha_Sites field Culture and the UI language
+            // from table Piranha_Sites field LanguageId (stored in table Piranha_Languages)
+            // This overrides the following settings:
+            var cultureInfo = CultureInfo.GetCultureInfo("de-DE");
+            CultureInfo.DefaultThreadCurrentCulture =
+                CultureInfo.CurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture =
+                CultureInfo.CurrentUICulture = cultureInfo;
+
             // required for cookies and session cookies (will throw CryptographicException without)
             services.AddDataProtection()
                 .SetApplicationName("ClubSite")
@@ -104,7 +115,7 @@ namespace ClubSite
                 svcBuilder.UseCms();
                 svcBuilder.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
                 svcBuilder.UseImageSharp();
-                svcBuilder.UseManager(); // https://localhost:44306/manager/ initial user: admin, pw: password
+                svcBuilder.UseManager(); // https://localhost:44307/manager/ initial user: admin, pw: password
                 svcBuilder.UseTinyMCE();
                 svcBuilder.UseMemoryCache();
                 svcBuilder.UseEF<SQLServerDb>(db =>
@@ -143,10 +154,13 @@ namespace ClubSite
 
             services.Configure<ConfigurationPoco.MailSettings>(
                 Configuration.GetSection(nameof(ConfigurationPoco.MailSettings)) ??
-                throw new ArgumentNullException(
+                throw new InvalidOperationException(
                     $"Configuration section '{nameof(ConfigurationPoco.MailSettings)}' not found."));
 
             services.AddTransient<Services.IMailService, Services.MailService>();
+
+            // We use EPPlus in a noncommercial context according to the Polyform Noncommercial license:
+            OfficeOpenXml.ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
         }
 
         /// <summary>
@@ -157,11 +171,8 @@ namespace ClubSite
         /// <param name="api">The PiranhaCms <see cref="IApi"/></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApi api)
         {
-            var cultureInfo = new System.Globalization.CultureInfo("de-DE");
-            System.Globalization.CultureInfo.DefaultThreadCurrentCulture =
-                System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
-            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture =
-                System.Globalization.CultureInfo.CurrentCulture = cultureInfo;
+            _ = env.EnvironmentName;
+            app.UseHttpsRedirection();
 
             if (false)
                 app.UseDeveloperExceptionPage();
@@ -184,6 +195,7 @@ namespace ClubSite
 
             // Register custom blocks
             App.Blocks.Register<PersonProfileBlock>();
+            App.Blocks.Register<NewPostsBlock>();
 
             /* To build specific types:
              new Piranha.AttributeBuilder.PageTypeBuilder(api)

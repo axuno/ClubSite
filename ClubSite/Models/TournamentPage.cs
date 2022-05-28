@@ -5,8 +5,6 @@
 
 using Piranha.AttributeBuilder;
 using Piranha.Extend;
-using Piranha.Extend.Blocks;
-using Piranha.Extend.Fields;
 using Piranha.Models;
 
 namespace ClubSite.Models
@@ -20,48 +18,6 @@ namespace ClubSite.Models
     public class TournamentPage : Page<TournamentPage>
     {
         [Region(Title = "Turnierbeschreibung", Description = "Festlegung der Eckdaten des Turniers")]
-        public TournamentDefinition TournamentDefinition { get; set; } = new TournamentDefinition();
-    }
-
-    public class TournamentDefinition
-    {
-        [Field(Title = "Primäres Bild", Placeholder = "Bild einsetzen")]
-        public ImageField TopImage { get; set; } = new ImageField();
-        
-        [Field(Title = "Turniername", Placeholder = "z.B. 28. Neusäßer Mixedturnier")]
-        public StringField Name { get; set; } = new StringField();
-
-        [Field(Title = "Datum von", Placeholder = "Datum")]
-        public DateField DateFrom { get; set; } = new DateField();
-
-        [Field(Title = "Datum bis", Placeholder = "Datum")]
-        public DateField DateTo { get; set; } = new DateField();
-
-        [Field(Title = "Uhrzeit von/bis", Placeholder = "Uhrzeit")]
-        public StringField TimeFromTo { get; set; } = new StringField();
-
-        [Field(Title = "Beginn der Anmeldefrist", Placeholder = "Datum")]
-        public DateField RegistrationStart { get; set; } = new DateField();
-
-        [Field(Title = "Anmeldeschluss", Placeholder = "Datum")]
-        public DateField RegistrationDeadline { get; set; } = new DateField();
-
-        [Field(Title = "Anzahl Teams", Placeholder = "Anzahl")]
-        public NumberField NumberOfTeams { get; set; } = new NumberField();
-
-        [Field(Title = "Team-Zusammensetzung", Placeholder = "z.B. Anzahl Damen/Herren")]
-        public StringField TeamComposition { get; set; } = new StringField();
-
-        [Field(Title = "Startgeld", Placeholder = "Startgeld")]
-        public StringField EntryFee { get; set; } = new StringField();
-
-        [Field(Title = "Bankverbindung")]
-        public TextField BankDetails { get; set; } = new TextField();
-
-        [Field(Title = "Adresse", Placeholder = "Hallenadresse")]
-        public StringField Address { get; set; } = new StringField();
-
-        [Field(Title = "Infos", Placeholder = "Ablauf, Regeln, Infos")]
-        public HtmlField Infos { get; set; } = new HtmlField();
+        public TournamentDefinition TournamentDefinition { get; set; } = new();
     }
 }

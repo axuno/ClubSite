@@ -9,15 +9,16 @@
     HttpContext.Response.Headers.TryAdd("Cache-Control", "no-store, no-cache, must-revalidate");
     HttpContext.Response.Headers.TryAdd("Pragma", "no-cache");
 
-    ViewData["Title"] = "Turnier-Anmeldung";
+    // Use the title from the TournamentPage for simplicity
+    ViewData["Title"] = Model.TournamentPage.Title;
     var maxTeams = Model.TournamentPage.TournamentDefinition.NumberOfTeams.Value;
     List<SelectListItem> GenderList()
     {
         return new List<SelectListItem>
-{
-            new SelectListItem {Value = string.Empty, Text = "Bitte auswählen"},
-            new SelectListItem {Value = "f", Text = "Frau"},
-            new SelectListItem {Value = "m", Text = "Herr"}
+        {
+            new() {Value = string.Empty, Text = "Bitte auswählen"},
+            new() {Value = "f", Text = "Frau"},
+            new() {Value = "m", Text = "Herr"}
         };
     }
 }
@@ -61,7 +62,7 @@
             </div>
             <div>
                 <label asp-for="Registration.Gender"></label>
-                <select asp-for="Registration.Gender" asp-items="GenderList()" class="form-select col-md-6 d-block" required="required"></select>
+                <select asp-for="Registration.Gender" asp-items="@GenderList()" class="form-select col-md-6 d-block" required="required"></select>
                 <span asp-validation-for="Registration.Gender" class="text-danger"></span>
             </div>
             <div>

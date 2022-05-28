@@ -1,9 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Hosting
+@using Microsoft.AspNetCore.Html
 @using Microsoft.Extensions.Hosting
 @inject IWebHostEnvironment Env
-@{
-    var clubAssembly = System.Reflection.Assembly.GetAssembly(typeof(Startup))?.GetName();
-}
 <!doctype html>
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
@@ -25,6 +23,7 @@
     <!-- favicon [end] -->
     <meta name="generator" value="axuno piranha cms https://axuno.net (clubsite: @Piranha.Utils.GetAssemblyVersion(typeof(Program).Assembly), piranha: @Piranha.Utils.GetAssemblyVersion(typeof(Piranha.App).Assembly))" />
     @await RenderSectionAsync("head", false)
+    @*PiranhaHtmlExtensions.MetaTags(WebApp, Model, generator: false);*@
     <link rel="stylesheet" href="~/assets/css/bootstrap.min.css" asp-append-version="true">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Raleway:wght@700&display=swap">
     <link rel="stylesheet" href="~/assets/css/style.min.css" asp-append-version="true">
@@ -32,18 +31,18 @@
     @await RenderSectionAsync("styles", false)
 </head>
 <body>
-    <div class="container-fluid main p-0 mb-2">
-        <menu>
-            <partial name="_MenuTopLevel.cshtml" />
-        </menu>
-        @RenderBody()
-        <partial name="_Footer.cshtml" />
-    </div>
-@if (!Env.IsDevelopment())
-{
-    <partial name="_GoogleAnalytics.cshtml"/>}
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<div class="container-fluid main p-0 mb-2">
+    <menu>
+        <partial name="_MenuTopLevel.cshtml" />
+    </menu>
+    @RenderBody()
+    <partial name="_Footer.cshtml" />
+</div>
+@if (!Env.IsDevelopment()) { <partial name="_GoogleAnalytics.cshtml"/> }
+@* SRI Hash Generator: https://www.srihash.org/ *@
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha384-Qg00WFl9r0Xr6rUqNLv1ffTSSKEFFCDCKVyHZ+sVt8KuvG99nWw5RNvbhuKgif9z" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 @await RenderSectionAsync("script", false)
 </body>
 </html>
+

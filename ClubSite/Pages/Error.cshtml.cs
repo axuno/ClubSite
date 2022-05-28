@@ -30,9 +30,6 @@ namespace ClubSite.Pages
             id ??= string.Empty;
             id = id.Trim();
 
-            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("de");
-            System.Globalization.CultureInfo.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("de");
-
             // The StatusCodePagesMiddleware stores a request-feature with
             // the original path on the HttpContext, that can be accessed from the Features property.
             // Note: IExceptionHandlerFeature does not contain the path
@@ -43,13 +40,13 @@ namespace ClubSite.Pages
             {
                 OrigPath = exceptionFeature.Path;
                 Exception = exceptionFeature.Error;
-                _logger.LogCritical(Exception, "Path: {0}", OrigPath);
+                _logger.LogCritical(Exception, "Path: {OrigPath}", OrigPath);
             }
             else
             {
                 OrigPath = HttpContext.Features
                     .Get<Microsoft.AspNetCore.Diagnostics.IStatusCodeReExecuteFeature>()?.OriginalPath;
-                _logger.LogInformation("Path: {0}, StatusCode: {1}", OrigPath, id);
+                _logger.LogInformation("Path: {OrigPath}, StatusCode: {Id}", OrigPath, id);
             }
 
             SentStatusCode = id;

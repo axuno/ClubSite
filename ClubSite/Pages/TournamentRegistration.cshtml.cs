@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,7 +16,7 @@ using ClubSite.Data.Poco;
 using ClubSite.Library;
 using ClubSite.Models;
 using ClubSite.Resources;
-using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -42,15 +41,34 @@ namespace ClubSite.Pages
         private readonly IApi _api;
         private readonly Services.IMailService _mailService;
         private readonly ILogger<TournamentRegistrationModel> _logger;
+        private readonly IAuthorizationService _authorizationService;
         
-        public TournamentRegistrationModel(ClubDbContext context, IApi api, Services.IMailService mailService, ILogger<TournamentRegistrationModel> logger)
+        public TournamentRegistrationModel(ClubDbContext context, IApi api, Services.IMailService mailService, IAuthorizationService auth, ILogger<TournamentRegistrationModel> logger)
         {
             _clubDbContext = context;
             _api = api;
             _mailService = mailService;
             _logger = logger;
+            _authorizationService = auth;
             TournamentPage = new TournamentPage();
             Registration = new TournamentRegistration();
+        }
+
+        public static TournamentPage? GetTournamentPage(IApi api)
+        {
+            // Call async method from sync context - we need the permalink to the TournamentPage
+            return new TaskFactory(CancellationToken.None,
+                    TaskCreationOptions.None,
+                    TaskContinuationOptions.None,
+                    TaskScheduler.Default)
+                .StartNew(() => api.Pages.GetAllAsync<TournamentPage>())
+                .Unwrap().ConfigureAwait(false).GetAwaiter()
+                .GetResult().FirstOrDefault();
+        }
+
+        public async Task<TournamentPage?> GetTournamentPageAsync()
+        {
+            return (await _api.Pages.GetAllAsync<TournamentPage>().ConfigureAwait(false)).FirstOrDefault();
         }
 
         [BindProperty]
@@ -77,6 +95,15 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnGetAsync(long dateTicks, Guid registrationId)
         {
+            var isAuthenticated = (await _authorizationService.AuthorizeAsync(User, Piranha.Manager.Permission.Pages))
+                .Succeeded;
+
+            // Redirect to the default TournamentPage
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
+            {
+                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
+            }
+
             try
             {
                 await SetupModel(dateTicks, registrationId);
@@ -91,6 +118,15 @@ namespace ClubSite.Pages
 
         public async Task<IActionResult> OnPostAsync(CancellationToken cancellationToken)
         {
+            var isAuthenticated = (await _authorizationService.AuthorizeAsync(User, Piranha.Manager.Permission.Pages))
+                .Succeeded;
+
+            // Redirect to the default TournamentPage
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
+            {
+                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
+            }
+
             try
             {
                 // Model must always be set up
@@ -158,8 +194,8 @@ namespace ClubSite.Pages
                 // Todo: Add notification for failure of saving on TournamentPage
             }
             
-            // Redirect to the TournamentPage
-            return Redirect(TournamentPage?.Permalink ?? "/");            
+            // Redirect to the default TournamentPage
+            return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");         
         }
 
         private async Task SetupModel(long date, Guid? registrationId)
@@ -168,10 +204,11 @@ namespace ClubSite.Pages
             var tournamentDate = new DateTime(date).Date;
             
             // Get the TournamentPage containing the definition for the given date
-            TournamentPage = (await _api.Pages.GetAllAsync<TournamentPage>()).FirstOrDefault(p =>
-                                  p.TournamentDefinition.DateFrom.Value.HasValue &&
-                                  p.TournamentDefinition.DateFrom.Value.Value.Date.Equals(tournamentDate)) ??
-                              throw new Exception($"{nameof(Models.TournamentPage)} for date '{tournamentDate}' not found");
+            TournamentPage = (await _api.Pages.GetAllAsync<TournamentPage>()
+                                 .ConfigureAwait(false)).FirstOrDefault(p =>
+                                 p.TournamentDefinition.DateFrom.Value.HasValue &&
+                                 p.TournamentDefinition.DateFrom.Value.Value.Date.Equals(tournamentDate)) ??
+                             throw new Exception($"{nameof(Models.TournamentPage)} for date '{tournamentDate}' not found");
             
             var definition = TournamentPage.TournamentDefinition;
 
@@ -219,7 +256,7 @@ Nachricht:
 ----------------------------------------
 {(string.IsNullOrWhiteSpace(Registration.Message) ? "(keine)" : Registration.Message)}
 ----------------------------------------
-{(Registration.IsStandByRegistration ? "\n" : "\nBankverbindung für die Startgebühr:\n" + definition.BankDetails.Value + "\n" )}
+{(Registration.IsStandByRegistration ? "\n" : "\nBankverbindung zum Überweisen der Startgebühr:\n" + definition.BankDetails.Value + "\n" )}
 Vielen Dank!
 
 Volleyballclub Neusäß e.V.

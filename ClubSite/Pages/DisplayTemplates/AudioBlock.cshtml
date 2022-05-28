@@ -1,4 +1,4 @@
-@model Piranha.Extend.Blocks.AudioBlock
+@model Piranha.Extend.Blocks.AudioBlock?
 @{ if (Model is null) return; }
 <audio width="100%" controls>
     <source src="@Url.Content(Model.Body)" type="">
