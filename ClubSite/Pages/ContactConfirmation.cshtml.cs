@@ -5,9 +5,8 @@
 
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ClubSite.Pages
+namespace ClubSite.Pages;
+
+public class ContactConfirmationModel : PageModel
 {
-    public class ContactConfirmationModel : PageModel
-    {
-    }
 }

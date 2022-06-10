@@ -8,19 +8,18 @@ using Piranha.Extend.Fields;
 using Piranha.Extend.Fields.Settings;
 using Piranha.Models;
 
-namespace ClubSite.Models
+namespace ClubSite.Models;
+
+[BlockType(Name = "Person Profile", Category = "Content", Icon = "fas fa-user")]
+public class PersonProfileBlock : Block
 {
-    [BlockType(Name = "Person Profile", Category = "Content", Icon = "fas fa-user")]
-    public class PersonProfileBlock : Block
-    {
-        [Field(Title = "Funktionsbezeichnung")] 
-        [StringFieldSettings(MaxLength = 40)]
-        public StringField Title { get; set; } = new();
+    [Field(Title = "Funktionsbezeichnung")] 
+    [StringFieldSettings(MaxLength = 40)]
+    public StringField Title { get; set; } = new();
 
-        [Field(Title = "Name, Kontaktdaten", Options = FieldOption.HalfWidth)]
-        public HtmlField? Contact { get; set; }
+    [Field(Title = "Name, Kontaktdaten", Options = FieldOption.HalfWidth)]
+    public HtmlField? Contact { get; set; }
 
-        [Field(Title = "Foto", Options = FieldOption.HalfWidth)]
-        public ImageField? Photo { get; set; }
-    }
+    [Field(Title = "Foto", Options = FieldOption.HalfWidth)]
+    public ImageField? Photo { get; set; }
 }

@@ -8,51 +8,50 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 
-namespace ClubSite.Pages
+namespace ClubSite.Pages;
+
+public class ErrorModel : PageModel
 {
-    public class ErrorModel : PageModel
+    private readonly ILogger<ErrorModel> _logger;
+
+    public ErrorModel(ILogger<ErrorModel> logger)
     {
-        private readonly ILogger<ErrorModel> _logger;
+        _logger = logger;
+    }
 
-        public ErrorModel(ILogger<ErrorModel> logger)
+    [BindProperty] public string? OrigPath { get; set; }
+    [BindProperty] public Exception? Exception { get; set; }
+    [BindProperty] public string? SentStatusCode { get; set; }
+    [BindProperty] public string? SentStatusText { get; set; }
+    [BindProperty] public string? Description { get; set; }
+
+    public void OnGet(string? id = null)
+    {
+        id ??= string.Empty;
+        id = id.Trim();
+
+        // The StatusCodePagesMiddleware stores a request-feature with
+        // the original path on the HttpContext, that can be accessed from the Features property.
+        // Note: IExceptionHandlerFeature does not contain the path
+        var exceptionFeature = HttpContext.Features
+            .Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
+
+        if (exceptionFeature?.Error != null)
         {
-            _logger = logger;
+            OrigPath = exceptionFeature.Path;
+            Exception = exceptionFeature.Error;
+            _logger.LogCritical(Exception, "Path: {OrigPath}", OrigPath);
+        }
+        else
+        {
+            OrigPath = HttpContext.Features
+                .Get<Microsoft.AspNetCore.Diagnostics.IStatusCodeReExecuteFeature>()?.OriginalPath;
+            _logger.LogInformation("Path: {OrigPath}, StatusCode: {Id}", OrigPath, id);
         }
 
-        [BindProperty] public string? OrigPath { get; set; }
-        [BindProperty] public Exception? Exception { get; set; }
-        [BindProperty] public string? SentStatusCode { get; set; }
-        [BindProperty] public string? SentStatusText { get; set; }
-        [BindProperty] public string? Description { get; set; }
-
-        public void OnGet(string? id = null)
-        {
-            id ??= string.Empty;
-            id = id.Trim();
-
-            // The StatusCodePagesMiddleware stores a request-feature with
-            // the original path on the HttpContext, that can be accessed from the Features property.
-            // Note: IExceptionHandlerFeature does not contain the path
-            var exceptionFeature = HttpContext.Features
-                .Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
-
-            if (exceptionFeature?.Error != null)
-            {
-                OrigPath = exceptionFeature.Path;
-                Exception = exceptionFeature.Error;
-                _logger.LogCritical(Exception, "Path: {OrigPath}", OrigPath);
-            }
-            else
-            {
-                OrigPath = HttpContext.Features
-                    .Get<Microsoft.AspNetCore.Diagnostics.IStatusCodeReExecuteFeature>()?.OriginalPath;
-                _logger.LogInformation("Path: {OrigPath}, StatusCode: {Id}", OrigPath, id);
-            }
-
-            SentStatusCode = id;
-            SentStatusText = Resources.StatusCodes.ResourceManager.GetString("E" + id) ?? "Fehler";
-            Description = Resources.StatusDescriptions.ResourceManager.GetString("E" + id) ??
-                          "Ein Fehler ist aufgetreten";
-        }
+        SentStatusCode = id;
+        SentStatusText = Resources.StatusCodes.ResourceManager.GetString("E" + id) ?? "Fehler";
+        Description = Resources.StatusDescriptions.ResourceManager.GetString("E" + id) ??
+                      "Ein Fehler ist aufgetreten";
     }
 }

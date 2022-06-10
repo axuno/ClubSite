@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,46 +7,45 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ClubSite.Pages
+namespace ClubSite.Pages;
+
+public class NetCoreInfoModel : PageModel
 {
-    public class NetCoreInfoModel : PageModel
+    private readonly IWebHostEnvironment _hostingEnvironment;
+    private readonly IAuthorizationService _authorization;
+        
+    public NetCoreInfoModel(IWebHostEnvironment hostingEnvironment, IAuthorizationService authorization)
     {
-        private readonly IWebHostEnvironment _hostingEnvironment;
-        private readonly IAuthorizationService _authorization;
+        _hostingEnvironment = hostingEnvironment;
+        _authorization = authorization;
+    }
         
-        public NetCoreInfoModel(IWebHostEnvironment hostingEnvironment, IAuthorizationService authorization)
+    public async Task<IActionResult> OnGetAsync()
+    {
+        if (!(await _authorization.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _authorization = authorization;
+            return Forbid();
         }
-        
-        public async Task<IActionResult> OnGetAsync()
-        {
-            if (!(await _authorization.AuthorizeAsync(User, Piranha.Manager.Permission.Pages)).Succeeded)
+            
+        var p = new Process {StartInfo = new ProcessStartInfo
             {
-                return Forbid();
+                FileName = "dotnet.exe",
+                Arguments = "--info",
+                UseShellExecute = false,
+                RedirectStandardOutput = true
             }
+        };
+
+        p.Start();
             
-            var p = new Process {StartInfo = new ProcessStartInfo
-                {
-                    FileName = "dotnet.exe",
-                    Arguments = "--info",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true
-                }
-            };
+        var sdkFolder = @"c:\Program Files\dotnet\sdk\";
+        var stdout = $"Web root path: {_hostingEnvironment.WebRootPath}\n\n";
+        stdout += $"{await p.StandardOutput.ReadToEndAsync()}\nFolder: {sdkFolder}\n";
+        await p.WaitForExitAsync();
 
-            p.Start();
-            
-            var sdkFolder = @"c:\Program Files\dotnet\sdk\";
-            var stdout = $"Web root path: {_hostingEnvironment.WebRootPath}\n\n";
-            stdout += $"{await p.StandardOutput.ReadToEndAsync()}\nFolder: {sdkFolder}\n";
-            await p.WaitForExitAsync();
+        var f = Directory.GetDirectories(sdkFolder);
+        f.ToList().ForEach(e => stdout += e + '\n');
 
-            var f = Directory.GetDirectories(sdkFolder);
-            f.ToList().ForEach(e => stdout += e + '\n');
-
-            return Content(stdout);
-        }
+        return Content(stdout);
     }
 }

@@ -6,15 +6,14 @@
 using Piranha.AttributeBuilder;
 using Piranha.Models;
 
-namespace ClubSite.Models
+namespace ClubSite.Models;
+
+/// <summary>
+/// Custom <see cref="TournamentPage"/> definition.
+/// </summary>
+[PageType(Title = "Contact", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
+[ContentTypeRoute(Title = "Default",
+    Route = "/ContactPage")] // Route is the base name of the Page name (ContactPage.cshtml)
+public class ContactPage : Page<ContactPage>
 {
-    /// <summary>
-    /// Custom <see cref="TournamentPage"/> definition.
-    /// </summary>
-    [PageType(Title = "Contact", UsePrimaryImage = false, UseExcerpt = false, UseBlocks = false)]
-    [ContentTypeRoute(Title = "Default",
-        Route = "/ContactPage")] // Route is the base name of the Page name (ContactPage.cshtml)
-    public class ContactPage : Page<ContactPage>
-    {
-    }
 }
