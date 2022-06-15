@@ -3,9 +3,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-28246687-1"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
-
     function gtag() { dataLayer.push(arguments); }
-
     gtag('js', new Date());
-    gtag('config', '@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value');
+    gtag('config', '@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value', {cookie_flags: 'SameSite=None;Secure'});
 </script>
