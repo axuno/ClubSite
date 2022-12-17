@@ -1,9 +1,10 @@
 ﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-28246687-1"></script>
+<!-- Global site tag (gtag.js) - Google Analytics (GA4) start -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', '@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value', {cookie_flags: 'SameSite=None;Secure'});
 </script>
+<!-- Global site tag (gtag.js) - Google Analytics (GA4) end -->
