@@ -73,5 +73,5 @@
 <div>Some Number: @Model.Data.AllFields?.Number?.Value</div>
 <div>Some Date: @Model.Data.AllFields?.Date?.Value?.ToLongDateString()</div>
 <div>Content from another Document: @Html.Raw(Model.Data.AllFields?.Page?.Page?.Excerpt)</div>
-<div>Document Field: <a href="@Url.Content(Model.Data.AllFields?.Document?.Media.PublicUrl)">@Model.Data.AllFields?.Document?.Media.Filename</a></div>
-<div>Image Field: <img src="@Url.Content(Model.Data.AllFields?.Image?.Media.PublicUrl)"/></div>
+<div>Document Field: <a href="@Url.Content(Model.Data.AllFields?.Document?.Media?.PublicUrl)">@Model.Data.AllFields?.Document?.Media?.Filename</a></div>
+<div>Image Field: <img src="@Url.Content(Model.Data.AllFields?.Image?.Media?.PublicUrl)"/></div>

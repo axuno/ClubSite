@@ -22,7 +22,7 @@ public class SuperPageModel : SinglePage<SuperPage>
         _db = db;
     }
 
-    async public override Task<IActionResult> OnGet(Guid id, bool draft = false)
+    public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
     {
         var result = await base.OnGet(id, draft);
 

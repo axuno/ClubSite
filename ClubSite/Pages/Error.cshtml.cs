@@ -7,16 +7,19 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace ClubSite.Pages;
 
 public class ErrorModel : PageModel
 {
     private readonly ILogger<ErrorModel> _logger;
-
-    public ErrorModel(ILogger<ErrorModel> logger)
+    private readonly ILogger _notFoundLogger;
+    
+    public ErrorModel(ILogger<ErrorModel> logger, ILoggerFactory loggerFactory)
     {
         _logger = logger;
+        _notFoundLogger = loggerFactory.CreateLogger(nameof(ClubSite) + ".NotFound");
     }
 
     [BindProperty] public string? OrigPath { get; set; }
@@ -27,8 +30,14 @@ public class ErrorModel : PageModel
 
     public void OnGet(string? id = null)
     {
-        id ??= string.Empty;
-        id = id.Trim();
+        // status code is already set!
+        if (Response.StatusCode.ToString() != id)
+        {
+            _logger.LogWarning("StatusCode: {StatusCode} != id: {id}, Path: {OrigPath}", Response.StatusCode, id, OrigPath);
+        }
+
+        if (string.IsNullOrEmpty(id) && Response.StatusCode != (int) System.Net.HttpStatusCode.OK)
+            id = Response.StatusCode.ToString();
 
         // The StatusCodePagesMiddleware stores a request-feature with
         // the original path on the HttpContext, that can be accessed from the Features property.
@@ -46,10 +55,14 @@ public class ErrorModel : PageModel
         {
             OrigPath = HttpContext.Features
                 .Get<Microsoft.AspNetCore.Diagnostics.IStatusCodeReExecuteFeature>()?.OriginalPath;
-            _logger.LogInformation("Path: {OrigPath}, StatusCode: {Id}", OrigPath, id);
+
+            if (Response.StatusCode == 404)
+                _notFoundLogger.LogInformation("{NotFound}", new {Status = Response.StatusCode, Ip = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "127.0.0.1", Path = OrigPath});
+            else
+                _logger.LogWarning("StatusCode: {StatusCode}, Path: {OrigPath}", Response.StatusCode, OrigPath);
         }
 
-        SentStatusCode = id;
+        SentStatusCode = Response.StatusCode.ToString();
         SentStatusText = Resources.StatusCodes.ResourceManager.GetString("E" + id) ?? "Fehler";
         Description = Resources.StatusDescriptions.ResourceManager.GetString("E" + id) ??
                       "Ein Fehler ist aufgetreten";
