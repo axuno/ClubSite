@@ -1,4 +1,6 @@
 @page
+@using Piranha
+@using Piranha.Extend
 @model SuperPageModel
 @{
     ViewData["Title"] = Model.Data.Title;
@@ -46,12 +48,17 @@
     </div>
 }
 
-@if (Model.Data.Links != null)
-{
-    <div class="container latest-post">
-        <div class="row">
-            <div class="col text-center">
-                @{
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            @{
+                // Get the Title of the "Links" Region attribute using the API. PageTypes are cached.
+                var title = App.PageTypes.GetById(Model.Data.TypeId)
+                    .Regions
+                    .First(r => r.Id == nameof(Model.Data.Links))
+                    .Title;
+                
+                    <h4>Region: @title</h4>
                     foreach (var link in Model.Data.Links)
                     {
                         if (link.ButtonLink?.Page?.Permalink != null && link.ButtonText != null)
@@ -62,11 +69,9 @@
                         }
                     }
                 }
-            </div>
         </div>
     </div>
-}
-
+</div>
 
 <div>Some Text: @Model.Data.AllFields?.Text</div>
 <div style="background-color: @Model.Data.AllFields?.ColorField?.Value">Background Color from ColorField</div>

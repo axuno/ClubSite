@@ -36,23 +36,3 @@
         }
     }
 </main>
-
-@*
-<article class="pb-0 h-100"> * h-100, so header background-color fills full height *
-<header class="p-2 h-100">
-    <a href="@post.Permalink" style="text-decoration: none">
-        <h5>@post.Title</h5>
-    </a>
-    <p class="post-meta">
-        <span>
-            @post.Published?.ToString("M") <a href="@Model.ArchivePage?.Permalink/year/@post.Published?.Year">@post.Published?.Year</a>
-        </span>
-        <span>
-            <a href="@Model.ArchivePage?.Permalink/category/@post.Category.Slug">@post.Category.Title</a>
-        </span>
-    </p>
-    <a href="@post.Permalink" class="btn btn-sm btn-primary">Mehr dazu</a>
-</header>
-</article>
-
-*@

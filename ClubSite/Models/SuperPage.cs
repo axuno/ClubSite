@@ -22,7 +22,7 @@ public class SuperPage : Page<SuperPage>
     /// <summary>
     /// Gets/sets the available links.
     /// </summary>
-    [Region(ListTitle = "ButtonText", ListPlaceholder = "New Link", Icon = "fas fa-quote-right")]
+    [Region(Title = "Links", ListTitle = "ButtonText", ListPlaceholder = "New Link", Icon = "fas fa-quote-right")]
     public IList<Href> Links { get; set; } = new List<Href>();
 
     [Region(Title = "All fields", Display = RegionDisplayMode.Setting, Description = "Vestibulum id ligula porta felis euismod <strong>semper</strong>. Curabitur blandit tempus porttitor.")]
