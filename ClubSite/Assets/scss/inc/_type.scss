@@ -17,8 +17,11 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-family: Raleway,sans-serif;
 }
-article > header {  // blog teasers
-    background-color: $gray-100;
+article > div.alert { // arvchive teasers, training, standalone alerts
+    padding: .5rem !important;
+    margin-bottom: 0;
+
+    &> p:last-child { margin-bottom: 0} // don't mess up margin with paragraph
 }
 blockquote {
     color: #999;

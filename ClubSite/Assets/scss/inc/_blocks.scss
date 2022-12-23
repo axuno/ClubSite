@@ -6,14 +6,26 @@
         border-radius: .25rem;
     }
 
+    & p:last-child {
+        margin-bottom: 0 // don't mess up margin with paragraph
+    }
+
     &.column-block {
         .col-md:not(:last-child) {
-            margin-bottom: 1.5rem;
+            margin-bottom: 0;
         }
 
         img {
             height: 100%;
             object-fit: cover;
+        }
+    }
+    // Small devices
+    @media (max-width: 768px) {
+        &.column-block {
+            .col-md:not(:last-child) {
+                margin-bottom: 1.5rem; //next column element will go to new line
+            }
         }
     }
 
@@ -31,20 +43,9 @@
     &.new-posts-block {
         padding: 0;
         margin: 0;
-        
+
         article h3 {
             font-size: 1.5rem !important;
-        }
-    }
-
-    // Medium devices (tablets, 768px and up)
-    @media (min-width: 768px) {
-        .block {
-            &.column-block {
-                .col-md:not(:last-child) {
-                    margin-bottom: 0;
-                }
-            }
         }
     }
 }

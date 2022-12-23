@@ -4,7 +4,7 @@
     var archiveInfo = Model.ArchiveInfo;
 }
 <article class="h-100"> @* h-100 so header background-color fills full height *@
-    <header class="h-100">
+    <div class="alert alert-light p-2 h-100">
         @if (post.PrimaryImage.HasValue && Model.ShowImage)
         {
             <a href="@post.Permalink">
@@ -43,5 +43,5 @@
             <p>@Html.Raw(post.Excerpt)</p>
         }
         <a href="@post.Permalink" class="btn btn-sm btn-primary">Mehr dazu</a>
-    </header>
+    </div>
 </article>

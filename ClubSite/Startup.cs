@@ -196,6 +196,7 @@ public class Startup
         // Register custom blocks
         App.Blocks.Register<PersonProfileBlock>();
         App.Blocks.Register<NewPostsBlock>();
+        App.Blocks.Register<HtmlFeaturedBlock>();
 
         /* To build specific types:
          new Piranha.AttributeBuilder.PageTypeBuilder(api)
