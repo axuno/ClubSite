@@ -1,0 +1,13 @@
+﻿@model ClubSite.Models.HtmlFeaturedBlock?
+@{
+    if (Model is null) return;
+
+    var alertCssClass = "alert-" + Model.BackgroundColor.Value.ToString().ToLower();
+    if (Model.BackgroundColor.Value == ThemeColor.Default) alertCssClass = "alert-" + ThemeColor.Light.ToString().ToLower();
+}
+<article class="h-100">
+    @* h-100 so the alert background color fills full height *@
+    <div class="alert @alertCssClass h-100">
+        @Html.Raw(Model.Body)
+    </div>
+</article>

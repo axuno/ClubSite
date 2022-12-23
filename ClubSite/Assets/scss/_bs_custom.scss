@@ -46,11 +46,11 @@ $cyan: #88BFC3;
 $primary: $blue;
 $secondary : $yellow;
 $success: $green;
-$info: #2f3e5b;
+$info: tint-color($primary, 50%);
 $warning: $orange;
 $danger: $red;
 $light: $cyan;
-$dark: $blue;
+$dark: $gray-800;
     
 // Reassign color vars to semantic color scheme
 $theme-colors: ( "primary": $primary, "secondary": $secondary, "success": $success, "info": $info, "warning": $warning, "danger": $danger, "light": $light, "dark": $dark );
@@ -71,7 +71,7 @@ $headings-color: $secondary;
 //
 // Settings for the `<body>` element.
 $body-bg: tint-color($secondary, 90%);
-$body-color: $dark;
+$body-color: $primary;
 
 
 // Borders

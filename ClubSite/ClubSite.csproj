@@ -4,10 +4,11 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-        <Version>3.3.0</Version>
+        <Version>3.4.0</Version>
         <Authors>axuno gGmbH</Authors>
         <Description>The source code for https://www.volleyballclub.de/</Description>
-        <Copyright>axuno gGmbH and Contributors</Copyright>
+        <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
+        <Copyright>Copyright 2020-$(CurrentYear) axuno gGmbH and Contributors</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
     </PropertyGroup>
 
