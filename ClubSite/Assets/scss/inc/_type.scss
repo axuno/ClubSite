@@ -21,10 +21,6 @@ article > div.alert { // arvchive teasers, training, standalone alerts
     padding: .5rem !important;
     margin-bottom: 0;
 
-    &.alert-light {
-        background-color: $gray-100 !important;
-    }
-
     &> p:last-child { margin-bottom: 0} // don't mess up margin with paragraph
 }
 blockquote {

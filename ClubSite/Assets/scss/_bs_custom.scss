@@ -49,7 +49,7 @@ $success: $green;
 $info: tint-color($primary, 50%);
 $warning: $orange;
 $danger: $red;
-$light: $cyan;
+$light: $gray-300;
 $dark: $gray-800;
     
 // Reassign color vars to semantic color scheme
@@ -120,7 +120,8 @@ $table-accent-bg: $body-bg;  // striped table background
 // Alerts
 //
 // Define alert colors, border radius, and padding.
-$alert-bg-level: -10; // = default
-$alert-border-level: 0;
-$alert-color-level: 0;
+// $alert-bg-scale: -80% !default;
+$alert-border-scale: -50%; // default = -70%;
+//$alert-color-scale: 40% !default;
+
 

@@ -5,7 +5,7 @@
     var unique = "gallery-" + Guid.NewGuid();
 }
 
-<div id="@unique" class="carousel slide gallery-block" data-bs-ride="carousel">
+<div id="@unique" class="carousel slide image-gallery-block" data-bs-ride="carousel">
     <ol class="carousel-indicators">
         @for (var n = 0; n < Model.Items.Count; n++)
         {
