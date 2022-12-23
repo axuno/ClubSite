@@ -5,7 +5,11 @@
     img {
         border-radius: .25rem;
     }
-    
+
+    & p:last-child {
+        margin-bottom: 0 // don't mess up margin with paragraph
+    }
+
     &.column-block {
         .col-md:not(:last-child) {
             margin-bottom: 0;
