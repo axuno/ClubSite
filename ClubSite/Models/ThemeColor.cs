@@ -10,22 +10,25 @@ namespace ClubSite.Models;
 
 public enum ThemeColor
 {
+    // Note: When using the member name as the Description,
+    //       the Display attribute could be omitted. This is for localization.
+
     [Display(Description = "Standard")]
     Default,
-    [Display(Description = "Hell")]
+    [Display(Description = nameof(Light))]
     Light,
-    [Display(Description = "Dunkel")]
+    [Display(Description = nameof(Dark))]
     Dark,
-    [Display(Description = "Primär")]
+    [Display(Description = nameof(Primary))]
     Primary,
-    [Display(Description = "Sekundär")]
+    [Display(Description = nameof(Secondary))]
     Secondary,
-    [Display(Description = "Erfolg")]
+    [Display(Description = nameof(Success))]
     Success,
-    [Display(Description = "Gefahr")]
+    [Display(Description = nameof(Danger))]
     Danger,
-    [Display(Description = "Warnung")]
+    [Display(Description = nameof(Warning))]
     Warning,
-    [Display(Description = "Info")]
+    [Display(Description = nameof(Info))]
     Info
 }

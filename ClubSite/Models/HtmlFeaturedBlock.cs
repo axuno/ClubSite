@@ -10,7 +10,7 @@ using Piranha.Models;
 
 namespace ClubSite.Models;
 
-[BlockType(Name = "Content-Feat.", Category = "Content", Icon = "fas fa-paragraph", Width = EditorWidth.Centered)]
+[BlockType(Name = "Content Feat.", Category = "Content", Icon = "fas fa-paragraph", Width = EditorWidth.Centered)]
 public class HtmlFeaturedBlock : HtmlBlock
 {
     [Field(Title = "Background Color", Description = "Select website theme color")]
