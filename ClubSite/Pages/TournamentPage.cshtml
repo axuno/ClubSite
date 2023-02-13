@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @inject IAuthorizationService Auth
 @model ClubSite.Pages.TournamentPageModel
 @{
@@ -60,83 +61,84 @@
 </header>
 <div class="mx-3 pt-2">
     <div class="mb-4">
+        <partial name="_RegistrationSuccessPartial" />
         <table id="tournament-description" class="table table-responsive table-striped table-bordered rounded shadow">
             <tbody>
-                <tr>
-                    <th>
-                        Datum:
-                    </th>
-                    <td>
-                        <b>@GetTournamentDates()</b>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Uhrzeit:
-                    </th>
-                    <td>
-                        @Html.Raw(definition.TimeFromTo.Value)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Besetzung:
-                    </th>
-                    <td>
-                        @Html.Raw(definition.TeamComposition.Value)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Anz. Teams:
-                    </th>
-                    <td>
-                        @Html.Raw(definition.NumberOfTeams.Value)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Startgeld:
-                    </th>
-                    <td>
-                        @Html.Raw(definition.EntryFee.Value)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Adresse:
-                    </th>
-                    <td>
-                        @Html.Raw(definition.Address.Value)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        Infos:
-                    </th>
-                    <td>
-                        @Html.Raw(definition.Infos.Value)
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <div class="pe-3">Anmeldefrist:</div>
-                    </th>
-                    <td>
-                        @if (definition.IsOver(DateTime.Now))
+            <tr>
+                <th>
+                    Datum:
+                </th>
+                <td>
+                    <b>@GetTournamentDates()</b>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Uhrzeit:
+                </th>
+                <td>
+                    @Html.Raw(definition.TimeFromTo.Value)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Besetzung:
+                </th>
+                <td>
+                    @Html.Raw(definition.TeamComposition.Value)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Anz. Teams:
+                </th>
+                <td>
+                    @Html.Raw(definition.NumberOfTeams.Value)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Startgeld:
+                </th>
+                <td>
+                    @Html.Raw(definition.EntryFee.Value)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Adresse:
+                </th>
+                <td>
+                    @Html.Raw(definition.Address.Value)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Infos:
+                </th>
+                <td>
+                    @Html.Raw(definition.Infos.Value)
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <div class="pe-3">Anmeldefrist:</div>
+                </th>
+                <td>
+                    @if (definition.IsOver(DateTime.Now))
+                    {
+                        <text>Ist abgelaufen</text>
+                    }
+                    else if (definition.IsRegistrationPeriodSet())
+                    {
+                        <div>@Html.Raw(definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(definition.RegistrationDeadline.Value?.ToShortDateString())</div>
+                        if (definition.IsRegistrationAllowed(DateTime.Now))
                         {
-                            <text>Ist abgelaufen</text>
+                            <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
                         }
-                        else if (definition.IsRegistrationPeriodSet())
-                        {
-                            <div>@Html.Raw(definition.RegistrationStart.Value?.ToShortDateString()) <text> bis </text> @Html.Raw(definition.RegistrationDeadline.Value?.ToShortDateString())</div>
-                            if (definition.IsRegistrationAllowed(DateTime.Now))
-                            {
-                                <div class="my-2"><a asp-page="/TournamentRegistration" asp-route-dateticks="@definition.DateFrom.Value!.Value.Date.Ticks" class="btn btn-lg btn-primary">Jetzt anmelden</a></div>
-                            }
-                        }
-                    </td>
-                </tr>
+                    }
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

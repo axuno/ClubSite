@@ -54,21 +54,16 @@ public class TournamentRegistrationModel : PageModel
         Registration = new TournamentRegistration();
     }
 
-    public static TournamentPage? GetTournamentPage(IApi api)
+    public static async Task<TournamentPage?> GetTournamentPage(IApi api)
     {
-        // Call async method from sync context - we need the permalink to the TournamentPage
-        return new TaskFactory(CancellationToken.None,
-                TaskCreationOptions.None,
-                TaskContinuationOptions.None,
-                TaskScheduler.Default)
-            .StartNew(() => api.Pages.GetAllAsync<TournamentPage>())
-            .Unwrap().ConfigureAwait(false).GetAwaiter()
-            .GetResult().FirstOrDefault();
+        var tournaments = await api.Pages.GetAllAsync<TournamentPage>();
+        return tournaments.FirstOrDefault();
     }
 
     public async Task<TournamentPage?> GetTournamentPageAsync()
     {
-        return (await _api.Pages.GetAllAsync<TournamentPage>().ConfigureAwait(false)).FirstOrDefault();
+        var tp = await _api.Pages.GetAllAsync<TournamentPage>();
+        return tp.FirstOrDefault();
     }
 
     [BindProperty]
@@ -98,20 +93,22 @@ public class TournamentRegistrationModel : PageModel
         var isAuthenticated = (await _authorizationService.AuthorizeAsync(User, Piranha.Manager.Permission.Pages))
             .Succeeded;
 
-        // Redirect to the default TournamentPage
-        if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
-        {
-            return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
-        }
-
         try
         {
             await SetupModel(dateTicks, registrationId);
+            
+            // Redirect to the default TournamentPage
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
+            {
+                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
+            }
+
+            // Return entry form
             return Page();
         }
         catch (Exception e)
         {
-            _logger.LogCritical("Error setting up the model for date {new DateOnly(dateTicks)}", e);
+            _logger.LogCritical(e, "Error setting up the model for date {DateTicks}", new DateTime(dateTicks));
             return NotFound();
         }
     }
@@ -121,16 +118,16 @@ public class TournamentRegistrationModel : PageModel
         var isAuthenticated = (await _authorizationService.AuthorizeAsync(User, Piranha.Manager.Permission.Pages))
             .Succeeded;
 
-        // Redirect to the default TournamentPage
-        if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
-        {
-            return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
-        }
-
         try
         {
             // Model must always be set up
             await SetupModel(TournamentDate, Registration.RegistrationId);
+
+            // Redirect to the default TournamentPage
+            if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
+            {
+                return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");
+            }
         }
         catch (Exception e)
         {
@@ -185,23 +182,25 @@ public class TournamentRegistrationModel : PageModel
                     $"Anmeldung zum Turnier am {TournamentPage.TournamentDefinition.DateFrom.Value!.Value.ToShortDateString()}",
                     GetConfirmationMessage(), cancellationToken);
             }
-                
-            // Todo: Add notification for successful saving on TournamentPage
+
+            Registration.Success = true;
+            TempData.Put<TournamentRegistration>(nameof(TournamentRegistration), Registration);
         }
         catch (Exception e)
         {
-            _logger.LogCritical("Error saving the tournament registration", e);
-            // Todo: Add notification for failure of saving on TournamentPage
+            _logger.LogCritical(e, "Error saving the tournament registration. {Registration}", GetConfirmationMessage());
+            Registration.Success = false;
+            TempData.Put<TournamentRegistration>(nameof(TournamentRegistration), Registration);
         }
             
         // Redirect to the default TournamentPage
         return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");         
     }
 
-    private async Task SetupModel(long date, Guid? registrationId)
+    private async Task SetupModel(long dateTicks, Guid? registrationId)
     {
         // Create date from ticks
-        var tournamentDate = new DateTime(date).Date;
+        var tournamentDate = new DateTime(dateTicks).Date;
             
         // Get the TournamentPage containing the definition for the given date
         TournamentPage = (await _api.Pages.GetAllAsync<TournamentPage>()
@@ -214,7 +213,7 @@ public class TournamentRegistrationModel : PageModel
 
         if (definition == null || definition.DateFrom == null || !definition.DateFrom.Value.HasValue || !definition.NumberOfTeams.Value.HasValue)
         {
-            throw new Exception($"Tournament definition has no '{nameof(definition.DateFrom)}' defined. {nameof(TournamentRegistrationModel)} cannot be created.");
+            throw new InvalidOperationException($"Tournament definition has no '{nameof(definition.DateFrom)}' defined. {nameof(TournamentRegistrationModel)} cannot be created.");
         }
 
         AllRegistrations = (await _clubDbContext.TournamentRegistration?
@@ -235,13 +234,13 @@ public class TournamentRegistrationModel : PageModel
         
     private string GetConfirmationMessage()
     {
-        var definition = TournamentPage!.TournamentDefinition;
+        var definition = TournamentPage.TournamentDefinition;
         return
             $@"Eingangsbestätigung der Turnieranmeldung {(Registration.IsStandByRegistration ? "\n(als möglicher \"Nachrücker\")" : "")}
 {definition.Name.Value}
 {new string('=', definition.Name.Value.Length)}
 
-Datum:       {definition.DateFrom.Value!.Value.ToLongDateString()}
+Datum:       {definition.DateFrom.Value?.ToLongDateString()}
 Adresse:     {definition.Address.Value}
 Startgebühr: {definition.EntryFee.Value}
 

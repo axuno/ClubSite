@@ -79,6 +79,13 @@ public class TournamentRegistration
     [Column(TypeName = "datetime")] public DateTime? CreatedOn { get; set; }
     [Column(TypeName = "datetime")] public DateTime? ModifiedOn { get; set; }
 
+    /// <summary>
+    /// <see langword="true"/> if registration was successful.
+    /// This field is not part of the database table.
+    /// </summary>
+    [NotMapped]
+    public bool Success { get; set; } = false;
+
     public string GetTeamNameWithClub()
     {
         return string.Join(' ', (TeamName ?? string.Empty).Trim(),

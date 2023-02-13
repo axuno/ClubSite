@@ -1,0 +1,27 @@
+﻿@using ClubSite.Data.Poco
+@{
+    // Check whether the tournament registration form put data to TempData
+    var registration = TempData.Get<TournamentRegistration>(nameof(TournamentRegistration));
+    //registration = new TournamentRegistration() { TeamName = "The club name", Success = true };
+}
+@{
+    // No data from registration form
+    if (registration != null)
+    {
+        if (registration.Success)
+        {
+            <div class="alert alert-success" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill" /></svg>
+                    <strong>Die Anmeldung für das Team &quot;@(registration.TeamName)&quot; war erfolgreich. Vielen Dank!</strong>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill" /></svg>
+                Bei der Anmeldung ist leider ein Fehler aufgetreten. Bitte später noch einmal versuchen.
+            </div>
+        }
+    }
+}
+<partial name="_BootstrapAlertIconsPartial" />
