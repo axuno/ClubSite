@@ -5,11 +5,14 @@
 
 using System;
 using System.IO;
-using Microsoft.AspNetCore;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using NLog.Web;
 
 namespace ClubSite;
@@ -22,7 +25,7 @@ public class Program
     /// </summary>
     public const string ConfigurationFolder = "Configuration";
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         // NLog: setup the logger first to catch all errors
         var currentDir = Directory.GetCurrentDirectory();
@@ -31,15 +34,32 @@ public class Program
             .GetCurrentClassLogger();
 
         // Allows for <target name="file" xsi:type="File" fileName = "${var:logDirectory}logfile.log"... >
-        NLog.LogManager.Configuration.Variables["logDirectory"] = currentDir + Path.DirectorySeparatorChar;
+        NLog.LogManager.Configuration.Variables["logDirectory"] = $"{currentDir}{Path.DirectorySeparatorChar}";
 
         try
         {
-            logger.Trace($"Configuration of {nameof(WebHost)} starting.");
-            // http://zuga.net/articles/cs-how-to-determine-if-a-program-process-or-file-is-32-bit-or-64-bit/
-            logger.Info($"This app runs as {(System.Environment.Is64BitProcess ? "64-bit" : "32-bit")} process.\n\n");
+            logger.Trace($"Configuration of {nameof(Microsoft.AspNetCore.WebHost)} starting.");
+            logger.Info($"This app runs as {(Environment.Is64BitProcess ? "64-bit" : "32-bit")} process.\n\n");
                 
-            CreateHostBuilder(args).Build().Run();
+            var builder = SetupBuilder(args);
+
+            var loggingConfig = builder.Configuration.GetSection("Logging");
+            builder.Logging.ClearProviders();
+            // Enable NLog as logging provider for Microsoft.Extension.Logging
+            builder.Logging.AddNLog(loggingConfig);
+            NLogBuilder.ConfigureNLog(Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
+                $"NLog.{builder.Environment.EnvironmentName}.config"));
+
+            builder.WebHost.ConfigureServices(WebAppStartup.ConfigureServices);
+
+            var app = builder.Build();
+
+            builder.WebHost.ConfigureAppConfiguration((context, confBuilder) =>
+            {
+                WebAppStartup.Configure(app, app.Services.GetRequiredService<ILoggerFactory>());
+            });
+            
+            await app.RunAsync();
         }
         catch (Exception e)
         {
@@ -48,52 +68,45 @@ public class Program
         }
         finally
         {
-            // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+            // Ensure to flush and stop internal timers/threads before application-exit (avoid segmentation fault on Linux)
             NLog.LogManager.Shutdown();
         }
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args)
+    public static WebApplicationBuilder SetupBuilder(string[] args)
     {
-        return Host.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((hostingContext, config) =>
-            {
-                var configPath = Path.Combine(hostingContext.HostingEnvironment.ContentRootPath,
-                    ConfigurationFolder);
-                config.SetBasePath(configPath)
-                    .AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", true,
-                        true)
-                    .AddJsonFile(@"credentials.json", false, true)
-                    .AddJsonFile($"credentials.{hostingContext.HostingEnvironment.EnvironmentName}.json", false,
-                        true)
-                    .AddEnvironmentVariables()
-                    .AddCommandLine(args);
+        var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+        {
+            Args = args,
+            ApplicationName = typeof(Program).Assembly.GetName().Name, // don't use Assembly.Fullname
+            ContentRootPath = Directory.GetCurrentDirectory(),
+            WebRootPath = "wwwroot"
+        });
+    
+        var absoluteConfigurationPath = Path.Combine(builder.Environment.ContentRootPath,
+            ConfigurationFolder);
 
-                var secretsFolder = Path.Combine(configPath, @$"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Secrets");
-                if (hostingContext.HostingEnvironment.IsDevelopment())
-                {
-                    if (!Directory.Exists(secretsFolder))
-                        throw new DirectoryNotFoundException("Secrets folder not found");
-                    config.AddJsonFile(Path.Combine(secretsFolder, @"credentials.json"), false);
-                    config.AddJsonFile(
-                        Path.Combine(secretsFolder,
-                            $"credentials.{hostingContext.HostingEnvironment.EnvironmentName}.json"), false);
-                }
+        builder.Configuration.SetBasePath(absoluteConfigurationPath)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json",
+                optional: true, reloadOnChange: true)
+            .AddJsonFile(@"credentials.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"credentials.{builder.Environment.EnvironmentName}.json",
+                optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .AddCommandLine(args);
 
-                NLogBuilder.ConfigureNLog(Path.Combine(configPath,
-                    $"NLog.{hostingContext.HostingEnvironment.EnvironmentName}.config"));
-            })
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            })
-            .ConfigureLogging((hostingContext, logging) =>
-            {
-                logging.ClearProviders();
-                // Note: This logging configuration overrides any call to SetMinimumLevel!
-                logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-            })
-            .UseNLog(); // NLog: Setup NLog for dependency injection;
+        if (builder.Environment.IsDevelopment())
+        {
+            var secretsFolder = Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder, @$"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Secrets");
+            if (!Directory.Exists(secretsFolder)) throw new DirectoryNotFoundException("Secrets folder not found");
+            builder.Configuration.AddJsonFile(Path.Combine(secretsFolder, @"credentials.json"), false);
+            builder.Configuration.AddJsonFile(Path.Combine(secretsFolder, $"credentials.{builder.Environment.EnvironmentName}.json"), false);
+        }
+
+        // Use static web assets from League (and other referenced projects or packages)
+        builder.WebHost.UseStaticWebAssets();
+
+        return builder;
     }
 }
