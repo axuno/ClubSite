@@ -190,10 +190,12 @@ public static class WebAppStartup
         {
             // Initialize Piranha
             App.Init(options.Api);
+            // Allow SVG files to be uploaded in manager
+            App.MediaTypes.Images.Add(".svg", "image/svg+xml", false);
             options.UseManager();
             options.UseTinyMCE();
             options.UseIdentity();
-
+            
             // Build all content types in this assembly
             _ = new ContentTypeBuilder(options.Api)
                 .AddAssembly(typeof(Program).Assembly)
