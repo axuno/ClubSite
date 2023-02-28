@@ -95,7 +95,10 @@ public class TournamentRegistrationModel : PageModel
 
         try
         {
-            await SetupModel(dateTicks, registrationId);
+            if (!await TrySetupModel(dateTicks, registrationId))
+            {
+                return NotFound();
+            }
             
             // Redirect to the default TournamentPage
             if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
@@ -121,7 +124,10 @@ public class TournamentRegistrationModel : PageModel
         try
         {
             // Model must always be set up
-            await SetupModel(TournamentDate, Registration.RegistrationId);
+            if (!await TrySetupModel(TournamentDate, Registration.RegistrationId))
+            {
+                return NotFound();
+            }
 
             // Redirect to the default TournamentPage
             if (TournamentPage.TournamentDefinition.IsOver(DateTime.Now) && !isAuthenticated)
@@ -131,7 +137,7 @@ public class TournamentRegistrationModel : PageModel
         }
         catch (Exception e)
         {
-            _logger.LogCritical("Error setting up the model for date {new DateOnly(TournamentDate)}", e);
+            _logger.LogCritical(e,"Error setting up the model for date {TournamentDate}", new DateTime(TournamentDate));
             return NotFound();
         }
             
@@ -197,17 +203,20 @@ public class TournamentRegistrationModel : PageModel
         return Redirect((await GetTournamentPageAsync())?.Permalink ?? "/");         
     }
 
-    private async Task SetupModel(long dateTicks, Guid? registrationId)
+    private async Task<bool> TrySetupModel(long dateTicks, Guid? registrationId)
     {
         // Create date from ticks
         var tournamentDate = new DateTime(dateTicks).Date;
             
         // Get the TournamentPage containing the definition for the given date
-        TournamentPage = (await _api.Pages.GetAllAsync<TournamentPage>()
-                             .ConfigureAwait(false)).FirstOrDefault(p =>
-                             p.TournamentDefinition.DateFrom.Value.HasValue &&
-                             p.TournamentDefinition.DateFrom.Value.Value.Date.Equals(tournamentDate)) ??
-                         throw new Exception($"{nameof(Models.TournamentPage)} for date '{tournamentDate}' not found");
+        var tournament = (await _api.Pages.GetAllAsync<TournamentPage>()
+            .ConfigureAwait(false)).FirstOrDefault(p =>
+            p.TournamentDefinition.DateFrom.Value.HasValue &&
+            p.TournamentDefinition.DateFrom.Value.Value.Date.Equals(tournamentDate));
+
+        if (tournament == null) return false;
+
+        TournamentPage = tournament;
             
         var definition = TournamentPage.TournamentDefinition;
 
@@ -230,6 +239,8 @@ public class TournamentRegistrationModel : PageModel
                 AllRegistrations.FirstOrDefault(r => r.RegistrationId.Equals(registrationId)) ??
                 new TournamentRegistration();
         }
+
+        return true;
     }
         
     private string GetConfirmationMessage()
