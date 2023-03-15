@@ -95,6 +95,8 @@ public class ContactPageModel : SinglePage<Models.ContactPage>
             
         if (Captcha != HttpContext.Session.GetString(CaptchaSvgGenerator.CaptchaSessionKeyName) && !string.IsNullOrEmpty(Captcha))
             ModelState.AddModelError(nameof(Captcha), "Ergebnis der Rechenaufgabe ist nicht korrekt");
+        if(!EmailValidator.IsValid(Email))
+            ModelState.AddModelError($"{nameof(Email)}", $"'{nameof(Email)}' enthält keine gültige E-Mail Adresse");
 
         if (!ModelState.IsValid) return Page();
 

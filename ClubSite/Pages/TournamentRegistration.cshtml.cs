@@ -147,6 +147,8 @@ public class TournamentRegistrationModel : PageModel
         ModelState.Clear();
             
         await TryUpdateModelAsync(new {Registration});
+        if(!EmailValidator.IsValid(Registration.Email))
+            ModelState.AddModelError($"{nameof(Registration)}.{nameof(Registration.Email)}", $"'{nameof(Registration.Email)}' enthält keine gültige E-Mail Adresse");
         if (Captcha != HttpContext.Session.GetString(CaptchaSvgGenerator.CaptchaSessionKeyName) &&
             !string.IsNullOrEmpty(Captcha))
             ModelState.AddModelError(nameof(Captcha), "Ergebnis der Rechenaufgabe war nicht korrekt");
@@ -167,6 +169,11 @@ public class TournamentRegistrationModel : PageModel
             if (isNewRegistration)
             {
                 // New record
+                Registration.Email = Registration.Email?.Trim();
+                Registration.FirstName = Registration.FirstName?.Trim();
+                Registration.LastName = Registration.LastName?.Trim();
+                Registration.TeamName = Registration.TeamName?.Trim();
+                Registration.ClubName = Registration.ClubName?.Trim();
                 Registration.RegistrationId = Guid.NewGuid();
                 Registration.CreatedOn = Registration.ModifiedOn = Registration.RegisteredOn = now;
                 Registration.TournamentDate = new DateTime(TournamentDate);
