@@ -12,8 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
-using NLog.Web;
+
 
 namespace ClubSite;
 
@@ -29,12 +30,13 @@ public class Program
     {
         // NLog: setup the logger first to catch all errors
         var currentDir = Directory.GetCurrentDirectory();
-        var logger = NLogBuilder
-            .ConfigureNLog($@"{currentDir}{Path.DirectorySeparatorChar}{ConfigurationFolder}{Path.DirectorySeparatorChar}NLog.Internal.config")
+
+        var logger = LogManager.Setup()
+            .LoadConfigurationFromFile($"{currentDir}{Path.DirectorySeparatorChar}{ConfigurationFolder}{Path.DirectorySeparatorChar}NLog.Internal.config")
             .GetCurrentClassLogger();
 
         // Allows for <target name="file" xsi:type="File" fileName = "${var:logDirectory}logfile.log"... >
-        NLog.LogManager.Configuration.Variables["logDirectory"] = $"{currentDir}{Path.DirectorySeparatorChar}";
+        LogManager.Configuration.Variables["logDirectory"] = $"{currentDir}{Path.DirectorySeparatorChar}";
 
         try
         {
@@ -47,9 +49,10 @@ public class Program
             builder.Logging.ClearProviders();
             // Enable NLog as logging provider for Microsoft.Extension.Logging
             builder.Logging.AddNLog(loggingConfig);
-            NLogBuilder.ConfigureNLog(Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
-                $"NLog.{builder.Environment.EnvironmentName}.config"));
-
+            LogManager.Setup()
+                .LoadConfigurationFromFile(Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
+                    $"NLog.{builder.Environment.EnvironmentName}.config"));
+            
             builder.WebHost.ConfigureServices(WebAppStartup.ConfigureServices);
 
             var app = builder.Build();
