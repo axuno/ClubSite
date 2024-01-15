@@ -85,20 +85,36 @@ public class MailService : IMailService
     public async Task SendTournamentRegistrationEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
         CancellationToken cancellationToken)
     {
-        var message = new MimeMessage();
-        message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
-        message.ReplyTo.Add(new MailboxAddress(fromName, fromEmail));
-        message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
+        // First send to the club
+
+        var clubMessage = new MimeMessage();
+        clubMessage.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
+        clubMessage.ReplyTo.Add(new MailboxAddress(fromName, fromEmail));
+        clubMessage.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
             
         foreach (var mailAddress in Settings.Message.ContactFormTo)
-            message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
+            clubMessage.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
 
-        message.Subject = subject;
-        message.Body = new TextPart(TextFormat.Text) {
+        clubMessage.Subject = subject;
+        clubMessage.Body = new TextPart(TextFormat.Text) {
             Text = plainBody
         };
 
-        await SendEmailAsync(message, cancellationToken);
+        await SendEmailAsync(clubMessage, cancellationToken);
+
+        // Then send to the registrant
+
+        var regMessage = new MimeMessage();
+        regMessage.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
+        regMessage.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
+        regMessage.To.Add(new MailboxAddress(fromName, fromEmail));
+
+        regMessage.Subject = subject;
+        regMessage.Body = new TextPart(TextFormat.Text) {
+            Text = plainBody
+        };
+
+        await SendEmailAsync(regMessage, cancellationToken);
     }
 
     public async Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken)
