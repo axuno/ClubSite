@@ -25,26 +25,25 @@ using Microsoft.Net.Http.Headers;
 using Piranha.AttributeBuilder;
 using Piranha.Manager.Editor;
 using Piranha;
-using Piranha.AspNetCore.Models;
 
 namespace ClubSite;
 
 /// <summary>
-/// The demo startup class to setup and configure the league.
+/// The startup class to set up and configure the ClubSite.
 /// </summary>
 public static class WebAppStartup
 {
     /// <summary>
     /// The method gets called by <see cref="Program"/> at startup, BEFORE building the app is completed.
     /// </summary>
-    public static void ConfigureServices(WebHostBuilderContext context, IServiceCollection services)
+    public static void ConfigureServices(IWebHostEnvironment context, IConfigurationManager configuration, IServiceCollection services)
     {
         // required for cookies and session cookies (will throw CryptographicException without)
         services.AddDataProtection()
-            .SetApplicationName(context.HostingEnvironment.ApplicationName)
+            .SetApplicationName(context.ApplicationName)
             .SetDefaultKeyLifetime(TimeSpan.FromDays(360))
             .PersistKeysToFileSystem(
-                new DirectoryInfo(Path.Combine(context.HostingEnvironment.ContentRootPath, "DataProtectionKeys")))
+                new DirectoryInfo(Path.Combine(context.ContentRootPath, "DataProtectionKeys")))
             .UseCryptographicAlgorithms(new AuthenticatedEncryptorConfiguration() {
                 EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
                 ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
@@ -54,12 +53,12 @@ public static class WebAppStartup
 
         // Custom ClubSite db context
         services.AddDbContext<Data.ClubDbContext>((sp, options) =>
-            options.UseSqlServer(context.Configuration.GetConnectionString("VolleyballClub")));
+            options.UseSqlServer(configuration.GetConnectionString("VolleyballClub")));
 
         // Piranha service setup
         services.AddPiranha(svcBuilder =>
         {
-            svcBuilder.AddRazorRuntimeCompilation = context.HostingEnvironment.IsDevelopment();
+            svcBuilder.AddRazorRuntimeCompilation = context.IsDevelopment();
 
             svcBuilder.UseCms();
             svcBuilder.UseFileStorage(naming: Piranha.Local.FileStorageNaming.UniqueFolderNames);
@@ -68,9 +67,9 @@ public static class WebAppStartup
             svcBuilder.UseTinyMCE();
             svcBuilder.UseMemoryCache();
             svcBuilder.UseEF<SQLServerDb>(db =>
-                db.UseSqlServer(context.Configuration.GetConnectionString("VolleyballClub")));
+                db.UseSqlServer(configuration.GetConnectionString("VolleyballClub")));
             svcBuilder.UseIdentityWithSeed<IdentitySQLServerDb>(db =>
-                db.UseSqlServer(context.Configuration.GetConnectionString("VolleyballClub")));
+                db.UseSqlServer(configuration.GetConnectionString("VolleyballClub")));
         });
             
         // MUST be before AddMvc!
@@ -102,7 +101,7 @@ public static class WebAppStartup
         });
 
         services.Configure<ConfigurationPoco.MailSettings>(
-            context.Configuration.GetSection(nameof(ConfigurationPoco.MailSettings)) ??
+            configuration.GetSection(nameof(ConfigurationPoco.MailSettings)) ??
             throw new InvalidOperationException(
                 $"Configuration section '{nameof(ConfigurationPoco.MailSettings)}' not found."));
 

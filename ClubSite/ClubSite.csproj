@@ -1,75 +1,65 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
-        <Version>3.6.0</Version>
-        <Authors>axuno gGmbH</Authors>
-        <Description>The source code for https://www.volleyballclub.de/</Description>
-        <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
-        <Copyright>Copyright 2020-$(CurrentYear) axuno gGmbH and Contributors</Copyright>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <!-- With dotnet, add parameter: -p:SatelliteResourceLanguages="""en;de""" -->
-        <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Azure.Identity" Version="1.10.4" />
-        <PackageReference Include="EPPlus" Version="7.0.5" />
-        <PackageReference Include="MailKit" Version="4.3.0" />
-        <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.3" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.14" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.14">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
-        <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.8" />
-        <PackageReference Include="Piranha" Version="10.4.0" />
-        <PackageReference Include="Piranha.AspNetCore" Version="10.4.0" />
-        <PackageReference Include="Piranha.AspNetCore.Identity" Version="10.4.0" />
-        <PackageReference Include="Piranha.AspNetCore.Identity.SQLServer" Version="10.4.0" />
-        <PackageReference Include="Piranha.AspNetCore.SimpleSecurity" Version="10.4.0" />
-        <PackageReference Include="Piranha.AttributeBuilder" Version="10.4.0" />
-        <PackageReference Include="Piranha.Data.EF.SQLServer" Version="10.4.0" />
-        <PackageReference Include="Piranha.ImageSharp" Version="10.4.0" />
-        <PackageReference Include="Piranha.Local.FileStorage" Version="10.4.0" />
-        <PackageReference Include="Piranha.Manager" Version="10.4.0" />
-        <PackageReference Include="Piranha.Manager.TinyMCE" Version="10.4.0" />
-        <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Resources\StatusCodes.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>StatusCodes.resx</DependentUpon>
-        </Compile>
-        <Compile Update="Resources\StatusDescriptions.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>StatusDescriptions.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-        <EmbeddedResource Update="Resources\StatusCodes.resx">
-            <Generator>PublicResXFileCodeGenerator</Generator>
-            <LastGenOutput>StatusCodes.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-        <EmbeddedResource Update="Resources\StatusDescriptions.resx">
-            <Generator>PublicResXFileCodeGenerator</Generator>
-            <LastGenOutput>StatusDescriptions.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="app_offline_.htm">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Version>4.0.0</Version>
+    <Authors>axuno gGmbH</Authors>
+    <Description>The source code for https://www.volleyballclub.de/</Description>
+    <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
+    <Copyright>Copyright 2020-$(CurrentYear) axuno gGmbH and Contributors</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!-- With dotnet, add parameter: -p:SatelliteResourceLanguages="""en;de""" -->
+    <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.10.4" />
+    <PackageReference Include="EPPlus" Version="7.0.10" />
+    <PackageReference Include="MailKit" Version="4.4.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.8" />
+    <PackageReference Include="Piranha" Version="11.0.0" />
+    <PackageReference Include="Piranha.AspNetCore" Version="11.0.0" />
+    <PackageReference Include="Piranha.AspNetCore.Identity" Version="11.0.0" />
+    <PackageReference Include="Piranha.AspNetCore.Identity.SQLServer" Version="11.0.0" />
+    <PackageReference Include="Piranha.AspNetCore.SimpleSecurity" Version="10.4.0" />
+    <PackageReference Include="Piranha.AttributeBuilder" Version="11.0.0" />
+    <PackageReference Include="Piranha.Data.EF.SQLServer" Version="11.0.0" />
+    <PackageReference Include="Piranha.ImageSharp" Version="11.0.0" />
+    <PackageReference Include="Piranha.Local.FileStorage" Version="11.0.0" />
+    <PackageReference Include="Piranha.Manager" Version="11.0.0" />
+    <PackageReference Include="Piranha.Manager.TinyMCE" Version="11.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\StatusCodes.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StatusCodes.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\StatusDescriptions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StatusDescriptions.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\StatusCodes.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StatusCodes.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StatusDescriptions.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>StatusDescriptions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="app_offline_.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

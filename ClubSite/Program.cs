@@ -53,14 +53,10 @@ public class Program
                 .LoadConfigurationFromFile(Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
                     $"NLog.{builder.Environment.EnvironmentName}.config"));
             
-            builder.WebHost.ConfigureServices(WebAppStartup.ConfigureServices);
+            WebAppStartup.ConfigureServices(builder.Environment, builder.Configuration, builder.Services);
 
             var app = builder.Build();
-
-            builder.WebHost.ConfigureAppConfiguration((context, confBuilder) =>
-            {
-                WebAppStartup.Configure(app, app.Services.GetRequiredService<ILoggerFactory>());
-            });
+            WebAppStartup.Configure(app, app.Services.GetRequiredService<ILoggerFactory>());
             
             await app.RunAsync();
         }
