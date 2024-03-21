@@ -17,7 +17,7 @@ namespace ClubSite.Controllers;
 [Route("captcha")]
 public class Captcha : Controller
 {
-    async public Task<IActionResult> Index()
+    public async Task<IActionResult> Index()
     {
         return await GetSvgContent();
     }
@@ -32,13 +32,14 @@ public class Captcha : Controller
 
         // Change the response headers to output an un-cached image.
         HttpContext.Response.Clear();
-        HttpContext.Response.Headers.Add("Expires", DateTime.UtcNow.Date.AddDays(-1).ToString("R"));
-        HttpContext.Response.Headers.Add("Cache-Control", "no-store, no-cache, must-revalidate");
-        HttpContext.Response.Headers.Add("Pragma", "no-cache");
+        // Don't use Headers.Add() here, as it will add multiple headers of the same type.
+        HttpContext.Response.Headers.Append("Expires", DateTime.UtcNow.Date.AddDays(-1).ToString("R"));
+        HttpContext.Response.Headers.Append("Cache-Control", "no-store, no-cache, must-revalidate");
+        HttpContext.Response.Headers.Append("Pragma", "no-cache");
 
         HttpContext.Response.ContentType = "image/svg+xml";
         return Task.FromResult(Content(ci.Image));
     }
 
-    private string CaptchaSessionKeyName => Library.CaptchaSvgGenerator.CaptchaSessionKeyName;
+    private static string CaptchaSessionKeyName => Library.CaptchaSvgGenerator.CaptchaSessionKeyName;
 }

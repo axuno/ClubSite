@@ -38,9 +38,7 @@
     <partial name="_Footer.cshtml" />
 </div>
 @if (!Env.IsDevelopment()) { <partial name="_GoogleAnalytics.cshtml"/> }
-@* SRI Hash Generator: https://www.srihash.org/ *@
-<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha384-Qg00WFl9r0Xr6rUqNLv1ffTSSKEFFCDCKVyHZ+sVt8KuvG99nWw5RNvbhuKgif9z" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="~/assets/js/bootstrap/bootstrap.bundle.min.js" asp-append-version="true"></script>
 @await RenderSectionAsync("script", false)
 </body>
 </html>

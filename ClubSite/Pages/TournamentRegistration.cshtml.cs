@@ -279,7 +279,7 @@ Vielen Dank!
 Volleyballclub Neusäß e.V.
 
 
-Browser: {(Request.Headers.ContainsKey(HeaderNames.UserAgent) ? Request.Headers[HeaderNames.UserAgent].ToString() : "unbekannt")}
+Browser: {(Request.Headers.TryGetValue(HeaderNames.UserAgent, out var value) ? value.ToString() : "unbekannt")}
 IP-Adresse: {HttpContext.Connection.RemoteIpAddress}
 ";
     }
