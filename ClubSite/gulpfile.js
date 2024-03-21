@@ -36,6 +36,8 @@ gulp.task("min",
             .pipe(gulp.dest("wwwroot/assets/fonts/lato/"));  
         gulp.src("assets/fonts/raleway/*.woff2")
             .pipe(gulp.dest("wwwroot/assets/fonts/raleway/"));
+        gulp.src("node_modules/bootstrap/dist/js/bootstrap.bundle.min.js")
+            .pipe(gulp.dest("wwwroot/assets/js/bootstrap/"));
         done();
     });
 
