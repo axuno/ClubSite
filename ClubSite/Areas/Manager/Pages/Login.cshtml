@@ -1,10 +1,13 @@
 ﻿@page "~/manager/login"
+@using ClubSite
 @model Piranha.Manager.LocalAuth.Areas.Manager.Pages.LoginModel
 @inject ManagerLocalizer Localizer
 @{
     Layout = null;
     var module = Piranha.App.Modules.Get<Module>();
     var preRelease = Piranha.Utils.IsPreRelease(typeof(Module).Assembly) ? "pre-release" : "";
+
+    var webAppInfo = new ClubSite.Library.AssemblyInfo(typeof(WebAppStartup));
 }
 <!doctype html>
 <html lang="en" style="min-height:100%">
@@ -49,7 +52,7 @@
                     </div>
                     <div class="form-group">
                         <label for="password" class="col-form-label col-form-label-lg">@Localizer.General["Password"]</label>
-                        <input name="password" required type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Password"].Value.ToLower()">
+                        <input id="password" name="password" required type="password" class="form-control form-control-lg text-center" placeholder="@Localizer.General["Password"].Value.ToLower()">
                     </div>
                     <button class="btn btn-lg btn-block btn-primary" type="submit">
                         <i class="fas fa-check"></i>
@@ -57,13 +60,13 @@
                 </div>
             </div>
         </form>
-        <div class="text-center" style="margin-top: 3rem">
-            <p style="text-transform: none; font-size: 1rem; margin-top: 0; color: gray"><a href="https://github.com/axuno/ClubSite" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno ClubSite, @Localizer.General["Version"] @Piranha.Utils.GetAssemblyVersion(typeof(ClubSite.Program).Assembly)</a></p>
-            <small style="text-transform: none; font-size: 0.8rem; margin-top: 0; color: gray">
-                Design und Realisierung:<br/>
-                Norbert Bietsch, <a href="https://axuno.net/" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno gemeinnützige GmbH</a>
-            </small>
-        </div>
+    </div>
+    <div class="text-center" style="margin-top: 3rem">
+        <p style="text-transform: none; font-size: 1rem; margin-top: 0; color: gray"><a href="https://github.com/axuno/ClubSite" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno ClubSite, @Localizer.General["Version"] v@(webAppInfo.Version?[..13])</a></p>
+        <small style="text-transform: none; font-size: 0.8rem; margin-top: 0; color: gray">
+            Design und Realisierung:<br/>
+            Norbert Bietsch, <a href="https://axuno.net/" target="_blank" style="color: gray" onmouseover="this.style.color = 'gray'" onmouseout="this.style.color = 'gray'">axuno gemeinnützige GmbH</a>
+        </small>
     </div>
     <script>
         (function () {

@@ -4,21 +4,20 @@
 // https://github.com/axuno/ClubSite
 //
 
-namespace ClubSite.Library
+namespace ClubSite.Library;
+
+public static class EmailValidator
 {
-    public static class EmailValidator
+    public static bool IsValid(string? email)
     {
-        public static bool IsValid(string? email)
+        try
         {
-            try
-            {
-                _ = new MimeKit.MailboxAddress(email, email);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            _ = new MimeKit.MailboxAddress(email, email);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 }
