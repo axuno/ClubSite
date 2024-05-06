@@ -1,5 +1,5 @@
 ﻿<footer class="mb-2">
-    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
         <ul class="navbar-nav mx-auto">
             @foreach (var item in WebApp.Site.Sitemap.Where(i => i.IsHidden && i.MenuTitle.Contains("Fusszeile", StringComparison.InvariantCultureIgnoreCase)))
             {
