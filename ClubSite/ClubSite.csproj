@@ -16,24 +16,24 @@
     <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.11.4" />
-    <PackageReference Include="EPPlus" Version="7.1.2" />
-    <PackageReference Include="MailKit" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.10" />
-    <PackageReference Include="Piranha" Version="11.0.0" />
-    <PackageReference Include="Piranha.AspNetCore" Version="11.0.0" />
-    <PackageReference Include="Piranha.AspNetCore.Identity" Version="11.0.0" />
-    <PackageReference Include="Piranha.AspNetCore.Identity.SQLServer" Version="11.0.0" />
+    <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="EPPlus" Version="7.2.0" />
+    <PackageReference Include="MailKit" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
+    <PackageReference Include="Piranha" Version="11.1.0" />
+    <PackageReference Include="Piranha.AspNetCore" Version="11.1.0" />
+    <PackageReference Include="Piranha.AspNetCore.Identity" Version="11.1.0" />
+    <PackageReference Include="Piranha.AspNetCore.Identity.SQLServer" Version="11.1.0" />
     <PackageReference Include="Piranha.AspNetCore.SimpleSecurity" Version="10.4.0" />
-    <PackageReference Include="Piranha.AttributeBuilder" Version="11.0.0" />
-    <PackageReference Include="Piranha.Data.EF.SQLServer" Version="11.0.0" />
-    <PackageReference Include="Piranha.ImageSharp" Version="11.0.0" />
-    <PackageReference Include="Piranha.Local.FileStorage" Version="11.0.0" />
-    <PackageReference Include="Piranha.Manager" Version="11.0.0" />
-    <PackageReference Include="Piranha.Manager.TinyMCE" Version="11.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
+    <PackageReference Include="Piranha.AttributeBuilder" Version="11.1.0" />
+    <PackageReference Include="Piranha.Data.EF.SQLServer" Version="11.1.0" />
+    <PackageReference Include="Piranha.ImageSharp" Version="11.1.0" />
+    <PackageReference Include="Piranha.Local.FileStorage" Version="11.1.0" />
+    <PackageReference Include="Piranha.Manager" Version="11.1.0" />
+    <PackageReference Include="Piranha.Manager.TinyMCE" Version="11.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
