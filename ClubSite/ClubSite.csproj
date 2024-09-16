@@ -3,8 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Version>4.0.2</Version>
-    <FileVersion>4.0.2</FileVersion>
+    <Version>4.0.3</Version>
+    <FileVersion>4.0.3</FileVersion>
     <!--only update AssemblyVersion with major releases -->
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <Authors>axuno gGmbH</Authors>
