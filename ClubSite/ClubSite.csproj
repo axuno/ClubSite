@@ -3,8 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Version>4.0.3</Version>
-    <FileVersion>4.0.3</FileVersion>
+    <Version>4.0.4</Version>
+    <FileVersion>4.0.4</FileVersion>
     <!--only update AssemblyVersion with major releases -->
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <Authors>axuno gGmbH</Authors>
@@ -16,11 +16,11 @@
     <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.12.0" />
-    <PackageReference Include="EPPlus" Version="7.3.1" />
+    <PackageReference Include="Azure.Identity" Version="1.12.1" />
+    <PackageReference Include="EPPlus" Version="7.3.2" />
     <PackageReference Include="MailKit" Version="4.7.1.1" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.13" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.14" />
     <PackageReference Include="Piranha" Version="11.1.0" />
     <PackageReference Include="Piranha.AspNetCore" Version="11.1.0" />
     <PackageReference Include="Piranha.AspNetCore.Identity" Version="11.1.0" />
