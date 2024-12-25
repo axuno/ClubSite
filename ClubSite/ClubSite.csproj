@@ -16,11 +16,11 @@
     <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.12.1" />
-    <PackageReference Include="EPPlus" Version="7.3.2" />
-    <PackageReference Include="MailKit" Version="4.7.1.1" />
+    <PackageReference Include="Azure.Identity" Version="1.13.1" />
+    <PackageReference Include="EPPlus" Version="7.5.2" />
+    <PackageReference Include="MailKit" Version="4.9.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.14" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.15" />
     <PackageReference Include="Piranha" Version="11.1.0" />
     <PackageReference Include="Piranha.AspNetCore" Version="11.1.0" />
     <PackageReference Include="Piranha.AspNetCore.Identity" Version="11.1.0" />
@@ -32,14 +32,14 @@
     <PackageReference Include="Piranha.Local.FileStorage" Version="11.1.0" />
     <PackageReference Include="Piranha.Manager" Version="11.1.0" />
     <PackageReference Include="Piranha.Manager.TinyMCE" Version="11.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\StatusCodes.Designer.cs">
