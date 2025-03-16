@@ -3,8 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Version>4.0.4</Version>
-    <FileVersion>4.0.4</FileVersion>
+    <Version>4.0.5</Version>
+    <FileVersion>4.0.5</FileVersion>
     <!--only update AssemblyVersion with major releases -->
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <Authors>axuno gGmbH</Authors>
@@ -16,11 +16,11 @@
     <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.13.1" />
-    <PackageReference Include="EPPlus" Version="7.5.2" />
-    <PackageReference Include="MailKit" Version="4.9.0" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.15" />
+    <PackageReference Include="Azure.Identity" Version="1.13.2" />
+    <PackageReference Include="EPPlus" Version="7.6.1" />
+    <PackageReference Include="MailKit" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
     <PackageReference Include="Piranha" Version="11.1.0" />
     <PackageReference Include="Piranha.AspNetCore" Version="11.1.0" />
     <PackageReference Include="Piranha.AspNetCore.Identity" Version="11.1.0" />
@@ -32,12 +32,12 @@
     <PackageReference Include="Piranha.Local.FileStorage" Version="11.1.0" />
     <PackageReference Include="Piranha.Manager" Version="11.1.0" />
     <PackageReference Include="Piranha.Manager.TinyMCE" Version="11.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
   </ItemGroup>
