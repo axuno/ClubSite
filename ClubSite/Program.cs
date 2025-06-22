@@ -28,7 +28,7 @@ public class Program
 
     public static async Task Main(string[] args)
     {
-        // NLog: setup the logger first to catch all errors
+        // NLog: set up the logger first to catch all errors
         var currentDir = Directory.GetCurrentDirectory();
 
         var logger = LogManager.Setup()
@@ -36,7 +36,7 @@ public class Program
             .GetCurrentClassLogger();
 
         // Allows for <target name="file" xsi:type="File" fileName = "${var:logDirectory}logfile.log"... >
-        LogManager.Configuration.Variables["logDirectory"] = $"{currentDir}{Path.DirectorySeparatorChar}";
+        LogManager.Configuration!.Variables["logDirectory"] = $"{currentDir}{Path.DirectorySeparatorChar}";
 
         try
         {
