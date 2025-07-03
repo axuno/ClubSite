@@ -3,8 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <Version>5.0.0</Version>
-    <FileVersion>5.0.0</FileVersion>
+    <Version>5.0.1</Version>
+    <FileVersion>5.0.1</FileVersion>
     <!--only update AssemblyVersion with major releases -->
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <Authors>axuno gGmbH</Authors>
@@ -16,11 +16,11 @@
     <SatelliteResourceLanguages>en;de</SatelliteResourceLanguages>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.14.0" />
-    <PackageReference Include="EPPlus" Version="8.0.6" />
-    <PackageReference Include="MailKit" Version="4.12.1" />
+    <PackageReference Include="Azure.Identity" Version="1.14.1" />
+    <PackageReference Include="EPPlus" Version="8.0.7" />
+    <PackageReference Include="MailKit" Version="4.13.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="6.0.0" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="6.0.1" />
     <PackageReference Include="Piranha" Version="12.0.0" />
     <PackageReference Include="Piranha.AspNetCore" Version="12.0.0" />
     <PackageReference Include="Piranha.AspNetCore.Identity" Version="12.0.0" />
@@ -39,7 +39,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.10" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\StatusCodes.Designer.cs">
