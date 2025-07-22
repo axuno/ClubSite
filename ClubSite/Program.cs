@@ -49,9 +49,8 @@ public class Program
             builder.Logging.ClearProviders();
             // Enable NLog as logging provider for Microsoft.Extension.Logging
             builder.Logging.AddNLog(loggingConfig);
-            LogManager.Setup()
-                .LoadConfigurationFromFile(Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
-                    $"NLog.{builder.Environment.EnvironmentName}.config"));
+            await using var logFactory = NLog.LogManager.Setup().LoadConfigurationFromFile(Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
+                $"NLog.{builder.Environment.EnvironmentName}.config")).LogFactory;
             
             WebAppStartup.ConfigureServices(builder.Environment, builder.Configuration, builder.Services);
 
@@ -64,11 +63,6 @@ public class Program
         {
             logger.Fatal(e, $"Application stopped after Exception. {e.Message}");
             throw;
-        }
-        finally
-        {
-            // Ensure to flush and stop internal timers/threads before application-exit (avoid segmentation fault on Linux)
-            NLog.LogManager.Shutdown();
         }
     }
 
