@@ -1,8 +1,6 @@
 ﻿@page "~/manager/login"
 @using ClubSite
-@using Microsoft.Extensions.Logging
-@model Piranha.Manager.LocalAuth.Areas.Manager.Pages.LoginModel
-@inject ILogger<Piranha.Manager.LocalAuth.Areas.Manager.Pages.LoginModel> Logger
+@model ClubSite.Areas.Manager.Pages.LoginModel
 @inject ManagerLocalizer Localizer
 @{
     Layout = null;
@@ -43,7 +41,6 @@
 
                 @if (!Model.ModelState.IsValid)
                 {
-                    Logger.LogWarning("Login failed: User '{Username}'", Model?.Input?.Username);
                     <p class="error-message">@string.Join("\r\n", ModelState.Where(p => p.Value != null).SelectMany(p => p.Value!.Errors).Select(e => e.ErrorMessage))</p>
                 }
 
