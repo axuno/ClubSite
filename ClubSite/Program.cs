@@ -15,7 +15,6 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 
-
 namespace ClubSite;
 
 public class Program
@@ -41,7 +40,7 @@ public class Program
         try
         {
             logger.Trace($"Configuration of {nameof(Microsoft.AspNetCore.WebHost)} starting.");
-            logger.Info($"This app runs as {(Environment.Is64BitProcess ? "64-bit" : "32-bit")} process.\n\n");
+            logger.Info($"This app runs as {(Environment.Is64BitProcess ? "64-bit" : "32-bit")} process.");
                 
             var builder = SetupBuilder(args);
 
@@ -49,8 +48,12 @@ public class Program
             builder.Logging.ClearProviders();
             // Enable NLog as logging provider for Microsoft.Extension.Logging
             builder.Logging.AddNLog(loggingConfig);
-            await using var logFactory = NLog.LogManager.Setup().LoadConfigurationFromFile(Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
-                $"NLog.{builder.Environment.EnvironmentName}.config")).LogFactory;
+            await using var logFactory = LogManager
+                .Setup()
+                .LoadConfigurationFromFile(
+                    Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder,
+                        $"NLog.{builder.Environment.EnvironmentName}.config"))
+                .LogFactory;
             
             WebAppStartup.ConfigureServices(builder.Environment, builder.Configuration, builder.Services);
 
