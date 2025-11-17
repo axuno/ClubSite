@@ -22,7 +22,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.3" />
     <PackageReference Include="NLog.Targets.AtomicFile" Version="6.0.6" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="6.1.0" />
-    <PackageReference Include="Piranha" Version="12.0.0" />
+    <PackageReference Include="Piranha" Version="12.0.1" /><!-- This is a locally compiled pkg of v12.1.0 -->
     <PackageReference Include="Piranha.AspNetCore" Version="12.0.0" />
     <PackageReference Include="Piranha.AspNetCore.Identity" Version="12.0.0" />
     <PackageReference Include="Piranha.AspNetCore.Identity.SQLServer" Version="12.0.0" />
