@@ -39,6 +39,7 @@ public class LoginModel : PageModel
         _service = service;
         _localizer = localizer;
         _logger = logger;
+        ErrorMessage = string.Empty;
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ public class LoginModel : PageModel
     /// </summary>
     /// <value></value>
     [BindProperty]
-    public InputModel Input { get; set; }
+    public required InputModel Input { get; set; }
 
     /// <summary>
     /// Gets/sets the optional return url after successful
