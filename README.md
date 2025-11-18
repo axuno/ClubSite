@@ -3,7 +3,7 @@
 # ClubSite
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/axuno/MailMergeLib/blob/master/License.txt)
-[![build + test](https://github.com/axuno/ClubSite/workflows/build%20+%20test/badge.svg?branch=main)](https://github.com/axuno/ClubSite/actions/workflows/build%20+%20test.yml)
+[![build + test](https://img.shields.io/github/check-runs/axuno/ClubSite/main?label=build%20%2B%20test)](https://github.com/axuno/ClubSite/actions/workflows/build%20+%20test.yml)
 
 ## About this project
 This is the source code for a sports club website. The C# AspNetCore project is using [PiranhaCMS](https://piranhacms.org/), 
@@ -12,5 +12,3 @@ and makes creating content enjoyable and fun, even for non technicians.
 
 ## Live website
 Have a look at the website: [https://www.volleyballclub.de/](https://www.volleyballclub.de/)
-
-
