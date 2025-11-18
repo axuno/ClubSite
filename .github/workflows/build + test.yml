@@ -17,8 +17,20 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Add local NuGet source config
+      run: |
+        cat <<EOF > NuGet.config
+        <?xml version="1.0" encoding="utf-8"?>
+        <configuration>
+          <packageSources>
+            <add key="LocalPackages" value="./LocalPackages" />
+            <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+          </packageSources>
+        </configuration>
+        EOF
+        ls ./LocalPackages
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore --configfile NuGet.config
     - name: Build
       run: dotnet build --no-restore -nowarn:CS0162,CS0436
     - name: Test

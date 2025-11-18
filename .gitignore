@@ -153,6 +153,8 @@ PublishScripts/
 
 # NuGet Packages
 *.nupkg
+# except explicitly added packages (folder must be included in NuGet.config)
+!**/LocalPackages/*
 **/nuget/*
 # The packages folder can be ignored because of Package Restore
 **/packages/*
