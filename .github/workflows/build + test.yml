@@ -28,6 +28,7 @@ jobs:
           </packageSources>
         </configuration>
         EOF
+        ls ./LocalPackages
     - name: Restore dependencies
       run: dotnet restore --configfile NuGet.config
     - name: Build
