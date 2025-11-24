@@ -15,12 +15,6 @@
         "pixrem": "5.0.0",
         "cssnano": "7.1.2",
         "bootstrap": "5.3.8",
-        "font-awesome": "4.7.0",
-        "@fortawesome/fontawesome-free": "5.15.4",
-        "is-svg": ">=6.1.0",
-        "set-value": ">=4.1.0",
-        "css-what": ">=7.0.0",
-        "glob-parent": ">=6.0.2",
-        "trim-newlines": ">=5.0.0"
+        "@fortawesome/fontawesome-free": "5.15.4"
     }
 }
