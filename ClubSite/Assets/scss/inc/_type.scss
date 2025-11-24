@@ -1,4 +1,4 @@
-@import './../bs_custom';
+@use '../bs_custom' as custom;
 
 body {
     font-family: Lato,sans-serif;
@@ -45,7 +45,7 @@ blockquote {
 }
 
 hr {
-    border: 2px solid $secondary;
+    border: 2px solid custom.$secondary;
 }
 
 .edit-icon {
@@ -67,7 +67,7 @@ hr {
 label {
     //font-size: 1rem;
     font-weight: normal;
-    color: $primary;
+    color: custom.$primary;
     background-color: transparent;
     margin-top: .75rem;
     margin-bottom: .25rem;

@@ -39,13 +39,13 @@ gulp.task('min',
                 suffix: '.min'
             }))
             .pipe(gulp.dest('wwwroot/assets/css/fontawesome'));
-        gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*')
+        gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*', { encoding: false })
             .pipe(gulp.dest('wwwroot/assets/css/fontawesome/webfonts'));
         gulp.src('assets/fonts/fonts-lato-raleway.css')
             .pipe(gulp.dest('wwwroot/assets/fonts/'));
-        gulp.src('assets/fonts/lato/*.woff2')
+        gulp.src('assets/fonts/lato/*.woff2', { encoding: false })
             .pipe(gulp.dest('wwwroot/assets/fonts/lato/'));  
-        gulp.src('assets/fonts/raleway/*.woff2')
+        gulp.src('assets/fonts/raleway/*.woff2', { encoding: false })
             .pipe(gulp.dest('wwwroot/assets/fonts/raleway/'));
         gulp.src('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js')
             .pipe(gulp.dest('wwwroot/assets/js/bootstrap/'));

@@ -1,4 +1,4 @@
-@import './../bs_custom';
+@use '../bs_custom' as custom;
 /*
 .btn {
     &.btn-primary {
@@ -16,6 +16,6 @@
 
 .btn {
     &.btn-secondary {
-        color: $dark;
+        color: custom.$dark;
     }
 }
