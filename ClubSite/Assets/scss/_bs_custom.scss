@@ -1,18 +1,16 @@
 // Bootstrap dependencies - javascript and fonts must be copied manually!!
 // font-awesome is included by site.scss
 // Helpful: https://pikock.github.io/bootstrap-magic/app/index.html#!/editor
-//
-//@import 'tether/src/css/tether.sass';
 
-// Always required for Bootstrap
-@import "bootstrap/scss/functions";
-//@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
+// Required for using Bootstrap mixins and functions
+@use 'bootstrap/scss/functions' as *;
+@use "bootstrap/scss/mixins" as *;
 
 // Bootstrap overrides
 //
-// Copy variables from `_variables.scss` to this file to override default values
-// without modifying source files.
+// *************************************************************************************
+// Be sure to include these variables in bootstrap-custom.scss when importing Bootstrap.
+// *************************************************************************************
 
 //
 // Color system
@@ -124,5 +122,3 @@ $table-bg: $white;
 // $alert-bg-scale: -80% !default;
 $alert-border-scale: -50%; // default = -70%;
 //$alert-color-scale: 40% !default;
-
-

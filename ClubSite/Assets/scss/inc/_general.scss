@@ -1,4 +1,4 @@
-@import './../bs_custom';
+@use '../bs_custom' as custom;
 
 .main { // _Layout
     background-color: #fff;
@@ -13,12 +13,12 @@ img {
 }
 
 .navbar .clubname {
-    color: $yellow;
+    color: custom.$yellow;
 }
 
 a.link {
     &:before {
-        font-family: "Font Awesome 5 Free";
+        font-family: 'Font Awesome 5 Free', sans-serif;
         font-weight: 900;
         font-size: 1rem;
         content: "\f35d";
@@ -29,5 +29,5 @@ a.link {
 }
 
 input[type="password"], input[type="text"]:required, input[type="email"]:required, select:required {
-    border-left: .5rem solid $secondary;
+    border-left: .5rem solid custom.$secondary;
 }

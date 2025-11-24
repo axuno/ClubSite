@@ -1,4 +1,4 @@
-@import './../bs_custom';
+@use '../bs_custom' as custom;
 
 .post-meta {
     font-size: 0.875rem;
@@ -20,7 +20,7 @@
 
 .comments {
     .alert {
-        background: $gray-200;
+        background: custom.$gray-200;
         padding: 2rem 2.5rem;
     }
 }

@@ -1,4 +1,4 @@
-@import './../bs_custom';
+@use '../bs_custom' as custom;
 .block {
     padding: 0 0 1.5rem;
 
