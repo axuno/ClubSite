@@ -14,7 +14,6 @@
         "gulp-postcss": "10.0.0",
         "gulp-rename": "^2.1.0",
         "gulp-sass": "6.0.1",
-        "pixrem": "5.0.0",
         "sass": "1.99.0"
     },
     "dependencies": {
