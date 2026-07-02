@@ -38,8 +38,8 @@
     <partial name="_Footer.cshtml" />
 </div>
 @if (!Env.IsDevelopment()) { <partial name="_GoogleAnalytics.cshtml"/> }
+<partial name="_CookieConsent.cshtml" />
 <script src="~/assets/js/bootstrap/bootstrap.bundle.min.js" asp-append-version="true"></script>
 @await RenderSectionAsync("script", false)
 </body>
 </html>
-

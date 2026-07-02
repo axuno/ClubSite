@@ -16,14 +16,14 @@ const sassOptions = {
 
 gulp.task('min',
     function(done) {
-        gulp.src('assets/scss/style.scss')
+        gulp.src('Assets/scss/style.scss')
             .pipe(sass(sassOptions).on('error', sass.logError))
             .pipe(postcss([autoprefixer(), cssnano()]))
             .pipe(rename({
                 suffix: '.min'
             }))
             .pipe(gulp.dest('wwwroot/assets/css'));
-        gulp.src('assets/scss/bootstrap-custom.scss')
+        gulp.src('Assets/scss/bootstrap-custom.scss')
             .pipe(sass(sassOptions).on('error', sass.logError))
             .pipe(postcss([autoprefixer(), cssnano()])) // autoprefix + minify
             .pipe(rename({
@@ -31,7 +31,7 @@ gulp.task('min',
                 suffix: '.min'
             }))
             .pipe(gulp.dest('wwwroot/assets/css'));
-        gulp.src('assets/scss/fontawesome-custom.scss')
+        gulp.src('Assets/scss/fontawesome-custom.scss')
             .pipe(sass(sassOptions).on('error', sass.logError))
             .pipe(postcss([autoprefixer(), cssnano()])) // autoprefix + minify
             .pipe(rename({
@@ -41,11 +41,11 @@ gulp.task('min',
             .pipe(gulp.dest('wwwroot/assets/css/fontawesome'));
         gulp.src('node_modules/@fortawesome/fontawesome-free/webfonts/*', { encoding: false })
             .pipe(gulp.dest('wwwroot/assets/css/fontawesome/webfonts'));
-        gulp.src('assets/fonts/fonts-lato-raleway.css')
+        gulp.src('Assets/fonts/fonts-lato-raleway.css')
             .pipe(gulp.dest('wwwroot/assets/fonts/'));
-        gulp.src('assets/fonts/lato/*.woff2', { encoding: false })
+        gulp.src('Assets/fonts/lato/*.woff2', { encoding: false })
             .pipe(gulp.dest('wwwroot/assets/fonts/lato/'));  
-        gulp.src('assets/fonts/raleway/*.woff2', { encoding: false })
+        gulp.src('Assets/fonts/raleway/*.woff2', { encoding: false })
             .pipe(gulp.dest('wwwroot/assets/fonts/raleway/'));
         gulp.src('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js')
             .pipe(gulp.dest('wwwroot/assets/js/bootstrap/'));
