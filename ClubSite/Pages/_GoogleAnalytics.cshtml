@@ -1,10 +1,55 @@
 ﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-<!-- Global site tag (gtag.js) - Google Analytics (GA4) start -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', '@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value', {cookie_flags: 'SameSite=None;Secure'});
-</script>
-<!-- Global site tag (gtag.js) - Google Analytics (GA4) end -->
+@{
+    var measurementId = Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value;
+}
+@if (!string.IsNullOrWhiteSpace(measurementId))
+{
+    <script>
+        (function (window, document) {
+            'use strict';
+
+            var measurementId = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(measurementId));
+            var disableKey = 'ga-disable-' + measurementId;
+            var analyticsScriptId = 'google-analytics-gtag';
+            var consentApi = window.clubSiteCookieConsent = window.clubSiteCookieConsent || {};
+
+            function gtag() {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push(arguments);
+            }
+
+            function loadAnalytics() {
+                if (!measurementId) {
+                    return;
+                }
+
+                window[disableKey] = false;
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = window.gtag || gtag;
+
+                if (!document.getElementById(analyticsScriptId)) {
+                    var script = document.createElement('script');
+                    script.id = analyticsScriptId;
+                    script.async = true;
+                    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+                    document.head.appendChild(script);
+                }
+
+                window.gtag('js', new Date());
+                window.gtag('config', measurementId, {
+                    cookie_flags: 'SameSite=None;Secure'
+                });
+            }
+
+            function disableAnalytics() {
+                if (measurementId) {
+                    window[disableKey] = true;
+                }
+            }
+
+            disableAnalytics();
+            consentApi.loadAnalytics = loadAnalytics;
+            consentApi.disableAnalytics = disableAnalytics;
+        })(window, document);
+    </script>
+}

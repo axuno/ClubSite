@@ -4,9 +4,9 @@
             <div class="col-12 col-lg">
                 <h2 id="cookie-consent-title" class="h5 mb-2">Cookie-Einstellungen</h2>
                 <p id="cookie-consent-description" class="mb-0">
-                    Wir verwenden technisch notwendige Cookies. Mit Ihrer Zustimmung verwenden wir außerdem Google Analytics,
-                    um die Nutzung unserer Website zu analysieren und unser Angebot zu verbessern. Sie können Ihre Auswahl
-                    jederzeit ändern. Weitere Informationen finden Sie in unserer
+                    Wir verwenden technisch notwendige Cookies. Google Analytics ist standardmäßig deaktiviert und wird erst geladen,
+                    wenn Sie Analyse-Cookies ausdrücklich akzeptieren. Wenn Sie ablehnen, wird Google Analytics nicht geladen und
+                    eventuell vorhandene Analytics-Cookies werden gelöscht. Sie können Ihre Auswahl jederzeit ändern. Weitere Informationen finden Sie in unserer
                     <a href="/datenschutz">Datenschutzerklärung</a>.
                 </p>
             </div>
@@ -128,12 +128,12 @@
 
         function rejectAnalyticsCookies() {
             setStoredConsent(rejectedConsentValue);
-            clearGoogleAnalyticsCookies();
 
             if (typeof consentApi.disableAnalytics === 'function') {
                 consentApi.disableAnalytics();
             }
 
+            clearGoogleAnalyticsCookies();
             hideBanner();
         }
 
@@ -165,10 +165,28 @@
                 button.addEventListener('click', showBanner);
             });
 
-            if (storedConsent) {
+            if (storedConsent === acceptedConsentValue) {
                 synchronizeStoredConsent(storedConsent);
+
+                if (typeof consentApi.loadAnalytics === 'function') {
+                    consentApi.loadAnalytics();
+                }
+
+                hideBanner();
+            } else if (storedConsent === rejectedConsentValue) {
+                synchronizeStoredConsent(storedConsent);
+
+                if (typeof consentApi.disableAnalytics === 'function') {
+                    consentApi.disableAnalytics();
+                }
+
+                clearGoogleAnalyticsCookies();
                 hideBanner();
             } else {
+                if (typeof consentApi.disableAnalytics === 'function') {
+                    consentApi.disableAnalytics();
+                }
+
                 showBanner();
             }
         });
