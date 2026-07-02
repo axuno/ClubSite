@@ -9,9 +9,30 @@
             'use strict';
 
             var measurementId = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(measurementId));
+            var consentStorageKey = 'clubsite_cookie_consent';
+            var acceptedConsentValue = 'analytics_accepted';
             var disableKey = 'ga-disable-' + measurementId;
             var analyticsScriptId = 'google-analytics-gtag';
             var consentApi = window.clubSiteCookieConsent = window.clubSiteCookieConsent || {};
+
+            function getStoredConsent() {
+                try {
+                    if (window.localStorage.getItem(consentStorageKey) === acceptedConsentValue) {
+                        return acceptedConsentValue;
+                    }
+                } catch (error) {
+                    // Some browser/privacy configurations disable localStorage.
+                }
+
+                var prefix = consentStorageKey + '=';
+                var cookieConsent = document.cookie
+                    .split(';')
+                    .map(function (cookie) { return cookie.trim(); })
+                    .filter(function (cookie) { return cookie.indexOf(prefix) === 0; })
+                    .map(function (cookie) { return decodeURIComponent(cookie.substring(prefix.length)); })[0] || '';
+
+                return cookieConsent === acceptedConsentValue ? acceptedConsentValue : '';
+            }
 
             function gtag() {
                 window.dataLayer = window.dataLayer || [];
@@ -19,7 +40,8 @@
             }
 
             function loadAnalytics() {
-                if (!measurementId) {
+                if (!measurementId || getStoredConsent() !== acceptedConsentValue) {
+                    disableAnalytics();
                     return;
                 }
 

@@ -97,7 +97,7 @@
 
             document.cookie.split(';')
                 .map(function (cookie) { return cookie.trim().split('=')[0]; })
-                .filter(function (name) { return name === '_ga' || name === '_gid' || name === '_gat' || name.indexOf('_ga_') === 0; })
+                .filter(function (name) { return name === '_ga' || name === '_gid' || name === '_gat' || name.indexOf('_ga_') === 0 || name.indexOf('_gat_') === 0; })
                 .forEach(function (name) {
                     domains.forEach(function (domain) { deleteCookie(name, domain); });
                 });
@@ -187,6 +187,7 @@
                     consentApi.disableAnalytics();
                 }
 
+                clearGoogleAnalyticsCookies();
                 showBanner();
             }
         });
