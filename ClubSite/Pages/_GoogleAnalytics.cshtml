@@ -1,10 +1,31 @@
-﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Logging
+@inject IHttpContextAccessor HttpContextAccessor
+@inject ILoggerFactory LoggerFactory
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@{
+    var logger = LoggerFactory.CreateLogger("ClubSite.Pages._GoogleAnalytics");
+    var trackingId = Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value;
+    var consentCookieName = Configuration["ConsentCookieName"];
+    var googleAnalyticsConsent = Configuration["GoogleAnalyticsConsent"];
+    
+    if (string.IsNullOrEmpty(trackingId) || consentCookieName is null || googleAnalyticsConsent is null)
+    {
+        logger.LogError("Error in configuration: {TrackingId} {ConsentCookieName} {GoogleAnalyticsConsent}", trackingId, consentCookieName, googleAnalyticsConsent);
+        return;
+    }
+
+    // Check if the user has accepted or declined Google Analytics tracking
+    var cookieValue = HttpContextAccessor?.HttpContext?.Request.Cookies[consentCookieName];
+    // Stop when the cookie is not present or the user has not accepted Google Analytics tracking
+    if (cookieValue is null || !cookieValue.Split(';').Contains(googleAnalyticsConsent)) return;
+}
 <!-- Global site tag (gtag.js) - Google Analytics (GA4) start -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=@trackingId"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-    gtag('config', '@Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value', {cookie_flags: 'SameSite=None;Secure'});
+    gtag('config', '@trackingId', {cookie_flags: 'SameSite=None;Secure'});
 </script>
 <!-- Global site tag (gtag.js) - Google Analytics (GA4) end -->

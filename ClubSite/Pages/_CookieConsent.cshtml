@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Logging
+@inject IHttpContextAccessor HttpContextAccessor
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject ILoggerFactory LoggerFactory
+@{
+    var logger = LoggerFactory.CreateLogger("ClubSite.Pages._CookieConsent");
+    var trackingId = Configuration.GetSection("GoogleConfiguration:AnalyticsTrackingId").Value;
+    var consentCookieName = Configuration["CookieConsent:CookieName"];
+    var noCookieConsent = Configuration["CookieConsent:NoConsent"];
+    var googleAnalyticsConsent = Configuration["CookieConsent:GoogleAnalytics"];
+    // Check if something ist wrong with the configuration
+    if (string.IsNullOrEmpty(trackingId) || consentCookieName is null)
+    {
+        logger.LogError("Error in configuration: {TrackingId} {ConsentCookieName}", trackingId, consentCookieName);
+        return;
+    }
+    var cookieValue = HttpContextAccessor?.HttpContext?.Request.Cookies[consentCookieName];
+    // Get 'data protection' page url from CMS sitemap
+    Guid.TryParse(Configuration["CookieConsent:DataProtectionPageId"], out var pageGuid);
+    var dataProtectionLink = string.Empty;
+    foreach (var topItem in WebApp.Site.Sitemap)
+    {
+        // Only search in the second hierarchy level
+        var found = topItem?.Items.Find(i => i.Id == pageGuid);
+        if (found is not null)
+        {
+            dataProtectionLink = found.Permalink;
+            break;
+        }
+    }
+
+    if (string.IsNullOrEmpty(dataProtectionLink))
+    {
+        logger.LogError("Link to data protection page not found");
+    }
+}
+
+<div id="cookie-consent-banner" class="position-sticky bottom-0 start-0 end-0 m-0 bg-primary p-2 shadow-lg rounded-1 d-none" style="z-index: 1080;">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <div class="row align-items-center g-3">
+            <div class="col-12 col-lg text-white-50">
+                <h2 class="h5 mb-2">Cookies und Statistik</h2>
+                <p class="mb-0">
+                    Wir verwenden technisch notwendige Cookies. 
+                    Mit Ihrer Einwilligung nutzen wir zusätzliche Cookies zur 
+                    statistischen Auswertung und Verbesserung der Website. Details 
+                    finden Sie in unserer
+                    <a href="@dataProtectionLink" class="link text-white-50">Datenschutzerklärung</a>.
+                </p>
+            </div>
+            <div class="col-12 col-lg-auto d-flex flex-column flex-sm-row gap-2 justify-content-lg-end">
+                <button id="cookie-consent-accept" type="button" class="btn btn-secondary">Alle akzeptieren</button>
+                <button id="cookie-consent-decline" type="button" class="btn text-white-50">Nur notwendige</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const dateToExpire = new Date(2038, 1, 1).toUTCString(); @* "forever" *@
+    const cookieName = '@(consentCookieName)';
+
+    function ShowCookieConsent() {
+        const element = document.getElementById('cookie-consent-banner');
+        element.classList.remove("d-none");
+        element.scrollIntoView();
+    }
+
+    function SetCookieAndReload(consent) {
+        document.cookie = `${cookieName}=${consent};expires=${dateToExpire};samesite=lax;path=/`;
+        window.location.reload();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        @if (cookieValue is null)
+        { 
+            @:ShowCookieConsent();
+        }
+
+        document.getElementById('cookie-consent-accept').addEventListener('click', function() {
+            SetCookieAndReload('@(googleAnalyticsConsent)');
+        });
+
+        document.getElementById('cookie-consent-decline').addEventListener('click', function() {
+            SetCookieAndReload('@(noCookieConsent)');
+        });
+
+        @* 'cookie-consent-opener' is in Footer.cshtml *@
+        document.getElementById('cookie-consent-opener').addEventListener('click', function() {
+            ShowCookieConsent();
+        });
+    });
+</script>
