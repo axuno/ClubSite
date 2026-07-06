@@ -1,7 +1,4 @@
 ﻿@using ClubSite
-@using Microsoft.AspNetCore.Hosting
-@using Microsoft.Extensions.Hosting
-@inject IWebHostEnvironment Env
 <!doctype html>
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
@@ -36,9 +33,9 @@
     </div>
     @RenderBody()
     <partial name="_Footer.cshtml" />
+    <partial name="_CookieConsent.cshtml" />
 </div>
-@if (!Env.IsDevelopment()) { <partial name="_GoogleAnalytics.cshtml"/> }
-<partial name="_CookieConsent.cshtml" />
+<partial name="_GoogleAnalytics.cshtml"/>
 <script src="~/assets/js/bootstrap/bootstrap.bundle.min.js" asp-append-version="true"></script>
 @await RenderSectionAsync("script", false)
 </body>
