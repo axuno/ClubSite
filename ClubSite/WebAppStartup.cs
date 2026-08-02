@@ -108,7 +108,7 @@ public static class WebAppStartup
         services.AddTransient<Services.IMailService, Services.MailService>();
 
         // We use EPPlus in a noncommercial context according to the Polyform Noncommercial license:
-        OfficeOpenXml.ExcelPackage.License.SetNonCommercialOrganization("Volleyballclub Neusäß e.V.");
+        OfficeOpenXml.ExcelPackage.License.SetNonCommercialOrganization("Volleyballclub Neusï¿½ï¿½ e.V.");
     }
 
     /// <summary>
@@ -172,10 +172,13 @@ public static class WebAppStartup
 
         #region *** Rewrite domains (even those without SSL certificate) to https://www.volleyballclub.de ***
 
-        app.UseRewriter(new RewriteOptions()
-            .AddRedirectToWwwPermanent()
-            .AddRedirectToHttpsPermanent()
-        );
+        if (!env.IsDevelopment())
+        {
+            app.UseRewriter(new RewriteOptions()
+                .AddRedirectToWwwPermanent()
+                .AddRedirectToHttpsPermanent()
+            );
+        }
 
         #endregion
 
