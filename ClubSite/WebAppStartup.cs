@@ -108,7 +108,7 @@ public static class WebAppStartup
         services.AddTransient<Services.IMailService, Services.MailService>();
 
         // We use EPPlus in a noncommercial context according to the Polyform Noncommercial license:
-        OfficeOpenXml.ExcelPackage.License.SetNonCommercialOrganization("Volleyballclub Neus�� e.V.");
+        OfficeOpenXml.ExcelPackage.License.SetNonCommercialOrganization("Volleyballclub Neusäß e.V.");
     }
 
     /// <summary>
