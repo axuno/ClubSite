@@ -192,15 +192,6 @@ public static class WebAppStartup
         {
             // Initialize Piranha
             App.Init(options.Api);
-            // Register custom Manager menu items
-            Piranha.Manager.Menu.Items["Settings"].Items.Add(new Piranha.Manager.MenuItem
-            {
-                InternalId = "ShortcutTab",
-                Name = "Shortcut Tab",
-                Route = "~/manager/settings/shortcut-tab",
-                Policy = Piranha.Manager.Permission.Admin,
-                Css = "fas fa-link"
-            });
             // Allow SVG files to be uploaded in manager
             App.MediaTypes.Images.Add(".svg", "image/svg+xml", false);
             options.UseManager();
