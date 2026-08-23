@@ -1,9 +1,47 @@
+@using Microsoft.Extensions.Configuration
+@using Microsoft.Extensions.Logging
+@using Piranha.Cache
+@inject IConfiguration Configuration
+@inject ICache Cache
+@inject ILoggerFactory LoggerFactory
 @{
-    // Floating shortcut tab — hardcoded link, no configuration needed.
-    // Change the values below if the link target or text should be updated.
-    var link = "/uploads/b59b88bb-4289-4604-9727-0da3dade275a/Beitrittserkl%c3%a4rung_ab_26.07.2026.pdf";
-    var text = "🏐 Beitreten";
-    var bgColor = "#dc3545";
+    var logger = LoggerFactory.CreateLogger("FloatingRegisterTab");
+    const string cacheKey = "floating-register-tab-cache";
+    const string text = "🏐 Beitreten";
+
+    async Task<string?> GetDocumentUrlCached(string folderName, string fileName)
+    {
+        var cachedUrl = await Cache.GetAsync<string>(cacheKey);
+        if (cachedUrl is not null) return cachedUrl;
+
+        var folders = await WebApp.Api.Media.GetAllFoldersAsync();
+        var folder = folders.FirstOrDefault(f => f.Name == folderName);
+        var docs = await WebApp.Api.Media.GetAllByFolderIdAsync(folder?.Id);
+        var doc = docs?.FirstOrDefault(n => n.Filename == fileName);
+        var publicUrl = doc?.PublicUrl;
+        await Cache.SetAsync(cacheKey, publicUrl);
+        return publicUrl;
+    }
+
+    string? publicUrl;
+    try
+    {
+        // Read from appsettings.json
+        var folder = Configuration["FloatingRegisterTab:FolderName"] ?? "";
+        var file = Configuration["FloatingRegisterTab:FileName"] ?? "";
+
+        publicUrl = await GetDocumentUrlCached(folder, file);
+        if (publicUrl is null)
+        {
+            logger.LogError("Register tab document not found: '{Folder}/{File}'", folder, file);
+            return; // exit without rendering the tab
+        }
+    }
+    catch (Exception e)
+    {
+        logger.LogError(e, "Error getting register tab url");
+        return; // exit without rendering the tab
+    }
 }
 <style>
     .floating-register-tab {
@@ -24,7 +62,7 @@
         transition: right 0.3s ease, box-shadow 0.3s ease;
         line-height: 1.3;
         color: #fff !important;
-        background: @bgColor;
+        background: #dc3545;
         border: none;
         display: inline-block;
     }
@@ -35,9 +73,9 @@
         color: #fff !important;
     }
 </style>
-<a href="@link"
+<a href="@Url.Content(publicUrl)"
    class="floating-register-tab"
-   target="_self"
+   target="_blank"
    rel="">
     @text
 </a>
