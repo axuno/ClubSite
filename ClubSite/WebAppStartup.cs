@@ -172,10 +172,13 @@ public static class WebAppStartup
 
         #region *** Rewrite domains (even those without SSL certificate) to https://www.volleyballclub.de ***
 
-        app.UseRewriter(new RewriteOptions()
-            .AddRedirectToWwwPermanent()
-            .AddRedirectToHttpsPermanent()
-        );
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseRewriter(new RewriteOptions()
+                .AddRedirectToWwwPermanent()
+                .AddRedirectToHttpsPermanent()
+            );
+        }
 
         #endregion
 
