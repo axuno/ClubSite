@@ -29,6 +29,9 @@ public interface IMailService
     Task SendTournamentRegistrationEmailAsync(string fromName, string fromEmail, string subject, string plainBody,
         CancellationToken cancellationToken);
 
+    Task SendTrialTrainingEmailAsync(string fromName, string fromEmail, string plainBody,
+        CancellationToken cancellationToken);
+
 
     Task SendEmailAsync(MimeMessage mimeMessage, CancellationToken cancellationToken);
     MailSettings Settings { get; }
@@ -75,6 +78,25 @@ public class MailService : IMailService
             message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
 
         message.Subject = subject;
+        message.Body = new TextPart(TextFormat.Text) {
+            Text = plainBody
+        };
+
+        await SendEmailAsync(message, cancellationToken);
+    }
+
+    public async Task SendTrialTrainingEmailAsync(string fromName, string fromEmail, string plainBody,
+        CancellationToken cancellationToken)
+    {
+        var message = new MimeMessage();
+        message.Headers.Add(HeaderId.Organization, Settings.Message.Organization ?? string.Empty);
+        message.ReplyTo.Add(new MailboxAddress(fromName, fromEmail));
+        message.From.Add(new MailboxAddress(Settings.Message.DefaultFrom.Name, Settings.Message.DefaultFrom.Email));
+
+        foreach (var mailAddress in Settings.Message.ContactFormTo)
+            message.To.Add(new MailboxAddress(mailAddress.Name, mailAddress.Email));
+
+        message.Subject = "Anfrage: Probetraining";
         message.Body = new TextPart(TextFormat.Text) {
             Text = plainBody
         };
