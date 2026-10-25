@@ -50,12 +50,11 @@
         {
             return new()
             {
-                new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
+                new SelectListItem { Value = "none", Text = "keine Präferenz" },
                 new SelectListItem { Value = "mixed", Text = "Mixed" },
                 new SelectListItem { Value = "women", Text = "Damen" },
                 new SelectListItem { Value = "men", Text = "Herren" },
-                new SelectListItem { Value = "youth", Text = "Jugendliche" },
-                new SelectListItem { Value = "none", Text = "keine Präferenz" }
+                new SelectListItem { Value = "youth", Text = "Jugendliche" }
             };
         }
 
@@ -63,11 +62,10 @@
         {
             return new()
             {
-                new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
+                new SelectListItem { Value = "other", Text = "Sonstiges" },
                 new SelectListItem { Value = "active", Text = "Aktiv spielen in einer Mannschaft" },
                 new SelectListItem { Value = "train-only", Text = "Nur trainieren" },
-                new SelectListItem { Value = "explore", Text = "Erstmal kennenlernen" },
-                new SelectListItem { Value = "other", Text = "Sonstiges" }
+                new SelectListItem { Value = "explore", Text = "Erstmal kennenlernen" }
             };
         }
     }
