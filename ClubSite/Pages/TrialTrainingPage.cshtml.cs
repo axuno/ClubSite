@@ -69,14 +69,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
     [Required(AllowEmptyStrings = false,
         ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
         ErrorMessageResourceType = typeof(DataAnnotationResource))]
-    [DataType(DataType.Text)]
-    [Display(Name = "Geschlecht")]
-    [RegularExpression("[mwd]", ErrorMessage = "Ungültiger Schlüssel für 'Geschlecht'")]
-    public string GenderInfo { get; set; } = string.Empty;
-
-    [Required(AllowEmptyStrings = false,
-        ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
-        ErrorMessageResourceType = typeof(DataAnnotationResource))]
     [Range(1, 120)]
     [Display(Name = "Alter")]
     public int Age { get; set; }
@@ -154,14 +146,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
             _ => "nicht angegeben"
         };
 
-        var genderInfoLabel = GenderInfo switch
-        {
-            "m" => "männlich",
-            "w" => "weiblich",
-            "d" => "divers",
-            _ => GenderInfo
-        };
-
         var experienceLabel = Experience switch
         {
             "beginner" => "Anfänger",
@@ -198,7 +182,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
 Telefon: {(string.IsNullOrWhiteSpace(PhoneNumber) ? "-" : PhoneNumber)}
 E-Mail:  {Email}
 
-Geschlecht: {genderInfoLabel}
 Alter: {Age}
 Spielerfahrung: {experienceLabel}
 Team-Präferenz: {teamLabel}

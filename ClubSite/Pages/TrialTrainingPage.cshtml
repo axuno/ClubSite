@@ -22,17 +22,6 @@
             };
         }
 
-        List<SelectListItem> GenderInfoList()
-        {
-            return new()
-            {
-                new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
-                new SelectListItem { Value = "m", Text = "männlich" },
-                new SelectListItem { Value = "w", Text = "weiblich" },
-                new SelectListItem { Value = "d", Text = "divers" }
-            };
-        }
-
         List<SelectListItem> ExperienceList()
         {
             return new()
@@ -84,7 +73,7 @@
             </div>
 
             <fieldset class="border rounded p-3 mb-4">
-                <legend class="h5">Persönliche Daten</legend>
+                <legend class="h5">Probetraining für</legend>
 
                 <div class="col-md-6">
                     <label asp-for="Gender" class="form-label"></label>
@@ -110,11 +99,6 @@
                     <label asp-for="PhoneNumber" class="form-label"></label>
                     <input asp-for="PhoneNumber" type="text" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                </div>
-                <div class="col-md-6">
-                    <label asp-for="GenderInfo" class="form-label"></label>
-                    <select asp-for="GenderInfo" asp-items="GenderInfoList()" class="form-select" required="required"></select>
-                    <span asp-validation-for="GenderInfo" class="text-danger"></span>
                 </div>
             </fieldset>
 
