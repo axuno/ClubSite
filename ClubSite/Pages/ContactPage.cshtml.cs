@@ -117,8 +117,7 @@ public class ContactPageModel : SinglePage<Models.ContactPage>
     private string GetFormMailMessage()
     {
         return
-            $@"{(Gender == "f" ? "Frau" : "Herr")}
-{FirstName} {LastName}
+$@"{(Gender switch { "f" => "Frau", "m" => "Herr", _ => "" })} {FirstName} {LastName}
 Telefon: {(string.IsNullOrWhiteSpace(PhoneNumber) ? "-" : PhoneNumber)}
 E-Mail:  {Email}
 

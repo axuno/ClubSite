@@ -13,12 +13,13 @@
 
         List<SelectListItem> GenderList()
         {
-            return new()
-            {
-                    new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
-                    new SelectListItem { Value = "f", Text = "Frau" },
-                    new SelectListItem { Value = "m", Text = "Herr" }
-                };
+            return
+            [
+                new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
+                new SelectListItem { Value = "f", Text = "Frau" },
+                new SelectListItem { Value = "m", Text = "Herr" },
+                new SelectListItem { Value = "u", Text = "Keine Angabe" }
+            ];
         }
     }
     <div>
