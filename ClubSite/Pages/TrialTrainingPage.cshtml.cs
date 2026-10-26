@@ -45,7 +45,7 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         ErrorMessageResourceType = typeof(DataAnnotationResource))]
     [DataType(DataType.Text)]
     [Display(Name = "Anrede")]
-    [RegularExpression("[mfd]", ErrorMessage = "Ungültiger Schlüssel für 'Anrede'")]
+    [RegularExpression("[mf]", ErrorMessage = "Ungültiger Schlüssel für 'Anrede'")]
     public string Gender { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false,
@@ -142,7 +142,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         {
             "f" => "Frau",
             "m" => "Herr",
-            "d" => "Divers",
             _ => "nicht angegeben"
         };
 
