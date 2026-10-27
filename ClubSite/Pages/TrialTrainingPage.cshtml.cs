@@ -85,18 +85,24 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
         ErrorMessageResourceType = typeof(DataAnnotationResource))]
     [Display(Name = "Spielerfahrung")]
+    [RegularExpression("^(beginner|some-experience|hobby|advanced|club-player)$",
+        ErrorMessage = "Ungültiger Wert für Spielerfahrung")]
     public string Experience { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false,
         ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
         ErrorMessageResourceType = typeof(DataAnnotationResource))]
     [Display(Name = "Team-Präferenz")]
+    [RegularExpression("^(none|mixed|women|men|youth)$",
+        ErrorMessage = "Ungültiger Wert für Team-Präferenz")]
     public string TeamPreference { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false,
         ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
         ErrorMessageResourceType = typeof(DataAnnotationResource))]
     [Display(Name = "Ziel")]
+    [RegularExpression("^(other|active|train-only|explore)$",
+        ErrorMessage = "Ungültiger Wert für Ziel")]
     public string Goal { get; set; } = string.Empty;
 
     [Display(Name = "Anmerkungen")]
@@ -168,7 +174,7 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
             "hobby" => "Hobbyniveau",
             "advanced" => "fortgeschritten",
             "club-player" => "Vereinsspieler",
-            _ => Experience
+            _ => "nicht angegeben"
         };
 
         var teamLabel = TeamPreference switch
@@ -178,7 +184,7 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
             "men" => "Herren",
             "youth" => "Jugendliche",
             "none" => "keine Präferenz",
-            _ => TeamPreference
+            _ => "nicht angegeben"
         };
 
         var goalLabel = Goal switch
@@ -187,7 +193,7 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
             "train-only" => "Nur trainieren",
             "explore" => "Erstmal kennenlernen",
             "other" => "Sonstiges",
-            _ => Goal
+            _ => "nicht angegeben"
         };
 
         return
