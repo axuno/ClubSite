@@ -15,9 +15,20 @@
         {
             return new()
             {
-                new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
+                new SelectListItem { Value = string.Empty, Text = "keine Angabe" },
                 new SelectListItem { Value = "f", Text = "Frau" },
                 new SelectListItem { Value = "m", Text = "Herr" }
+            };
+        }
+
+        List<SelectListItem> GenderInfoList()
+        {
+            return new()
+            {
+                new SelectListItem { Value = string.Empty, Text = "keine Angabe" },
+                new SelectListItem { Value = "m", Text = "männlich" },
+                new SelectListItem { Value = "w", Text = "weiblich" },
+                new SelectListItem { Value = "d", Text = "divers" }
             };
         }
 
@@ -78,6 +89,11 @@
                     <label asp-for="Gender" class="form-label"></label>
                     <select asp-for="Gender" asp-items="GenderList()" class="form-select" required="required"></select>
                     <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="GenderInfo" class="form-label"></label>
+                    <select asp-for="GenderInfo" asp-items="GenderInfoList()" class="form-select" required="required"></select>
+                    <span asp-validation-for="GenderInfo" class="text-danger"></span>
                 </div>
                 <div>
                     <label asp-for="FirstName" class="form-label"></label>
