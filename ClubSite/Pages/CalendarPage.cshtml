@@ -1,0 +1,107 @@
+﻿@page
+@model ClubSite.Pages.CalendarPageModel
+@{
+    ViewData["Title"] = "Termine";
+}
+<div class="mx-3 py-2">
+    <div>
+        <h2 class="h2">@ViewData["Title"]</h2>
+        <h4 class="h4">Spieltage, Training &amp; Vereinstermine</h4>
+        <hr />
+    </div>
+
+    @if (!Model.HasIcsFiles)
+    {
+        <div class="alert alert-info" role="alert">
+            Der Terminkalender wird aktuell noch befüllt.
+        </div>
+    }
+    else
+    {
+        <form method="get" class="row g-3 mb-4 align-items-end" role="form">
+            <div class="col-md-3">
+                <label asp-for="TeamFilter" class="form-label">Team</label>
+                <select asp-for="TeamFilter" class="form-select">
+                    <option value="">Alle Teams</option>
+                    @foreach (var team in Model.AvailableTeams)
+                    {
+                        <option value="@team">@team</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="CategoryFilter" class="form-label">Kategorie</label>
+                <select asp-for="CategoryFilter" class="form-select">
+                    <option value="">Alle Kategorien</option>
+                    @foreach (var category in Model.AvailableCategories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Mode" class="form-label">Zeitraum</label>
+                <select asp-for="Mode" class="form-select">
+                    <option value="upcoming">Anstehende Termine</option>
+                    <option value="past">Vergangene Termine</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Filtern</button>
+            </div>
+        </form>
+
+        @if (Model.Events.Count == 0)
+        {
+            <div class="alert alert-secondary" role="alert">
+                Keine Termine für die gewählten Filter.
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col" style="width: 110px">Datum</th>
+                        <th scope="col" style="width: 70px">Uhrzeit</th>
+                        <th scope="col">Titel</th>
+                        <th scope="col" style="width: 100px">Team</th>
+                        <th scope="col" style="width: 120px">Kategorie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var evt in Model.Events)
+                    {
+                        <tr>
+                            <td class="text-nowrap">@evt.StartDate.ToString("dd.MM.yyyy")</td>
+                            <td>@evt.StartDate.ToString("HH:mm")@if (evt.EndDate.TimeOfDay != evt.StartDate.TimeOfDay) {@( " – " + evt.EndDate.ToString("HH:mm"))}</td>
+                            <td>
+                                <div class="fw-semibold">@evt.Title</div>
+                                @if (!string.IsNullOrEmpty(evt.Location))
+                                {
+                                    <div class="small text-muted"><i class="fas fa-map-marker-alt me-1"></i>@evt.Location</div>
+                                }
+                                @if (!string.IsNullOrEmpty(evt.Description))
+                                {
+                                    <div class="small text-muted mt-1">@evt.Description</div>
+                                }
+</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(evt.Team))
+                                {
+                                    <span class="badge bg-primary rounded-pill">@evt.Team</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(evt.Category))
+                                {
+                                    <span class="badge bg-secondary rounded-pill">@evt.Category</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div>
