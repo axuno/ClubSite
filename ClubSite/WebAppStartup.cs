@@ -20,6 +20,7 @@ using Piranha.Data.EF.SQLServer;
 using System;
 using Microsoft.AspNetCore.Http;
 using ClubSite.Models;
+using ClubSite.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Net.Http.Headers;
 using Piranha.AttributeBuilder;
@@ -107,8 +108,11 @@ public static class WebAppStartup
 
         services.AddTransient<Services.IMailService, Services.MailService>();
 
+        // Calendar events service
+        services.AddSingleton<ICalendarService, CalendarService>();
+
         // We use EPPlus in a noncommercial context according to the Polyform Noncommercial license:
-        OfficeOpenXml.ExcelPackage.License.SetNonCommercialOrganization("Volleyballclub Neus‰ﬂ e.V.");
+        OfficeOpenXml.ExcelPackage.License.SetNonCommercialOrganization("Volleyballclub Neus√§√ü e.V.");
     }
 
     /// <summary>
@@ -172,10 +176,13 @@ public static class WebAppStartup
 
         #region *** Rewrite domains (even those without SSL certificate) to https://www.volleyballclub.de ***
 
-        app.UseRewriter(new RewriteOptions()
-            .AddRedirectToWwwPermanent()
-            .AddRedirectToHttpsPermanent()
-        );
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseRewriter(new RewriteOptions()
+                .AddRedirectToWwwPermanent()
+                .AddRedirectToHttpsPermanent()
+            );
+        }
 
         #endregion
 
@@ -191,6 +198,8 @@ public static class WebAppStartup
             App.Init(options.Api);
             // Allow SVG files to be uploaded in manager
             App.MediaTypes.Images.Add(".svg", "image/svg+xml", false);
+            // Allow .ics calendar files
+            App.MediaTypes.Documents.Add(".ics", "text/calendar", false);
             options.UseManager();
             options.UseTinyMCE();
             options.UseIdentity();
