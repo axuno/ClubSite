@@ -60,14 +60,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
         ErrorMessageResourceType = typeof(DataAnnotationResource))]
     [DataType(DataType.Text)]
-    [Display(Name = "Geschlecht")]
-    [RegularExpression("[mwd]", ErrorMessage = "Ungültiger Schlüssel für 'Geschlecht'")]
-    public string GenderInfo { get; set; } = string.Empty;
-
-    [Required(AllowEmptyStrings = false,
-        ErrorMessageResourceName = nameof(DataAnnotationResource.PropertyValueRequired),
-        ErrorMessageResourceType = typeof(DataAnnotationResource))]
-    [DataType(DataType.Text)]
     [Display(Name = "Vorname")]
     public string FirstName { get; set; } = string.Empty;
 
@@ -170,14 +162,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         new Option { V = "m", L = "Herr" }
     };
 
-    public List<Option> GenderInfoOptions() => new()
-    {
-        new Option { V = string.Empty, L = "keine Angabe" },
-        new Option { V = "m", L = "männlich" },
-        new Option { V = "w", L = "weiblich" },
-        new Option { V = "d", L = "divers" }
-    };
-
     public List<Option> ExperienceOptions() => new()
     {
         new Option { V = string.Empty, L = "Bitte auswählen" },
@@ -217,7 +201,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
     private string GetFormMailMessage()
     {
         var genderLabel = Label(GenderOptions(), Gender);
-        var genderInfoLabel = Label(GenderInfoOptions(), GenderInfo);
         var experienceLabel = Label(ExperienceOptions(), Experience);
         var teamLabel = Label(TeamOptions(), TeamPreference);
         var goalLabel = Label(GoalOptions(), Goal);
@@ -229,7 +212,6 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
 Telefon: {(string.IsNullOrWhiteSpace(PhoneNumber) ? "-" : PhoneNumber)}
 E-Mail:  {Email}
 
-Geschlecht: {genderInfoLabel}
 Alter: {Age}
 Spielerfahrung: {experienceLabel}
 Team-Präferenz: {teamLabel}

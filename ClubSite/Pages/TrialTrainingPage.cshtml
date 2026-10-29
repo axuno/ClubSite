@@ -38,11 +38,6 @@
                     <select asp-for="Gender" asp-items="ToSelectList(Model.GenderOptions())" class="form-select" required="required"></select>
                     <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
-                <div class="col-md-6">
-                    <label asp-for="GenderInfo" class="form-label"></label>
-                    <select asp-for="GenderInfo" asp-items="ToSelectList(Model.GenderInfoOptions())" class="form-select" required="required"></select>
-                    <span asp-validation-for="GenderInfo" class="text-danger"></span>
-                </div>
                 <div>
                     <label asp-for="FirstName" class="form-label"></label>
                     <input asp-for="FirstName" type="text" required="required" class="form-control" />
