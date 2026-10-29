@@ -4,6 +4,7 @@
 // https://github.com/axuno/ClubSite
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,13 @@ using Piranha.AspNetCore.Models;
 using Piranha.AspNetCore.Services;
 
 namespace ClubSite.Pages;
+
+/// <summary>Value/label pair for shared dropdown options.</summary>
+public class Option
+{
+    public string V { get; set; } = string.Empty;
+    public string L { get; set; } = string.Empty;
+}
 
 [BindProperties]
 [ValidateAntiForgeryToken]
@@ -150,51 +158,69 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         return Redirect("/probetraining:anfrage-erhalten");
     }
 
+    // ────────────────────────────────────────────────────────
+    // Shared option definitions (single source of truth)
+    // Used by both the view (dropdowns) and GetFormMailMessage()
+    // ────────────────────────────────────────────────────────
+
+    public List<Option> GenderOptions() => new()
+    {
+        new Option { V = string.Empty, L = "keine Angabe" },
+        new Option { V = "f", L = "Frau" },
+        new Option { V = "m", L = "Herr" }
+    };
+
+    public List<Option> GenderInfoOptions() => new()
+    {
+        new Option { V = string.Empty, L = "keine Angabe" },
+        new Option { V = "m", L = "männlich" },
+        new Option { V = "w", L = "weiblich" },
+        new Option { V = "d", L = "divers" }
+    };
+
+    public List<Option> ExperienceOptions() => new()
+    {
+        new Option { V = string.Empty, L = "Bitte auswählen" },
+        new Option { V = "beginner", L = "Anfänger" },
+        new Option { V = "some-experience", L = "geringe Erfahrung" },
+        new Option { V = "hobby", L = "Hobbyniveau" },
+        new Option { V = "advanced", L = "fortgeschritten" },
+        new Option { V = "club-player", L = "Vereinsspieler" }
+    };
+
+    public List<Option> TeamOptions() => new()
+    {
+        new Option { V = string.Empty, L = "Bitte auswählen" },
+        new Option { V = "none", L = "keine Präferenz" },
+        new Option { V = "mixed", L = "Mixed" },
+        new Option { V = "women", L = "Damen" },
+        new Option { V = "men", L = "Herren" },
+        new Option { V = "youth", L = "Jugendliche" }
+    };
+
+    public List<Option> GoalOptions() => new()
+    {
+        new Option { V = string.Empty, L = "Bitte auswählen" },
+        new Option { V = "other", L = "Sonstiges" },
+        new Option { V = "active", L = "Aktiv spielen in einer Mannschaft" },
+        new Option { V = "train-only", L = "Nur trainieren" },
+        new Option { V = "explore", L = "Erstmal kennenlernen" }
+    };
+
+    /// <summary>Looks up a label from shared options; returns "nicht angegeben" on mismatch.</summary>
+    public static string Label(List<Option> options, string value)
+    {
+        var found = options.Find(o => o.V == value);
+        return found is null ? "nicht angegeben" : found.L;
+    }
+
     private string GetFormMailMessage()
     {
-        var genderLabel = Gender switch
-        {
-            "f" => "Frau",
-            "m" => "Herr",
-            _ => "nicht angegeben"
-        };
-
-        var genderInfoLabel = GenderInfo switch
-        {
-            "m" => "männlich",
-            "w" => "weiblich",
-            "d" => "divers",
-            _ => "nicht angegeben"
-        };
-
-        var experienceLabel = Experience switch
-        {
-            "beginner" => "Anfänger",
-            "some-experience" => "geringe Erfahrung",
-            "hobby" => "Hobbyniveau",
-            "advanced" => "fortgeschritten",
-            "club-player" => "Vereinsspieler",
-            _ => "nicht angegeben"
-        };
-
-        var teamLabel = TeamPreference switch
-        {
-            "mixed" => "Mixed",
-            "women" => "Damen",
-            "men" => "Herren",
-            "youth" => "Jugendliche",
-            "none" => "keine Präferenz",
-            _ => "nicht angegeben"
-        };
-
-        var goalLabel = Goal switch
-        {
-            "active" => "Aktiv spielen mit Mannschaft",
-            "train-only" => "Nur trainieren",
-            "explore" => "Erstmal kennenlernen",
-            "other" => "Sonstiges",
-            _ => "nicht angegeben"
-        };
+        var genderLabel = Label(GenderOptions(), Gender);
+        var genderInfoLabel = Label(GenderInfoOptions(), GenderInfo);
+        var experienceLabel = Label(ExperienceOptions(), Experience);
+        var teamLabel = Label(TeamOptions(), TeamPreference);
+        var goalLabel = Label(GoalOptions(), Goal);
 
         return
             $@"Anfrage für ein Probetraining
