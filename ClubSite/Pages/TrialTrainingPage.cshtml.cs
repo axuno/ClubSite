@@ -12,6 +12,7 @@ using ClubSite.Library;
 using ClubSite.Resources;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Piranha;
@@ -19,13 +20,6 @@ using Piranha.AspNetCore.Models;
 using Piranha.AspNetCore.Services;
 
 namespace ClubSite.Pages;
-
-/// <summary>Value/label pair for shared dropdown options.</summary>
-public class Option
-{
-    public string V { get; set; } = string.Empty;
-    public string L { get; set; } = string.Empty;
-}
 
 [BindProperties]
 [ValidateAntiForgeryToken]
@@ -155,47 +149,47 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
     // Used by both the view (dropdowns) and GetFormMailMessage()
     // ────────────────────────────────────────────────────────
 
-    public List<Option> GenderOptions() => new()
+    public List<SelectListItem> GenderOptions() => new()
     {
-        new Option { V = string.Empty, L = "keine Angabe" },
-        new Option { V = "f", L = "Frau" },
-        new Option { V = "m", L = "Herr" }
+        new SelectListItem { Value = string.Empty, Text = "keine Angabe" },
+        new SelectListItem { Value = "f", Text = "Frau" },
+        new SelectListItem { Value = "m", Text = "Herr" }
     };
 
-    public List<Option> ExperienceOptions() => new()
+    public List<SelectListItem> ExperienceOptions() => new()
     {
-        new Option { V = string.Empty, L = "Bitte auswählen" },
-        new Option { V = "beginner", L = "Anfänger" },
-        new Option { V = "some-experience", L = "geringe Erfahrung" },
-        new Option { V = "hobby", L = "Hobbyniveau" },
-        new Option { V = "advanced", L = "fortgeschritten" },
-        new Option { V = "club-player", L = "Vereinsspieler" }
+        new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
+        new SelectListItem { Value = "beginner", Text = "Anfänger" },
+        new SelectListItem { Value = "some-experience", Text = "geringe Erfahrung" },
+        new SelectListItem { Value = "hobby", Text = "Hobbyniveau" },
+        new SelectListItem { Value = "advanced", Text = "fortgeschritten" },
+        new SelectListItem { Value = "club-player", Text = "Vereinsspieler" }
     };
 
-    public List<Option> TeamOptions() => new()
+    public List<SelectListItem> TeamOptions() => new()
     {
-        new Option { V = string.Empty, L = "Bitte auswählen" },
-        new Option { V = "none", L = "keine Präferenz" },
-        new Option { V = "mixed", L = "Mixed" },
-        new Option { V = "women", L = "Damen" },
-        new Option { V = "men", L = "Herren" },
-        new Option { V = "youth", L = "Jugendliche" }
+        new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
+        new SelectListItem { Value = "none", Text = "keine Präferenz" },
+        new SelectListItem { Value = "mixed", Text = "Mixed" },
+        new SelectListItem { Value = "women", Text = "Damen" },
+        new SelectListItem { Value = "men", Text = "Herren" },
+        new SelectListItem { Value = "youth", Text = "Jugendliche" }
     };
 
-    public List<Option> GoalOptions() => new()
+    public List<SelectListItem> GoalOptions() => new()
     {
-        new Option { V = string.Empty, L = "Bitte auswählen" },
-        new Option { V = "other", L = "Sonstiges" },
-        new Option { V = "active", L = "Aktiv spielen in einer Mannschaft" },
-        new Option { V = "train-only", L = "Nur trainieren" },
-        new Option { V = "explore", L = "Erstmal kennenlernen" }
+        new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
+        new SelectListItem { Value = "other", Text = "Sonstiges" },
+        new SelectListItem { Value = "active", Text = "Aktiv spielen in einer Mannschaft" },
+        new SelectListItem { Value = "train-only", Text = "Nur trainieren" },
+        new SelectListItem { Value = "explore", Text = "Erstmal kennenlernen" }
     };
 
     /// <summary>Looks up a label from shared options; returns "nicht angegeben" on mismatch.</summary>
-    public static string Label(List<Option> options, string value)
+    public static string Label(List<SelectListItem> options, string value)
     {
-        var found = options.Find(o => o.V == value);
-        return found is null ? "nicht angegeben" : found.L;
+        var found = options.Find(o => o.Value == value);
+        return found is null ? "nicht angegeben" : found.Text!;
     }
 
     private string GetFormMailMessage()

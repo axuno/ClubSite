@@ -10,11 +10,6 @@
 <div class="mx-3 py-2">
     @{
         ViewData["Title"] = "Probetraining vereinbaren";
-
-        List<SelectListItem> ToSelectList(List<Option> opts)
-        {
-            return opts.Select(o => new SelectListItem { Value = o.V, Text = o.L }).ToList();
-        }
     }
     <div>
         <h2 class="h2">@ViewData["Title"]</h2>
@@ -35,7 +30,7 @@
 
                 <div class="col-md-6">
                     <label asp-for="Gender" class="form-label"></label>
-                    <select asp-for="Gender" asp-items="ToSelectList(Model.GenderOptions())" class="form-select" required="required"></select>
+                    <select asp-for="Gender" asp-items="Model.GenderOptions()" class="form-select" required="required"></select>
                     <span asp-validation-for="Gender" class="text-danger"></span>
                 </div>
                 <div>
@@ -70,17 +65,17 @@
                 </div>
                 <div class="col-md-6">
                     <label asp-for="Experience" class="form-label"></label>
-                    <select asp-for="Experience" asp-items="ToSelectList(Model.ExperienceOptions())" class="form-select" required="required"></select>
+                    <select asp-for="Experience" asp-items="Model.ExperienceOptions()" class="form-select" required="required"></select>
                     <span asp-validation-for="Experience" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
                     <label asp-for="TeamPreference" class="form-label"></label>
-                    <select asp-for="TeamPreference" asp-items="ToSelectList(Model.TeamOptions())" class="form-select" required="required"></select>
+                    <select asp-for="TeamPreference" asp-items="Model.TeamOptions()" class="form-select" required="required"></select>
                     <span asp-validation-for="TeamPreference" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
                     <label asp-for="Goal" class="form-label"></label>
-                    <select asp-for="Goal" asp-items="ToSelectList(Model.GoalOptions())" class="form-select" required="required"></select>
+                    <select asp-for="Goal" asp-items="Model.GoalOptions()" class="form-select" required="required"></select>
                     <span asp-validation-for="Goal" class="text-danger"></span>
                 </div>
             </fieldset>
