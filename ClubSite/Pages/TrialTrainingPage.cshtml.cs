@@ -47,7 +47,7 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         ErrorMessageResourceType = typeof(DataAnnotationResource))]
     [DataType(DataType.Text)]
     [Display(Name = "Anrede")]
-    [RegularExpression("[mf]", ErrorMessage = "Ungültiger Schlüssel für 'Anrede'")]
+    [RegularExpression("[mfu]", ErrorMessage = "Ungültiger Schlüssel für 'Anrede'")]
     public string Gender { get; set; } = string.Empty;
 
     [Required(AllowEmptyStrings = false,
@@ -144,81 +144,77 @@ public class TrialTrainingPageModel : SinglePage<Models.TrialTrainingPage>
         return Redirect("/probetraining:anfrage-erhalten");
     }
 
-    // ────────────────────────────────────────────────────────
-    // Shared option definitions (single source of truth)
-    // Used by both the view (dropdowns) and GetFormMailMessage()
-    // ────────────────────────────────────────────────────────
+    public List<SelectListItem> GenderOptions() => [
+        new() { Value = string.Empty, Text = "Bitte auswählen" },
+        new() { Value = "f", Text = "Frau" },
+        new() { Value = "m", Text = "Herr" },
+        new() { Value = "u", Text = "Keine Angabe" }
+    ];
 
-    public List<SelectListItem> GenderOptions() => new()
-    {
-        new SelectListItem { Value = string.Empty, Text = "keine Angabe" },
-        new SelectListItem { Value = "f", Text = "Frau" },
-        new SelectListItem { Value = "m", Text = "Herr" }
-    };
 
-    public List<SelectListItem> ExperienceOptions() => new()
-    {
-        new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
-        new SelectListItem { Value = "beginner", Text = "Anfänger" },
-        new SelectListItem { Value = "some-experience", Text = "geringe Erfahrung" },
-        new SelectListItem { Value = "hobby", Text = "Hobbyniveau" },
-        new SelectListItem { Value = "advanced", Text = "fortgeschritten" },
-        new SelectListItem { Value = "club-player", Text = "Vereinsspieler" }
-    };
+    public List<SelectListItem> ExperienceOptions() => [
+        new() { Value = string.Empty, Text = "Bitte auswählen" },
+        new() { Value = "beginner", Text = "Anfänger" },
+        new() { Value = "some-experience", Text = "geringe Erfahrung" },
+        new() { Value = "hobby", Text = "Hobbyniveau" },
+        new() { Value = "advanced", Text = "fortgeschritten" },
+        new() { Value = "club-player", Text = "Vereinsspieler" }
+    ];
 
-    public List<SelectListItem> TeamOptions() => new()
-    {
-        new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
-        new SelectListItem { Value = "none", Text = "keine Präferenz" },
-        new SelectListItem { Value = "mixed", Text = "Mixed" },
-        new SelectListItem { Value = "women", Text = "Damen" },
-        new SelectListItem { Value = "men", Text = "Herren" },
-        new SelectListItem { Value = "youth", Text = "Jugendliche" }
-    };
+    public List<SelectListItem> TeamOptions() => [
+        new() { Value = string.Empty, Text = "Bitte auswählen" },
+        new() { Value = "none", Text = "keine Präferenz" },
+        new() { Value = "mixed", Text = "Mixed" },
+        new() { Value = "women", Text = "Damen" },
+        new() { Value = "men", Text = "Herren" },
+        new() { Value = "youth", Text = "Jugendliche" }
+    ];
 
-    public List<SelectListItem> GoalOptions() => new()
-    {
-        new SelectListItem { Value = string.Empty, Text = "Bitte auswählen" },
-        new SelectListItem { Value = "other", Text = "Sonstiges" },
-        new SelectListItem { Value = "active", Text = "Aktiv spielen in einer Mannschaft" },
-        new SelectListItem { Value = "train-only", Text = "Nur trainieren" },
-        new SelectListItem { Value = "explore", Text = "Erstmal kennenlernen" }
-    };
+    public List<SelectListItem> GoalOptions() => [
+        new() { Value = string.Empty, Text = "Bitte auswählen" },
+        new() { Value = "other", Text = "Sonstiges" },
+        new() { Value = "active", Text = "Aktiv spielen in einer Mannschaft" },
+        new() { Value = "train-only", Text = "Nur trainieren" },
+        new() { Value = "explore", Text = "Erstmal kennenlernen" }
+    ];
 
     /// <summary>Looks up a label from shared options; returns "nicht angegeben" on mismatch.</summary>
     public static string Label(List<SelectListItem> options, string value)
     {
         var found = options.Find(o => o.Value == value);
-        return found is null ? "nicht angegeben" : found.Text!;
+        return found is null ? "[nicht angegeben]" : found.Text!;
     }
 
     private string GetFormMailMessage()
     {
         var genderLabel = Label(GenderOptions(), Gender);
+        genderLabel = genderLabel == "Keine Angabe" ? $"[{genderLabel}]" : genderLabel;
         var experienceLabel = Label(ExperienceOptions(), Experience);
         var teamLabel = Label(TeamOptions(), TeamPreference);
         var goalLabel = Label(GoalOptions(), Goal);
 
         return
-            $@"Anfrage für ein Probetraining
+            $"""
+             Anfrage für ein Probetraining
 
-{(genderLabel)} {FirstName} {LastName}
-Telefon: {(string.IsNullOrWhiteSpace(PhoneNumber) ? "-" : PhoneNumber)}
-E-Mail:  {Email}
+             {genderLabel} {FirstName} {LastName}
+             Telefon: {(string.IsNullOrWhiteSpace(PhoneNumber) ? "-" : PhoneNumber)}
+             E-Mail:  {Email}
 
-Alter: {Age}
-Spielerfahrung: {experienceLabel}
-Team-Präferenz: {teamLabel}
-Ziel: {goalLabel}
+             Alter: {Age}
+             Spielerfahrung: {experienceLabel}
+             Team-Präferenz: {teamLabel}
+             Ziel: {goalLabel}
 
-Anmerkungen:
-----------------------------------------
-{(string.IsNullOrWhiteSpace(Comment) ? "(keine)" : Comment)}
+             Anmerkungen:
+             ----------------------------------------
+             {(string.IsNullOrWhiteSpace(Comment) ? "(keine)" : Comment)}
 
 
-----------------------------------------
-Browser: {(Request.Headers.ContainsKey(HeaderNames.UserAgent) ? Request.Headers[HeaderNames.UserAgent].ToString() : "unbekannt")}
-IP-Adresse: {HttpContext.Connection.RemoteIpAddress}
-";
+             ----------------------------------------
+             Browser: {(Request.Headers.ContainsKey(HeaderNames.UserAgent) ? Request.Headers[HeaderNames.UserAgent].ToString() : "unbekannt")}
+             IP-Adresse: {HttpContext.Connection.RemoteIpAddress}
+
+             """;
     }
 }
