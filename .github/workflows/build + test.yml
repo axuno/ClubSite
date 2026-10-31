@@ -38,4 +38,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore -nowarn:CS0162,CS0436
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --filter "TestCategory!=Integration"
