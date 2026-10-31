@@ -42,7 +42,7 @@ public class Program
             logger.Trace($"Configuration of {nameof(Microsoft.AspNetCore.WebHost)} starting.");
             logger.Info($"This app runs as {(Environment.Is64BitProcess ? "64-bit" : "32-bit")} process.");
                 
-            var builder = SetupBuilder(args);
+            var builder = SetupBuilder(args, logger);
 
             var loggingConfig = builder.Configuration.GetSection("Logging");
             builder.Logging.ClearProviders();
@@ -69,7 +69,7 @@ public class Program
         }
     }
 
-    public static WebApplicationBuilder SetupBuilder(string[] args)
+    public static WebApplicationBuilder SetupBuilder(string[] args, NLog.ILogger logger)
     {
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
@@ -90,16 +90,22 @@ public class Program
                 optional: true, reloadOnChange: true)
             .AddJsonFile(@"Credentials.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"Credentials.{builder.Environment.EnvironmentName}.json",
-                optional: false, reloadOnChange: true)
+                optional: true, reloadOnChange: true)
             .AddEnvironmentVariables()
             .AddCommandLine(args);
 
         if (builder.Environment.IsDevelopment())
         {
             var secretsFolder = Path.Combine(builder.Environment.ContentRootPath, ConfigurationFolder, @$"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}Secrets");
-            if (!Directory.Exists(secretsFolder)) throw new DirectoryNotFoundException("Secrets folder not found");
-            builder.Configuration.AddJsonFile(Path.Combine(secretsFolder, @"credentials.json"), false);
-            builder.Configuration.AddJsonFile(Path.Combine(secretsFolder, $"credentials.{builder.Environment.EnvironmentName}.json"), false);
+            if (Directory.Exists(secretsFolder))
+            {
+                builder.Configuration.AddJsonFile(Path.Combine(secretsFolder, @"credentials.json"), false);
+                builder.Configuration.AddJsonFile(Path.Combine(secretsFolder, $"credentials.{builder.Environment.EnvironmentName}.json"), false);
+            }
+            else
+            {
+                logger.Fatal("Secrets folder not found");
+            }
         }
 
         // Use static web assets from League (and other referenced projects or packages)
