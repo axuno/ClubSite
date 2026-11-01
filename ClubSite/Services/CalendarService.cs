@@ -41,11 +41,19 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = (Calendar)new CalendarSerializer().Deserialize(icsContent);
-            if (calendar != null)
-                return ParseCalendar(calendar, rangeStart, rangeEnd)
-                    .OrderBy(e => e.StartDate)
-                    .ToList();
+            // ICal.Net 6 fails on non-URI ORGANIZER values (e.g. "ORGANIZER:Volleyball")
+            var cleaned = System.Text.RegularExpressions.Regex.Replace(
+                icsContent, @"^ORGANIZER:.*$", "ORGANIZER:mailto:club@volleyballclub.de",
+                System.Text.RegularExpressions.RegexOptions.Multiline);
+
+            var calendars = CalendarSerializer.DeserializeCollection<Calendar>(cleaned);
+            var items = new List<CalendarEventItem>();
+            foreach (var cal in calendars)
+            {
+                if (cal != null)
+                    items.AddRange(ParseCalendar(cal, rangeStart, rangeEnd));
+            }
+            return items.OrderBy(e => e.StartDate).ToList();
         }
         catch (Exception ex)
         {
@@ -202,10 +210,15 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = (Calendar)new CalendarSerializer().Deserialize(icsContent);
-            if (calendar == null) return [];
+            var cleaned = System.Text.RegularExpressions.Regex.Replace(
+                icsContent, @"^ORGANIZER:.*$", "ORGANIZER:mailto:club@volleyballclub.de",
+                System.Text.RegularExpressions.RegexOptions.Multiline);
+            var calendars = CalendarSerializer.DeserializeCollection<Calendar>(cleaned);
 
-            foreach (var ev in calendar.Events)
+            foreach (var cal in calendars)
+            {
+                if (cal == null) continue;
+                foreach (var ev in cal.Events)
             {
                 var (team, category) = ParseCategoriesFromEvent(ev);
                 if (!string.IsNullOrEmpty(team)) values.Add(team);
