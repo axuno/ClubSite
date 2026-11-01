@@ -221,10 +221,10 @@ public class CalendarService : ICalendarService
                 foreach (var ev in cal.Events)
                 {
                     var (team, category) = ParseCategoriesFromEvent(ev);
-                if (!string.IsNullOrEmpty(team)) values.Add(team);
-                if (!string.IsNullOrEmpty(category)) values.Add(category);
+                    if (!string.IsNullOrEmpty(team)) values.Add(team);
+                    if (!string.IsNullOrEmpty(category)) values.Add(category);
+                }
             }
-        }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Failed to extract distinct field values from calendar file");
