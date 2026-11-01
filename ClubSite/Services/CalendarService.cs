@@ -28,10 +28,6 @@ public class CalendarService : ICalendarService
         _logger = logger;
     }
 
-    /// <summary>
-    /// Loads the calendar file from the uploads directory and returns events
-    /// within the specified date range (evaluating RRULE for recurring events).
-    /// </summary>
     public List<CalendarEventItem> GetEvents(DateTime rangeStart, DateTime rangeEnd)
     {
         var calendarFile = FindCalendarFile();
@@ -58,35 +54,15 @@ public class CalendarService : ICalendarService
         return [];
     }
 
-    /// <summary>
-    /// Returns distinct team values from all .ics files (for filter dropdowns).
-    /// </summary>
-    public List<string> GetAvailableTeams()
-    {
-        return GetDistinctFieldValues(e => e.Team);
-    }
+    public List<string> GetAvailableTeams() => GetDistinctFieldValues(e => e.Team);
+    public List<string> GetAvailableCategories() => GetDistinctFieldValues(e => e.Category);
 
-    /// <summary>
-    /// Returns distinct category values from all .ics files (for filter dropdowns).
-    /// </summary>
-    public List<string> GetAvailableCategories()
-    {
-        return GetDistinctFieldValues(e => e.Category);
-    }
-
-    /// <summary>
-    /// Checks whether at least one calendar file exists (cached).
-    /// </summary>
     public bool HasCalendarFiles()
     {
         _hasCalendarFiles ??= FindCalendarFile() != null;
         return _hasCalendarFiles.Value;
     }
 
-    /// <summary>
-    /// Finds the newest events.ics file under wwwroot/uploads/.
-    /// Returns null if none found.
-    /// </summary>
     private string? FindCalendarFile()
     {
         var uploadsRoot = Path.Combine(_webRoot, UploadsDir);
@@ -94,12 +70,8 @@ public class CalendarService : ICalendarService
             return null;
 
         var files = Directory.GetFiles(uploadsRoot, CalendarFileName, SearchOption.AllDirectories);
-
-        if (files.Length == 0)
-            return null;
-
-        if (files.Length <= 1)
-            return files[0];
+        if (files.Length == 0) return null;
+        if (files.Length <= 1) return files[0];
 
         var newest = files.OrderByDescending(File.GetLastWriteTime).First();
         _logger.LogInformation("Multiple calendar files found, using newest: {FilePath}", newest);
@@ -110,16 +82,16 @@ public class CalendarService : ICalendarService
     {
         var items = new List<CalendarEventItem>();
 
-        foreach (var component in calendar.Events)
+        foreach (var ev in calendar.Events)
         {
-            if (component is not CalendarEvent ev || ev.DtStart == null) continue;
+            if (ev.DtStart == null) continue;
 
             var (team, category) = ParseCategoriesFromEvent(ev);
             var start = ToLocal(ev.DtStart);
             var end = ev.DtEnd != null ? ToLocal(ev.DtEnd) : start;
             var duration = end - start;
 
-            if (ev.RecurrenceRule?.Frequency == FrequencyType.Weekly)
+            if (IsWeeklyRecurrence(ev))
             {
                 items.AddRange(
                     ExpandWeeklyRecurrence(ev, start, duration, rangeStart, rangeEnd, team, category));
@@ -142,9 +114,11 @@ public class CalendarService : ICalendarService
         return items;
     }
 
-    /// <summary>
-    /// Expands weekly recurring events (RRULE FREQ=WEEKLY) into individual CalendarEventItems.
-    /// </summary>
+    private static bool IsWeeklyRecurrence(CalendarEvent ev)
+    {
+        return ev.RecurrenceRule != null && ev.RecurrenceRule.Frequency == FrequencyType.Weekly;
+    }
+
     private static List<CalendarEventItem> ExpandWeeklyRecurrence(
         CalendarEvent ev, DateTime start, TimeSpan duration,
         DateTime rangeStart, DateTime rangeEnd,
@@ -206,24 +180,19 @@ public class CalendarService : ICalendarService
         if (ev.Categories is not { Count: > 0 })
             return (string.Empty, string.Empty);
 
-        var team = ev.Categories[0];
-        var category = ev.Categories.Count > 1 ? ev.Categories[1] : string.Empty;
-        return (team, category);
+        return (ev.Categories[0], ev.Categories.Count > 1 ? ev.Categories[1] : string.Empty);
     }
 
-
-    private DateTime ToLocal(CalDateTime cal)
+    private static DateTime ToLocal(DateTime dt)
     {
-        if (cal.IsUtc)
-            return TimeZoneInfo.ConvertTimeFromUtc(cal, TimeZoneInfo.Local);
-        return cal;
+        if (dt.Kind == DateTimeKind.Utc)
+            return TimeZoneInfo.ConvertTimeFromUtc(dt, TimeZoneInfo.Local);
+        return dt;
     }
 
     private List<string> GetDistinctFieldValues(Func<CalendarEventItem, string> selector)
     {
         var values = new HashSet<string>();
-        var rangeStart = DateTime.Now.AddYears(-1);
-        var rangeEnd = DateTime.Now.AddYears(2);
 
         var calendarFile = FindCalendarFile();
         if (calendarFile == null) return [];
@@ -234,9 +203,8 @@ public class CalendarService : ICalendarService
             var calendar = CalendarSerializer.Deserialize(icsContent);
             if (calendar == null) return [];
 
-            foreach (var component in calendar.Events)
+            foreach (var ev in calendar.Events)
             {
-                if (component is not CalendarEvent ev) continue;
                 var (team, category) = ParseCategoriesFromEvent(ev);
                 if (!string.IsNullOrEmpty(team)) values.Add(team);
                 if (!string.IsNullOrEmpty(category)) values.Add(category);
@@ -247,6 +215,6 @@ public class CalendarService : ICalendarService
             _logger.LogWarning(ex, "Failed to extract distinct field values from calendar file");
         }
 
-        return values.OrderBy(v => v).ToList();
+        return [.. values.OrderBy(v => v)];
     }
 }
