@@ -219,8 +219,8 @@ public class CalendarService : ICalendarService
             {
                 if (cal == null) continue;
                 foreach (var ev in cal.Events)
-            {
-                var (team, category) = ParseCategoriesFromEvent(ev);
+                {
+                    var (team, category) = ParseCategoriesFromEvent(ev);
                 if (!string.IsNullOrEmpty(team)) values.Add(team);
                 if (!string.IsNullOrEmpty(category)) values.Add(category);
             }
