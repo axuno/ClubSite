@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
-using Ical.Net.DataTypes;
+using Ical.Net.Serialization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -44,7 +44,7 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = Calendar.Load(icsContent);
+            var calendar = CalendarSerializer.Deserialize(icsContent);
             if (calendar != null)
                 return ParseCalendar(calendar, rangeStart, rangeEnd)
                     .OrderBy(e => e.StartDate)
@@ -215,8 +215,8 @@ public class CalendarService : ICalendarService
     private DateTime ToLocal(CalDateTime cal)
     {
         if (cal.IsUtc)
-            return TimeZoneInfo.ConvertTimeFromUtc(cal.Value, TimeZoneInfo.Local);
-        return cal.Value;
+            return TimeZoneInfo.ConvertTimeFromUtc(cal, TimeZoneInfo.Local);
+        return cal;
     }
 
     private List<string> GetDistinctFieldValues(Func<CalendarEventItem, string> selector)
@@ -231,7 +231,7 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = Calendar.Load(icsContent);
+            var calendar = CalendarSerializer.Deserialize(icsContent);
             if (calendar == null) return [];
 
             foreach (var component in calendar.Events)
