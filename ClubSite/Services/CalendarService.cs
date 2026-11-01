@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
+using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
@@ -40,7 +41,7 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = CalendarSerializer.Deserialize(icsContent);
+            var calendar = new CalendarSerializer().Deserialize(icsContent);
             if (calendar != null)
                 return ParseCalendar(calendar, rangeStart, rangeEnd)
                     .OrderBy(e => e.StartDate)
@@ -128,7 +129,7 @@ public class CalendarService : ICalendarService
         var rule = ev.RecurrenceRule!;
 
         var until = rule.Until != null
-            ? (rule.Until.Value < rangeEnd ? rule.Until.Value : rangeEnd)
+            ? (rule.Until.ToDateTimeUnspecified() < rangeEnd ? rule.Until.ToDateTimeUnspecified() : rangeEnd)
             : rangeEnd;
 
         var maxOccurrences = rule.Count > 0 ? rule.Count : 200;
@@ -183,9 +184,10 @@ public class CalendarService : ICalendarService
         return (ev.Categories[0], ev.Categories.Count > 1 ? ev.Categories[1] : string.Empty);
     }
 
-    private static DateTime ToLocal(DateTime dt)
+    private static DateTime ToLocal(CalDateTime cal)
     {
-        if (dt.Kind == DateTimeKind.Utc)
+        var dt = cal.ToDateTimeUnspecified();
+        if (cal.IsUtc)
             return TimeZoneInfo.ConvertTimeFromUtc(dt, TimeZoneInfo.Local);
         return dt;
     }
@@ -200,7 +202,7 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = CalendarSerializer.Deserialize(icsContent);
+            var calendar = new CalendarSerializer().Deserialize(icsContent);
             if (calendar == null) return [];
 
             foreach (var ev in calendar.Events)
