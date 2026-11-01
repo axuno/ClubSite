@@ -41,6 +41,9 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
+            // iCal line unfolding: join continuation lines (RFC 5545)
+            icsContent = System.Text.RegularExpressions.Regex.Replace(
+                icsContent, @"\r\n[ \t]", "");
             // ICal.Net 6 fails on non-URI ORGANIZER values (e.g. "ORGANIZER:Volleyball")
             var cleaned = System.Text.RegularExpressions.Regex.Replace(
                 icsContent, @"^ORGANIZER:.*$", "ORGANIZER:mailto:club@volleyballclub.de",
@@ -115,7 +118,8 @@ public class CalendarService : ICalendarService
                     Location = ev.Location ?? string.Empty,
                     Description = ev.Description ?? string.Empty,
                     Team = team,
-                    Category = category
+                    Category = category,
+                    IsHomeGame = IsHomeVenue(ev.Location ?? string.Empty)
                 });
             }
         }
@@ -203,33 +207,27 @@ public class CalendarService : ICalendarService
     private List<string> GetDistinctFieldValues(Func<CalendarEventItem, string> selector)
     {
         var values = new HashSet<string>();
+        var rangeStart = DateTime.Now.AddYears(-1);
+        var rangeEnd = DateTime.Now.AddYears(2);
 
-        var calendarFile = FindCalendarFile();
-        if (calendarFile == null) return [];
-
-        try
+        foreach (var item in GetEvents(rangeStart, rangeEnd))
         {
-            var icsContent = File.ReadAllText(calendarFile);
-            var cleaned = System.Text.RegularExpressions.Regex.Replace(
-                icsContent, @"^ORGANIZER:.*$", "ORGANIZER:mailto:club@volleyballclub.de",
-                System.Text.RegularExpressions.RegexOptions.Multiline);
-            var calendars = CalendarSerializer.DeserializeCollection<Calendar>(cleaned);
-
-            foreach (var cal in calendars)
-            {
-                if (cal == null) continue;
-                foreach (var ev in cal.Events)
-                {
-                    var (team, category) = ParseCategoriesFromEvent(ev);
-                    if (!string.IsNullOrEmpty(team)) values.Add(team);
-                    if (!string.IsNullOrEmpty(category)) values.Add(category);
-                }
-            }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Failed to extract distinct field values from calendar file");
+            var val = selector(item);
+            if (!string.IsNullOrEmpty(val))
+                values.Add(val);
         }
 
         return [.. values.OrderBy(v => v)];
+    }
+
+    /// <summary>
+    /// Determines if a venue location is a home venue for VC Neusäß.
+    /// Home venues are in or near Neusäß (PLZ 86356).
+    /// </summary>
+    private static bool IsHomeVenue(string location)
+    {
+        if (string.IsNullOrWhiteSpace(location)) return false;
+        var loc = location.ToLowerInvariant();
+        return loc.Contains("neusäß") || loc.Contains("neusaess") || loc.Contains("86356");
     }
 }

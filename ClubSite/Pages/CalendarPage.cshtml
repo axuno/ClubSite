@@ -1,6 +1,7 @@
 ﻿@page
 @model ClubSite.Pages.CalendarPageModel
 @{
+    ViewData["Version"] = "177fdfa";
     ViewData["Title"] = "Termine";
 }
 <div class="mx-3 py-2">
@@ -76,7 +77,17 @@
                             <td class="text-nowrap">@evt.StartDate.ToString("dd.MM.yyyy")</td>
                             <td>@evt.StartDate.ToString("HH:mm")@if (evt.EndDate.TimeOfDay != evt.StartDate.TimeOfDay) {@( " – " + evt.EndDate.ToString("HH:mm"))}</td>
                             <td>
-                                <div class="fw-semibold">@evt.Title</div>
+                                <div class="fw-semibold">
+                                    @evt.Title
+                                    @if (evt.IsHomeGame)
+                                    {
+                                        <span class="badge bg-success ms-1" title="Heimspiel">🏠 Heim</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary ms-1" title="Auswärtsspiel">🚗 Auswärts</span>
+                                    }
+                                </div>
                                 @if (!string.IsNullOrEmpty(evt.Location))
                                 {
                                     <div class="small text-muted"><i class="fas fa-map-marker-alt me-1"></i>@evt.Location</div>
