@@ -1,8 +1,3 @@
-// Copyright (C) axuno gGmbH and Contributors.
-// This software may be modified and distributed under the terms
-// of the MIT license. See the LICENSE file for details.
-// https://github.com/axuno/ClubSite
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,17 +39,17 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
     /// <summary>
     /// Filtered events for the current view.
     /// </summary>
-    public List<CalendarEventItem> Events { get; set; } = new();
+    public List<CalendarEventItem> Events { get; set; } = [];
 
     /// <summary>
     /// Available teams for the filter dropdown.
     /// </summary>
-    public List<string> AvailableTeams { get; set; } = new();
+    public List<string> AvailableTeams { get; set; } = [];
 
     /// <summary>
     /// Available categories for the filter dropdown.
     /// </summary>
-    public List<string> AvailableCategories { get; set; } = new();
+    public List<string> AvailableCategories { get; set; } = [];
 
     /// <summary>
     /// Whether calendar files exist.
@@ -73,27 +68,18 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
 
     private void LoadFilterFromQueryString()
     {
-        TeamFilter = Request.Query["TeamFilter"].FirstOrDefault() ?? string.Empty;
-        CategoryFilter = Request.Query["CategoryFilter"].FirstOrDefault() ?? string.Empty;
-        Mode = Request.Query["Mode"].FirstOrDefault() ?? "upcoming";
+        TeamFilter = Request.Query[nameof(TeamFilter)].FirstOrDefault() ?? string.Empty;
+        CategoryFilter = Request.Query[nameof(CategoryFilter)].FirstOrDefault() ?? string.Empty;
+        Mode = Request.Query[nameof(Mode)].FirstOrDefault() ?? "upcoming";
     }
 
     private void LoadEvents()
     {
         var now = DateTime.Now;
 
-        DateTime rangeStart, rangeEnd;
-
-        if (Mode == "past")
-        {
-            rangeStart = now.AddMonths(-6);
-            rangeEnd = now;
-        }
-        else
-        {
-            rangeStart = now.AddMonths(-1);
-            rangeEnd = now.AddMonths(6);
-        }
+        var (rangeStart, rangeEnd) = Mode == "past"
+            ? (now.AddMonths(-6), now)
+            : (now.AddMonths(-1), now.AddMonths(6));
 
         var allEvents = _calendarService.GetEvents(rangeStart, rangeEnd);
 
@@ -102,10 +88,10 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
 
         var filtered = allEvents.AsEnumerable();
 
-        if (!string.IsNullOrEmpty(TeamFilter) && TeamFilter != "Alle")
+        if (!string.IsNullOrEmpty(TeamFilter))
             filtered = filtered.Where(e => e.Team == TeamFilter);
 
-        if (!string.IsNullOrEmpty(CategoryFilter) && CategoryFilter != "Alle")
+        if (!string.IsNullOrEmpty(CategoryFilter))
             filtered = filtered.Where(e => e.Category == CategoryFilter);
 
         if (Mode == "past")
