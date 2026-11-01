@@ -41,7 +41,7 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = new CalendarSerializer().Deserialize(icsContent);
+            var calendar = (Calendar)new CalendarSerializer().Deserialize(icsContent);
             if (calendar != null)
                 return ParseCalendar(calendar, rangeStart, rangeEnd)
                     .OrderBy(e => e.StartDate)
@@ -202,7 +202,7 @@ public class CalendarService : ICalendarService
         try
         {
             var icsContent = File.ReadAllText(calendarFile);
-            var calendar = new CalendarSerializer().Deserialize(icsContent);
+            var calendar = (Calendar)new CalendarSerializer().Deserialize(icsContent);
             if (calendar == null) return [];
 
             foreach (var ev in calendar.Events)
