@@ -5,6 +5,8 @@ using System.Linq;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.Serialization;
+using Ical.Net.DataTypes;
+using NodaTime;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -44,39 +46,27 @@ public class CalendarService : ICalendarService
         {
             if (ev.DtStart == null || count >= MaxEvents) continue;
 
-            var baseStart = ToLocalDate(ev.DtStart);
-            var baseEnd = ev.DtEnd != null ? ToLocalDate(ev.DtEnd) : baseStart;
-            
             var (team, category) = ParseCategories(ev);
             var location = ev.Location?.ToString() ?? string.Empty;
 
-            // iCal.Net handles RRULE expansion natively
-            List<DateTime> occurrences = [];
-            try
-            {
-                var occ = ev.GetOccurrences<DateTime>(rangeStart, rangeEnd);
-                if (occ != null) occurrences = [.. occ];
-            }
-            catch (Exception) { }
+            // Convert range to NodaTime ZonedDateTime for ICal.Net 6
+            var zone = DateTimeZoneProviders.Tzdb["Europe/Berlin"];
+            var startInst = Instant.FromUtc(rangeStart.Year, rangeStart.Month, rangeStart.Day, rangeStart.Hour, rangeStart.Minute, rangeStart.Second);
+            var startZoned = startInst.InZone(zone);
 
-            if (occurrences.Length == 0)
-                occurrences = [baseStart];
-
-            foreach (var occStart in occurrences)
+            // ICal.Net's GetOccurrences handles RRULE expansion natively
+            foreach (var occ in ev.GetOccurrences(startZoned))
             {
-                if (count++ >= MaxEvents) break;
-                var duration = baseEnd - baseStart;
-                items.Add(new CalendarEventItem
-                {
-                    Title = ev.Summary ?? "(no title)",
-                    StartDate = occStart,
-                    EndDate = occStart + duration,
-                    Location = location,
-                    Description = ev.Description ?? string.Empty,
-                    Team = team,
-                    Category = category,
-                    IsHomeGame = IsHomeVenue(location)
-                });
+                if (count >= MaxEvents) break;
+
+                var occStart = CalDateTime.FromZonedDateTime(occ.Start).ToDateTimeUnspecified();
+                var occEnd = CalDateTime.FromZonedDateTime(occ.End).ToDateTimeUnspecified();
+
+                if (occStart > rangeEnd) break;
+                if (occEnd < rangeStart) continue;
+
+                items.Add(MakeItem(ev, occStart, occEnd, team, category, location));
+                count++;
             }
         }
         return [.. items.OrderBy(e => e.StartDate)];
@@ -123,25 +113,10 @@ public class CalendarService : ICalendarService
         return files.OrderByDescending(File.GetLastWriteTime).First();
     }
 
-    private static (string team, string category) ParseCategories(CalendarEvent ev)
+    private static bool IsHomeGame(string category)
     {
-        if (ev.Categories is not { Count: > 0 })
-            return (string.Empty, string.Empty);
-        return (ev.Categories[0], ev.Categories.Count > 1 ? ev.Categories[1] : string.Empty);
-    }
-
-    private static DateTime ToLocalDate(DateTime dt)
-    {
-        if (dt.Kind == DateTimeKind.Utc)
-            return TimeZoneInfo.ConvertTimeFromUtc(dt, TimeZoneInfo.Local);
-        return dt;
-    }
-
-    private static bool IsHomeVenue(string location)
-    {
-        if (string.IsNullOrWhiteSpace(location)) return false;
-        var loc = location.ToLowerInvariant();
-        return loc.Contains("neusäß") || loc.Contains("neusaess") || loc.Contains("86356");
+        return !string.IsNullOrEmpty(category)
+            && category.ToLowerInvariant().Contains("heimspieltag");
     }
 
     private List<string> CollectDistinct(Func<CalendarEventItem, string> selector)
