@@ -5,7 +5,6 @@ using System.Linq;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.Serialization;
-using Ical.Net.DataTypes;
 using NodaTime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
