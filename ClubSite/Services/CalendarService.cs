@@ -7,6 +7,7 @@ using Ical.Net.CalendarComponents;
 using Ical.Net.Serialization;
 using Ical.Net.DataTypes;
 using NodaTime;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -17,18 +18,29 @@ namespace ClubSite.Services;
 /// </summary>
 public class CalendarService : ICalendarService
 {
-    private const string CalendarFileName = "events.ics";
-    private const string UploadsDir = "uploads";
+    private string _calendarFileName = "events.ics";
+    private string _uploadsDir = "uploads";
     private const int MaxEvents = 300;
 
     private readonly string _webRoot;
     private readonly ILogger<CalendarService> _logger;
     private bool? _hasCalendarFiles;
 
-    public CalendarService(IWebHostEnvironment env, ILogger<CalendarService> logger)
+    public CalendarService(IWebHostEnvironment env, ILogger<CalendarService> logger,
+        IConfiguration configuration)
     {
         _webRoot = env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot");
         _logger = logger;
+
+        // Allow override from AppSettings.json > Calendar.FileName / Calendar.UploadsDir
+        try
+        {
+            var fileName = configuration["Calendar:FileName"];
+            if (!string.IsNullOrEmpty(fileName)) _calendarFileName = fileName;
+            var uploadsDir = configuration["Calendar:UploadsDir"];
+            if (!string.IsNullOrEmpty(uploadsDir)) _uploadsDir = uploadsDir;
+        }
+        catch { }
     }
 
     /// <summary>
@@ -104,10 +116,10 @@ public class CalendarService : ICalendarService
 
     private string? FindCalendarFile()
     {
-        var uploadsRoot = Path.Combine(_webRoot, UploadsDir);
+        var uploadsRoot = Path.Combine(_webRoot, _uploadsDir);
         if (!Directory.Exists(uploadsRoot)) return null;
 
-        var files = Directory.GetFiles(uploadsRoot, CalendarFileName, SearchOption.AllDirectories);
+        var files = Directory.GetFiles(uploadsRoot, _calendarFileName, SearchOption.AllDirectories);
         if (files.Length == 0) return null;
         if (files.Length <= 1) return files[0];
         return files.OrderByDescending(File.GetLastWriteTime).First();
