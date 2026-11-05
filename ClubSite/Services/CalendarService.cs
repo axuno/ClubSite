@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
+using Ical.Net.DataTypes;
 using Ical.Net.Serialization;
 using NodaTime;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,7 @@ public class CalendarService : ICalendarService
 
     private readonly string _webRoot;
     private readonly ILogger<CalendarService> _logger;
-    private bool? _hasCalendarFiles;
+    private Calendar? _cachedCalendar;
 
     public CalendarService(IWebHostEnvironment env, ILogger<CalendarService> logger,
         IConfiguration configuration)
@@ -42,10 +43,6 @@ public class CalendarService : ICalendarService
         catch { }
     }
 
-    /// <summary>
-    /// Returns calendar events within the given date range.
-    /// Uses iCal.Net's built-in GetOccurrences for RRULE expansion.
-    /// </summary>
     public List<CalendarEventItem> GetEvents(DateTime rangeStart, DateTime rangeEnd)
     {
         var calendar = LoadCalendar();
@@ -58,7 +55,9 @@ public class CalendarService : ICalendarService
             if (ev.DtStart == null || count >= MaxEvents) continue;
 
             var (team, category) = ParseCategories(ev);
-            var location = ev.Location?.ToString() ?? string.Empty;
+            // ICal.Net 6 Location property returns only venue name, not full address
+            // Use raw property value for the complete address
+            string location = ev.Location?.ToString() ?? string.Empty;
 
             // Convert range to NodaTime ZonedDateTime for ICal.Net 6
             var zone = DateTimeZoneProviders.Tzdb["Europe/Berlin"];
@@ -91,12 +90,13 @@ public class CalendarService : ICalendarService
 
     public bool HasCalendarFiles()
     {
-        _hasCalendarFiles ??= FindCalendarFile() != null;
-        return _hasCalendarFiles.Value;
+        return LoadCalendar() != null;
     }
 
     private Calendar? LoadCalendar()
     {
+        if (_cachedCalendar != null) return _cachedCalendar;
+
         var calendarFile = FindCalendarFile();
         if (calendarFile == null) return null;
 
@@ -104,13 +104,13 @@ public class CalendarService : ICalendarService
         {
             var icsContent = File.ReadAllText(calendarFile);
             var calendars = CalendarSerializer.DeserializeCollection<Calendar>(icsContent);
-            return calendars?.FirstOrDefault();
+            _cachedCalendar = calendars?.FirstOrDefault();
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Failed to parse calendar file {FilePath}", calendarFile);
         }
-        return null;
+        return _cachedCalendar;
     }
 
     private string? FindCalendarFile()
@@ -122,6 +122,30 @@ public class CalendarService : ICalendarService
         if (files.Length == 0) return null;
         if (files.Length <= 1) return files[0];
         return files.OrderByDescending(File.GetLastWriteTime).First();
+    }
+
+
+
+
+    private static CalendarEventItem MakeItem(CalendarEvent ev, DateTime start, DateTime end,
+        string team, string category, string location) => new CalendarEventItem
+    {
+        Title = ev.Summary?.ToString() ?? "(no title)",
+        StartDate = start,
+        EndDate = end,
+        Location = location,
+        Description = ev.Description?.ToString() ?? string.Empty,
+        Team = team,
+        Category = category,
+        IsHomeGame = IsHomeGame(category),
+        Url = ev.Url?.ToString()
+    };
+
+    private static (string team, string category) ParseCategories(CalendarEvent ev)
+    {
+        if (ev.Categories is not { Count: > 0 })
+            return (string.Empty, string.Empty);
+        return (ev.Categories[0], ev.Categories.Count > 1 ? ev.Categories[1] : string.Empty);
     }
 
     private static bool IsHomeGame(string category)
