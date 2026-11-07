@@ -78,15 +78,15 @@
                             <td>@evt.StartDate.ToString("HH:mm")@if (evt.EndDate.TimeOfDay != evt.StartDate.TimeOfDay) {@( " – " + evt.EndDate.ToString("HH:mm"))}</td>
                             <td>
                                 <div class="fw-semibold">
-                                    @evt.Title
-                                    @if (evt.IsHomeGame)
+                                    @if (!string.IsNullOrEmpty(evt.Url))
                                     {
-                                        <span class="badge bg-success ms-1" title="Heimspiel">🏠 Heim</span>
+                                        <a href="@evt.Url" target="_blank">@evt.Title</a>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-secondary ms-1" title="Auswärtsspiel">🚗 Auswärts</span>
+                                        @evt.Title
                                     }
+
                                 </div>
                                 @if (!string.IsNullOrEmpty(evt.Location))
                                 {
