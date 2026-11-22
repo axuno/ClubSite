@@ -90,9 +90,7 @@ public class Program
                 optional: true, reloadOnChange: true)
             .AddJsonFile(@"Credentials.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"Credentials.{builder.Environment.EnvironmentName}.json",
-                optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .AddCommandLine(args);
+                optional: true, reloadOnChange: true);
 
         if (builder.Environment.IsDevelopment())
         {
@@ -107,6 +105,10 @@ public class Program
                 logger.Fatal("Secrets folder not found");
             }
         }
+
+        builder.Configuration
+            .AddEnvironmentVariables()
+            .AddCommandLine(args);
 
         // Use static web assets from League (and other referenced projects or packages)
         builder.WebHost.UseStaticWebAssets();
