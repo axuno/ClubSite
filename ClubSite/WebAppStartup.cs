@@ -108,8 +108,8 @@ public static class WebAppStartup
 
         services.AddTransient<Services.IMailService, Services.MailService>();
 
-        // Calendar events service
-        services.AddSingleton<ICalendarService, CalendarService>();
+        // Calendar events service (reads Piranha-managed .ics assets via IStorage and caches by media version)
+        services.AddScoped<ICalendarService, CalendarService>();
 
         // We use EPPlus in a noncommercial context according to the Polyform Noncommercial license:
         OfficeOpenXml.ExcelPackage.License.SetNonCommercialOrganization("Volleyballclub Neusäß e.V.");
