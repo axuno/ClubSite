@@ -409,4 +409,84 @@ public class CalendarServiceTests
         model.Events.Should().ContainSingle(e => e.Title == "Heimspiel");
         model.LastUpdated.Should().Be(media.LastModified);
     }
+
+    [TestCase("upcoming", CalendarDisplayMode.Upcoming, new[] { "Kommendes Spiel" })]
+    [TestCase("past", CalendarDisplayMode.Past, new[] { "Vergangenes Spiel" })]
+    [TestCase("all", CalendarDisplayMode.All, new[] { "Vergangenes Spiel", "Kommendes Spiel" })]
+    [TestCase("invalid-value", CalendarDisplayMode.Upcoming, new[] { "Kommendes Spiel" })]
+    public async Task CalendarPageModel_ModeEnumAndAllOption_FiltersSafely(
+        string queryMode,
+        CalendarDisplayMode expectedMode,
+        string[] expectedTitles)
+    {
+        var pageId = Guid.NewGuid();
+        var mediaId = Guid.NewGuid();
+        var media = new Media { Id = mediaId, Filename = "spieltage.ics", Type = MediaType.Document, LastModified = new DateTime(2026, 6, 2, 14, 0, 0) };
+        var pageData = new CalendarPage
+        {
+            Id = pageId,
+            Title = "Termine",
+            CalendarFiles =
+            [
+                new CalendarDocumentRegion
+                {
+                    Title = new StringField { Value = "BVV" },
+                    Document = new DocumentField { Id = mediaId, Media = media }
+                }
+            ]
+        };
+
+        var loader = new Mock<IModelLoader>();
+        loader.Setup(l => l.GetPageAsync<CalendarPage>(pageId, It.IsAny<System.Security.Claims.ClaimsPrincipal>(), false))
+            .ReturnsAsync(pageData);
+
+        var mediaService = new Mock<IMediaService>();
+        mediaService.Setup(m => m.GetByIdAsync(mediaId)).ReturnsAsync(media);
+
+        var api = new Mock<IApi>();
+        api.SetupGet(a => a.Media).Returns(mediaService.Object);
+
+        var calendarService = new Mock<ICalendarService>();
+        calendarService.Setup(s => s.LoadEventsAsync(It.IsAny<IEnumerable<Media>>(), It.IsAny<DateTime?>(), It.IsAny<DateTime?>()))
+            .ReturnsAsync(new CalendarLoadResult
+            {
+                Events =
+                [
+                    new CalendarEventItem
+                    {
+                        Title = "Vergangenes Spiel",
+                        StartDate = new DateTime(2026, 5, 10, 14, 0, 0),
+                        EndDate = new DateTime(2026, 5, 10, 16, 0, 0),
+                        Team = "Damen 1",
+                        Category = "Spieltag"
+                    },
+                    new CalendarEventItem
+                    {
+                        Title = "Kommendes Spiel",
+                        StartDate = new DateTime(2026, 6, 20, 14, 0, 0),
+                        EndDate = new DateTime(2026, 6, 20, 16, 0, 0),
+                        Team = "Damen 1",
+                        Category = "Heimspieltag"
+                    }
+                ],
+                AvailableTeams = ["Damen 1"],
+                AvailableCategories = ["Heimspieltag", "Spieltag"],
+                LastUpdated = media.LastModified
+            });
+
+        var httpContext = new DefaultHttpContext();
+        httpContext.Request.QueryString = new QueryString($"?Mode={queryMode}");
+
+        var model = new CalendarPageModel(calendarService.Object, api.Object, loader.Object,
+            new FixedClock(Instant.FromUtc(2026, 6, 10, 10, 0)))
+        {
+            PageContext = new PageContext { HttpContext = httpContext }
+        };
+
+        var actionResult = await model.OnGet(pageId);
+
+        actionResult.Should().BeOfType<PageResult>();
+        model.Mode.Should().Be(expectedMode);
+        model.Events.Select(e => e.Title).Should().Equal(expectedTitles);
+    }
 }

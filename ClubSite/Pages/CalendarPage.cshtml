@@ -52,8 +52,9 @@
             <div class="col-md-3">
                 <label asp-for="Mode" class="form-label">Zeitraum</label>
                 <select asp-for="Mode" class="form-select">
-                    <option value="upcoming">Anstehende Termine</option>
-                    <option value="past">Vergangene Termine</option>
+                    <option value="@CalendarDisplayMode.Upcoming">Anstehende Termine</option>
+                    <option value="@CalendarDisplayMode.Past">Vergangene Termine</option>
+                    <option value="@CalendarDisplayMode.All">Alle Termine</option>
                 </select>
             </div>
             <div class="col-md-3">

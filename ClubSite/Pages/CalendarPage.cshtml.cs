@@ -18,6 +18,16 @@ using Piranha.Models;
 namespace ClubSite.Pages;
 
 /// <summary>
+/// Supported display ranges for the calendar page.
+/// </summary>
+public enum CalendarDisplayMode
+{
+    Upcoming,
+    Past,
+    All
+}
+
+/// <summary>
 /// Page model for Piranha <see cref="Models.CalendarPage"/> displaying events from Piranha-managed .ics assets.
 /// </summary>
 public class CalendarPageModel : SinglePage<Models.CalendarPage>
@@ -50,10 +60,10 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
     public string CategoryFilter { get; set; } = string.Empty;
 
     /// <summary>
-    /// Display mode: "upcoming" (default) or "past".
+    /// Display mode: upcoming (default), past, or all events.
     /// </summary>
     [BindProperty(SupportsGet = true)]
-    public string Mode { get; set; } = "upcoming";
+    public CalendarDisplayMode Mode { get; set; } = CalendarDisplayMode.Upcoming;
 
     /// <summary>
     /// Filtered events for the current view.
@@ -111,9 +121,17 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
             CategoryFilter = category.FirstOrDefault() ?? string.Empty;
         }
 
-        if (Request.Query.TryGetValue(nameof(Mode), out var mode))
+        if (Request.Query.TryGetValue(nameof(Mode), out var modeRaw))
         {
-            Mode = mode.FirstOrDefault() ?? "upcoming";
+            var modeText = modeRaw.FirstOrDefault();
+            Mode = Enum.TryParse<CalendarDisplayMode>(modeText, ignoreCase: true, out var parsed)
+                && Enum.IsDefined(parsed)
+                ? parsed
+                : CalendarDisplayMode.Upcoming;
+        }
+        else if (!Enum.IsDefined(Mode))
+        {
+            Mode = CalendarDisplayMode.Upcoming;
         }
     }
 
@@ -134,9 +152,12 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
         // independently of the server's configured time zone.
         var now = _clock.GetCurrentInstant().InZone(BerlinZone).LocalDateTime.ToDateTimeUnspecified();
 
-        var (rangeStart, rangeEnd) = Mode == "past"
-            ? (now.AddMonths(-6), now)
-            : (now.AddMonths(-1), now.AddMonths(6));
+        var (rangeStart, rangeEnd) = Mode switch
+        {
+            CalendarDisplayMode.Past => (now.AddMonths(-6), now),
+            CalendarDisplayMode.All => (now.AddMonths(-6), now.AddMonths(6)),
+            _ => (now.AddMonths(-1), now.AddMonths(6))
+        };
 
         var loadResult = await _calendarService.LoadEventsAsync(mediaDocuments, rangeStart, rangeEnd);
 
@@ -156,14 +177,12 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
             filtered = filtered.Where(e => string.Equals(e.Category, CategoryFilter, StringComparison.CurrentCultureIgnoreCase));
         }
 
-        if (Mode == "past")
+        filtered = Mode switch
         {
-            filtered = filtered.Where(e => e.EndDate < now);
-        }
-        else
-        {
-            filtered = filtered.Where(e => e.EndDate >= now);
-        }
+            CalendarDisplayMode.Past => filtered.Where(e => e.EndDate < now),
+            CalendarDisplayMode.All => filtered,
+            _ => filtered.Where(e => e.EndDate >= now)
+        };
 
         Events = filtered.OrderBy(e => e.StartDate).ToList();
     }
