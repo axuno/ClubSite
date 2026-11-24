@@ -50,6 +50,10 @@ public class CalendarService : ICalendarService
 
         var items = new List<CalendarEventItem>();
         int count = 0;
+        var zone = DateTimeZoneProviders.Tzdb["Europe/Berlin"];
+        // The requested bounds are Berlin wall-clock times, not UTC instants.
+        // Resolve ambiguous/skipped times using NodaTime's lenient mapping.
+        var startZoned = zone.AtLeniently(LocalDateTime.FromDateTime(rangeStart));
         foreach (var ev in calendar.Events)
         {
             if (ev.DtStart == null || count >= MaxEvents) continue;
@@ -59,18 +63,13 @@ public class CalendarService : ICalendarService
             // Use raw property value for the complete address
             string location = ev.Location?.ToString() ?? string.Empty;
 
-            // Convert range to NodaTime ZonedDateTime for ICal.Net 6
-            var zone = DateTimeZoneProviders.Tzdb["Europe/Berlin"];
-            var startInst = Instant.FromUtc(rangeStart.Year, rangeStart.Month, rangeStart.Day, rangeStart.Hour, rangeStart.Minute, rangeStart.Second);
-            var startZoned = startInst.InZone(zone);
-
             // ICal.Net's GetOccurrences handles RRULE expansion natively
             foreach (var occ in ev.GetOccurrences(startZoned))
             {
                 if (count >= MaxEvents) break;
 
-                var occStart = CalDateTime.FromZonedDateTime(occ.Start).ToDateTimeUnspecified();
-                var occEnd = CalDateTime.FromZonedDateTime(occ.End).ToDateTimeUnspecified();
+                var occStart = occ.Start.WithZone(zone).LocalDateTime.ToDateTimeUnspecified();
+                var occEnd = occ.End.WithZone(zone).LocalDateTime.ToDateTimeUnspecified();
 
                 if (occStart > rangeEnd) break;
                 if (occEnd < rangeStart) continue;
@@ -157,7 +156,10 @@ public class CalendarService : ICalendarService
     private List<string> CollectDistinct(Func<CalendarEventItem, string> selector)
     {
         var values = new HashSet<string>();
-        foreach (var item in GetEvents(DateTime.Now.AddYears(-1), DateTime.Now.AddYears(2)))
+        var now = SystemClock.Instance.GetCurrentInstant()
+            .InZone(DateTimeZoneProviders.Tzdb["Europe/Berlin"])
+            .LocalDateTime.ToDateTimeUnspecified();
+        foreach (var item in GetEvents(now.AddYears(-1), now.AddYears(2)))
         {
             var val = selector(item);
             if (!string.IsNullOrEmpty(val)) values.Add(val);

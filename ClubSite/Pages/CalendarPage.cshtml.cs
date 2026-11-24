@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ClubSite.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NodaTime;
 using Piranha.AspNetCore.Models;
 using Piranha.AspNetCore.Services;
 
@@ -75,7 +76,11 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
 
     private void LoadEvents()
     {
-        var now = DateTime.Now;
+        // Calendar display and filtering always use Berlin wall-clock time,
+        // independently of the server's configured time zone.
+        var now = SystemClock.Instance.GetCurrentInstant()
+            .InZone(DateTimeZoneProviders.Tzdb["Europe/Berlin"])
+            .LocalDateTime.ToDateTimeUnspecified();
 
         var (rangeStart, rangeEnd) = Mode == "past"
             ? (now.AddMonths(-6), now)
