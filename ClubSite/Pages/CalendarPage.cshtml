@@ -1,0 +1,152 @@
+@page
+@model ClubSite.Pages.CalendarPageModel
+@{
+    var pageTitle = string.IsNullOrWhiteSpace(Model.Data?.Title) ? "Termine" : Model.Data.Title;
+    ViewData["Title"] = pageTitle;
+}
+
+@section head
+{
+    @if (Model.Data != null)
+    {
+        @WebApp.MetaTags(Model.Data)
+    }
+}
+
+<div class="mx-3 py-2">
+    <div>
+        <h2 class="h2 text-primary">@pageTitle</h2>
+        <h4 class="h4 text-primary">Spieltage, Training &amp; Vereinstermine</h4>
+        <hr />
+    </div>
+
+    @if (!Model.HasIcsFiles)
+    {
+        <div class="alert alert-info" role="alert">
+            Der Terminkalender wird aktuell noch befüllt.
+        </div>
+    }
+    else
+    {
+        @if (Model.EventsTruncated)
+        {
+            <div class="alert alert-warning" role="status">
+                Die Terminliste wurde begrenzt und ist möglicherweise unvollständig. Dies gilt auch für die gefilterten Ergebnisse.
+            </div>
+        }
+
+        <form method="get" class="row g-3 mb-4 align-items-end" role="form">
+            <div class="col-md-3">
+                <label asp-for="TeamFilter" class="form-label">Team</label>
+                <select asp-for="TeamFilter" class="form-select">
+                    <option value="">Alle Teams</option>
+                    @foreach (var team in Model.AvailableTeams)
+                    {
+                        <option value="@team">@team</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="CategoryFilter" class="form-label">Kategorie</label>
+                <select asp-for="CategoryFilter" class="form-select">
+                    <option value="">Alle Kategorien</option>
+                    @foreach (var category in Model.AvailableCategories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label asp-for="Mode" class="form-label">Zeitraum</label>
+                <select asp-for="Mode" class="form-select">
+                    <option value="@CalendarDisplayMode.Upcoming">Anstehende Termine (nächste 10 Monate)</option>
+                    <option value="@CalendarDisplayMode.Past">Vergangene Termine (letzte 6 Monate)</option>
+                    <option value="@CalendarDisplayMode.All">Alle Termine (letzte 2 bis nächste 10 Monate)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Filtern</button>
+            </div>
+        </form>
+
+        @if (Model.Events.Count == 0)
+        {
+            <div class="alert alert-secondary" role="alert">
+                Keine Termine für die gewählten Filter.
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-light table-striped table-hover align-middle mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th scope="col" style="width: 110px">Datum</th>
+                            <th scope="col" style="width: 110px">Uhrzeit</th>
+                            <th scope="col">Titel</th>
+                            <th scope="col" style="width: 110px">Team</th>
+                            <th scope="col" style="width: 130px">Kategorie</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var evt in Model.Events)
+                        {
+                            <tr>
+                                <td class="text-nowrap">@evt.StartDate.ToString("dd.MM.yyyy")</td>
+                                <td class="text-nowrap">
+                                    @if (evt.IsAllDay)
+                                    {
+                                        @:Ganztägig
+                                    }
+                                    else
+                                    {
+                                        @evt.StartDate.ToString("HH:mm")@if (evt.EndDate != evt.StartDate) {@(" – " + evt.EndDate.ToString("HH:mm"))}
+                                    }
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">
+                                        @if (!string.IsNullOrEmpty(evt.Url))
+                                        {
+                                            <a href="@evt.Url" target="_blank" rel="noopener noreferrer" class="link-primary">@evt.Title</a>
+                                        }
+                                        else
+                                        {
+                                            @evt.Title
+                                        }
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(evt.Location))
+                                    {
+                                        <div class="small text-muted"><i class="fas fa-map-marker-alt me-1" aria-hidden="true"></i>@evt.Location</div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(evt.Description))
+                                    {
+                                        <div class="small text-muted mt-1">@evt.Description</div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(evt.Team))
+                                    {
+                                        <span class="badge bg-primary rounded-pill">@evt.Team</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(evt.Category))
+                                    {
+                                        <span class="badge bg-secondary text-dark rounded-pill">@evt.Category</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    }
+</div>
+
+@if (Model.LastUpdated.HasValue)
+{
+    <div class="small text-muted text-center mt-2">
+        Letzte Aktualisierung: @Model.LastUpdated.Value.ToString("dd.MM.yyyy HH:mm") Uhr
+    </div>
+}
