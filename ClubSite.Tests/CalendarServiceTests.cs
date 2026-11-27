@@ -95,6 +95,46 @@ public class CalendarServiceTests
         };
     }
 
+    [TestCase(300, false, false)]
+    [TestCase(301, true, false)]
+    [TestCase(2000, true, false)]
+    [TestCase(2001, true, true)]
+    public async Task LoadEventsAsync_ReportsOnlyLimitsExceededInTheRequestedRange(
+        int occurrenceCount, bool eventLimitExceeded, bool calendarOccurrenceLimitExceeded)
+    {
+        var storage = new InMemoryStorage();
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        var ics = $"""
+            BEGIN:VCALENDAR
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:limit-test
+            DTSTART:20260610T100000Z
+            RRULE:FREQ=MINUTELY;COUNT={occurrenceCount}
+            SUMMARY:Training
+            CATEGORIES:Verein,Training
+            END:VEVENT
+            END:VCALENDAR
+            """;
+        var media = CreateMedia(Guid.NewGuid(), "events.ics", DateTime.UtcNow, ics, storage);
+        var service = new CalendarService(storage, cache, NullLogger<CalendarService>.Instance,
+            new FixedClock(Instant.FromUtc(2026, 6, 10, 10, 0)));
+        var rangeStart = new DateTime(2026, 6, 10, 12, 0, 0);
+
+        var result = await service.LoadEventsAsync([media], rangeStart, rangeStart.AddDays(2));
+
+        result.Events.Should().HaveCount(300);
+        result.EventLimitExceeded.Should().Be(eventLimitExceeded);
+        result.CalendarOccurrenceLimitExceeded.Should().Be(calendarOccurrenceLimitExceeded);
+
+        var narrowResult = await service.LoadEventsAsync([media], rangeStart, rangeStart.AddMinutes(1));
+
+        narrowResult.Events.Should().HaveCount(2);
+        narrowResult.EventLimitExceeded.Should().BeFalse();
+        narrowResult.CalendarOccurrenceLimitExceeded.Should().BeFalse();
+        narrowResult.AvailableTeams.Should().ContainSingle("Verein");
+    }
+
     [TestCase("20260115", "20260115T091500Z", "20260115T094500Z")] // Winter (CET, UTC+1)
     [TestCase("20260715", "20260715T081500Z", "20260715T084500Z")] // Summer (CEST, UTC+2)
     [TestCase("20260329", "20260329T081500Z", "20260329T084500Z")] // Spring-forward day
@@ -393,6 +433,7 @@ public class CalendarServiceTests
                 ],
                 AvailableTeams = ["Damen 1"],
                 AvailableCategories = ["Heimspieltag"],
+                EventLimitExceeded = true,
                 LastUpdated = media.LastModified
             });
 
@@ -407,17 +448,15 @@ public class CalendarServiceTests
         actionResult.Should().BeOfType<PageResult>();
         model.HasIcsFiles.Should().BeTrue();
         model.Events.Should().ContainSingle(e => e.Title == "Heimspiel");
+        model.EventsTruncated.Should().BeTrue();
         model.LastUpdated.Should().Be(media.LastModified);
     }
 
-    [TestCase("upcoming", CalendarDisplayMode.Upcoming, new[] { "Kommendes Spiel" })]
-    [TestCase("past", CalendarDisplayMode.Past, new[] { "Vergangenes Spiel" })]
-    [TestCase("all", CalendarDisplayMode.All, new[] { "Vergangenes Spiel", "Kommendes Spiel" })]
-    [TestCase("invalid-value", CalendarDisplayMode.Upcoming, new[] { "Kommendes Spiel" })]
-    public async Task CalendarPageModel_ModeEnumAndAllOption_FiltersSafely(
-        string queryMode,
-        CalendarDisplayMode expectedMode,
-        string[] expectedTitles)
+    [TestCase(CalendarDisplayMode.Upcoming, -1, 6, new[] { "Kommendes Spiel" })]
+    [TestCase(CalendarDisplayMode.Past, -6, 0, new[] { "Vergangenes Spiel" })]
+    [TestCase(CalendarDisplayMode.All, -6, 6, new[] { "Vergangenes Spiel", "Kommendes Spiel" })]
+    public async Task CalendarPageModel_ModeSelectsDateRangeAndFiltersEvents(
+        CalendarDisplayMode mode, int startMonthOffset, int endMonthOffset, string[] expectedTitles)
     {
         var pageId = Guid.NewGuid();
         var mediaId = Guid.NewGuid();
@@ -474,19 +513,19 @@ public class CalendarServiceTests
                 LastUpdated = media.LastModified
             });
 
-        var httpContext = new DefaultHttpContext();
-        httpContext.Request.QueryString = new QueryString($"?Mode={queryMode}");
-
         var model = new CalendarPageModel(calendarService.Object, api.Object, loader.Object,
             new FixedClock(Instant.FromUtc(2026, 6, 10, 10, 0)))
         {
-            PageContext = new PageContext { HttpContext = httpContext }
+            Mode = mode,
+            PageContext = new PageContext { HttpContext = new DefaultHttpContext() }
         };
 
         var actionResult = await model.OnGet(pageId);
 
         actionResult.Should().BeOfType<PageResult>();
-        model.Mode.Should().Be(expectedMode);
         model.Events.Select(e => e.Title).Should().Equal(expectedTitles);
+        var now = new DateTime(2026, 6, 10, 12, 0, 0);
+        calendarService.Verify(s => s.LoadEventsAsync(
+            It.IsAny<IEnumerable<Media>>(), now.AddMonths(startMonthOffset), now.AddMonths(endMonthOffset)), Times.Once);
     }
 }

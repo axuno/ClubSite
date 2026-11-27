@@ -28,6 +28,13 @@
     }
     else
     {
+        @if (Model.EventsTruncated)
+        {
+            <div class="alert alert-warning" role="status">
+                Die Terminliste wurde begrenzt und ist möglicherweise unvollständig. Dies gilt auch für die gefilterten Ergebnisse.
+            </div>
+        }
+
         <form method="get" class="row g-3 mb-4 align-items-end" role="form">
             <div class="col-md-3">
                 <label asp-for="TeamFilter" class="form-label">Team</label>
@@ -53,7 +60,7 @@
                 <label asp-for="Mode" class="form-label">Zeitraum</label>
                 <select asp-for="Mode" class="form-select">
                     <option value="@CalendarDisplayMode.Upcoming">Anstehende Termine</option>
-                    <option value="@CalendarDisplayMode.Past">Vergangene Termine</option>
+                    <option value="@CalendarDisplayMode.Past">Vergangene Termine (letzte 6 Monate)</option>
                     <option value="@CalendarDisplayMode.All">Alle Termine</option>
                 </select>
             </div>

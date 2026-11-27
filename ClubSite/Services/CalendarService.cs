@@ -29,7 +29,7 @@ namespace ClubSite.Services;
 public class CalendarService : ICalendarService
 {
     private const int MaxEvents = 300;
-    private const int MaxOccurrencesPerEvent = 2000;
+    private const int MaxOccurrencesPerCalendar = 2000;
     private const int MaxCalendarFilesPerPage = 20;
     private const long MaxCalendarFileBytes = 5 * 1024 * 1024;
     private const int MaxUnmatchedIncrementsLimit = 1000;
@@ -128,14 +128,14 @@ public class CalendarService : ICalendarService
             filterWindowStart.ToInstant(),
             filterWindowEnd.ToInstant());
 
-        var teams = filterEvents
+        var teams = filterEvents.Events
             .Select(e => e.Team)
             .Where(t => !string.IsNullOrWhiteSpace(t))
             .Distinct(StringComparer.CurrentCultureIgnoreCase)
             .OrderBy(t => t, StringComparer.CurrentCultureIgnoreCase)
             .ToList();
 
-        var categories = filterEvents
+        var categories = filterEvents.Events
             .Select(e => e.Category)
             .Where(c => !string.IsNullOrWhiteSpace(c))
             .Distinct(StringComparer.CurrentCultureIgnoreCase)
@@ -144,10 +144,12 @@ public class CalendarService : ICalendarService
 
         return new CalendarLoadResult
         {
-            Events = events,
+            Events = events.Events,
             AvailableTeams = teams,
             AvailableCategories = categories,
-            LastUpdated = lastUpdated
+            LastUpdated = lastUpdated,
+            EventLimitExceeded = events.EventLimitExceeded,
+            CalendarOccurrenceLimitExceeded = events.CalendarOccurrenceLimitExceeded
         };
     }
 
@@ -241,7 +243,12 @@ public class CalendarService : ICalendarService
     private static string BuildCacheKey(Media media) =>
         $"ClubSite:Calendar:{media.Id:N}:{media.LastModified.Ticks}:{media.Size}:{media.Filename}";
 
-    private List<CalendarEventItem> ExpandEvents(
+    private sealed record ExpansionResult(
+        List<CalendarEventItem> Events,
+        bool EventLimitExceeded,
+        bool CalendarOccurrenceLimitExceeded);
+
+    private ExpansionResult ExpandEvents(
         IReadOnlyList<Calendar> calendars,
         ZonedDateTime rangeStartZoned,
         Instant rangeStartInstant,
@@ -253,6 +260,7 @@ public class CalendarService : ICalendarService
         };
 
         var expanded = new List<(Instant SortInstant, CalendarEventItem Item)>();
+        var calendarOccurrenceLimitExceeded = false;
 
         foreach (var calendar in calendars)
         {
@@ -283,10 +291,11 @@ public class CalendarService : ICalendarService
                         continue;
                     }
 
-                    if (++calendarCount > MaxOccurrencesPerEvent)
+                    if (++calendarCount > MaxOccurrencesPerCalendar)
                     {
+                        calendarOccurrenceLimitExceeded = true;
                         _logger.LogWarning("Calendar occurrence expansion exceeded per-calendar limit {Limit}.",
-                            MaxOccurrencesPerEvent);
+                            MaxOccurrencesPerCalendar);
                         break;
                     }
 
@@ -308,12 +317,14 @@ public class CalendarService : ICalendarService
             }
         }
 
-        return expanded
+        var events = expanded
             .OrderBy(entry => entry.SortInstant)
             .ThenBy(entry => entry.Item.Title, StringComparer.CurrentCultureIgnoreCase)
             .Take(MaxEvents)
             .Select(entry => entry.Item)
             .ToList();
+
+        return new ExpansionResult(events, expanded.Count > MaxEvents, calendarOccurrenceLimitExceeded);
     }
 
     private static ZonedDateTime ResolveBerlinWallTime(DateTime wallTime)

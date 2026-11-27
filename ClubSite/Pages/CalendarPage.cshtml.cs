@@ -90,6 +90,9 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
     /// </summary>
     public DateTime? LastUpdated { get; private set; }
 
+    /// <summary>Whether the requested range was truncated before applying the display filters.</summary>
+    public bool EventsTruncated { get; private set; }
+
     public override async Task<IActionResult> OnGet(Guid id, bool draft = false)
     {
         var result = await base.OnGet(id, draft);
@@ -98,41 +101,9 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
             return result;
         }
 
-        LoadFilterFromQueryString();
         await LoadEventsAsync();
 
         return result;
-    }
-
-    private void LoadFilterFromQueryString()
-    {
-        if (Request?.Query == null)
-        {
-            return;
-        }
-
-        if (Request.Query.TryGetValue(nameof(TeamFilter), out var team))
-        {
-            TeamFilter = team.FirstOrDefault() ?? string.Empty;
-        }
-
-        if (Request.Query.TryGetValue(nameof(CategoryFilter), out var category))
-        {
-            CategoryFilter = category.FirstOrDefault() ?? string.Empty;
-        }
-
-        if (Request.Query.TryGetValue(nameof(Mode), out var modeRaw))
-        {
-            var modeText = modeRaw.FirstOrDefault();
-            Mode = Enum.TryParse<CalendarDisplayMode>(modeText, ignoreCase: true, out var parsed)
-                && Enum.IsDefined(parsed)
-                ? parsed
-                : CalendarDisplayMode.Upcoming;
-        }
-        else if (!Enum.IsDefined(Mode))
-        {
-            Mode = CalendarDisplayMode.Upcoming;
-        }
     }
 
     private async Task LoadEventsAsync()
@@ -145,6 +116,7 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
             AvailableTeams = [];
             AvailableCategories = [];
             LastUpdated = null;
+            EventsTruncated = false;
             return;
         }
 
@@ -164,6 +136,7 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
         AvailableTeams = [.. loadResult.AvailableTeams];
         AvailableCategories = [.. loadResult.AvailableCategories];
         LastUpdated = loadResult.LastUpdated;
+        EventsTruncated = loadResult.EventLimitExceeded || loadResult.CalendarOccurrenceLimitExceeded;
 
         var filtered = loadResult.Events.AsEnumerable();
 

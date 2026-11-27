@@ -34,6 +34,10 @@ public class CalendarLoadResult
     public IReadOnlyList<string> AvailableTeams { get; init; } = [];
     public IReadOnlyList<string> AvailableCategories { get; init; } = [];
     public DateTime? LastUpdated { get; init; }
+    /// <summary>Whether more than 300 occurrences matched the requested range.</summary>
+    public bool EventLimitExceeded { get; init; }
+    /// <summary>Whether any calendar had more than 2000 occurrences in the requested range.</summary>
+    public bool CalendarOccurrenceLimitExceeded { get; init; }
 }
 
 /// <summary>

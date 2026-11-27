@@ -113,6 +113,13 @@ public class CalendarPlaywrightTests : PageTest
             BEGIN:VCALENDAR
             VERSION:2.0
             BEGIN:VEVENT
+            UID:bvv-archived
+            DTSTART;TZID=Europe/Berlin:20251209T140000
+            DTEND;TZID=Europe/Berlin:20251209T160000
+            SUMMARY:Archivspiel
+            CATEGORIES:Damen 1,Spieltag
+            END:VEVENT
+            BEGIN:VEVENT
             UID:bvv-past
             DTSTART;TZID=Europe/Berlin:20260505T140000
             DTEND;TZID=Europe/Berlin:20260505T160000
@@ -129,6 +136,13 @@ public class CalendarPlaywrightTests : PageTest
             LOCATION:Halle Neusäß
             CATEGORIES:Damen 1,Heimspieltag
             URL:https://volleyball.bayern/spiel/202
+            END:VEVENT
+            BEGIN:VEVENT
+            UID:bvv-recurring
+            DTSTART:20260630T100000Z
+            RRULE:FREQ=MINUTELY;COUNT=301
+            SUMMARY:Serientermin
+            CATEGORIES:Damen 1,Training
             END:VEVENT
             END:VCALENDAR
             """;
@@ -333,6 +347,34 @@ public class CalendarPlaywrightTests : PageTest
         updatedText.Should().Contain("Sommerfest 2026");
         updatedText.Should().NotContain("Mitgliederversammlung");
         updatedText.Should().Contain("Letzte Aktualisierung: 04.06.2026 09:15 Uhr");
+    }
+
+    [Test]
+    public async Task CalendarPage_BindsPastModeAndFiltersAndShowsSixMonthWindow()
+    {
+        var response = await Page.GotoAsync($"{_baseUrl}/termine?Mode=past&TeamFilter=Damen%201&CategoryFilter=Spieltag");
+
+        response!.Status.Should().Be((int)HttpStatusCode.OK);
+        (await Page.Locator("#Mode").InputValueAsync()).Should().Be(nameof(CalendarDisplayMode.Past));
+        (await Page.Locator("#TeamFilter").InputValueAsync()).Should().Be("Damen 1");
+        (await Page.Locator("#CategoryFilter").InputValueAsync()).Should().Be("Spieltag");
+        (await Page.Locator("#Mode option:checked").TextContentAsync()).Should().Contain("letzte 6 Monate");
+        (await Page.Locator("tbody tr").CountAsync()).Should().Be(1);
+        (await Page.Locator("tbody").TextContentAsync()).Should().Contain("Damen 1 Auswärtsspiel");
+        (await Page.GetByRole(AriaRole.Status).CountAsync()).Should().Be(0);
+    }
+
+    [TestCase("invalid-value")]
+    [TestCase("99")]
+    public async Task CalendarPage_InvalidModeUsesUpcomingAndShowsWarningEvenWithOneFilteredEvent(string mode)
+    {
+        var response = await Page.GotoAsync($"{_baseUrl}/termine?Mode={mode}&CategoryFilter=Heimspieltag");
+
+        response!.Status.Should().Be((int)HttpStatusCode.OK);
+        (await Page.Locator("#Mode").InputValueAsync()).Should().Be(nameof(CalendarDisplayMode.Upcoming));
+        (await Page.Locator("tbody tr").CountAsync()).Should().Be(1);
+        (await Page.Locator("tbody").TextContentAsync()).Should().Contain("Damen 1 Heimspieltag");
+        (await Page.GetByRole(AriaRole.Status).TextContentAsync()).Should().Contain("Die Terminliste wurde begrenzt");
     }
 
     private static int GetFreePort()
