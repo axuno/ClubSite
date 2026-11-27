@@ -452,9 +452,9 @@ public class CalendarServiceTests
         model.LastUpdated.Should().Be(media.LastModified);
     }
 
-    [TestCase(CalendarDisplayMode.Upcoming, -1, 6, new[] { "Kommendes Spiel" })]
+    [TestCase(CalendarDisplayMode.Upcoming, -1, 10, new[] { "Kommendes Spiel" })]
     [TestCase(CalendarDisplayMode.Past, -6, 0, new[] { "Vergangenes Spiel" })]
-    [TestCase(CalendarDisplayMode.All, -6, 6, new[] { "Vergangenes Spiel", "Kommendes Spiel" })]
+    [TestCase(CalendarDisplayMode.All, -2, 10, new[] { "Vergangenes Spiel", "Kommendes Spiel" })]
     public async Task CalendarPageModel_ModeSelectsDateRangeAndFiltersEvents(
         CalendarDisplayMode mode, int startMonthOffset, int endMonthOffset, string[] expectedTitles)
     {

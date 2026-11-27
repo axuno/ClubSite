@@ -59,9 +59,9 @@
             <div class="col-md-3">
                 <label asp-for="Mode" class="form-label">Zeitraum</label>
                 <select asp-for="Mode" class="form-select">
-                    <option value="@CalendarDisplayMode.Upcoming">Anstehende Termine</option>
+                    <option value="@CalendarDisplayMode.Upcoming">Anstehende Termine (nächste 10 Monate)</option>
                     <option value="@CalendarDisplayMode.Past">Vergangene Termine (letzte 6 Monate)</option>
-                    <option value="@CalendarDisplayMode.All">Alle Termine</option>
+                    <option value="@CalendarDisplayMode.All">Alle Termine (letzte 2 bis nächste 10 Monate)</option>
                 </select>
             </div>
             <div class="col-md-3">

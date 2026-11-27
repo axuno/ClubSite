@@ -15,8 +15,8 @@ Have a look at the website: [https://www.volleyballclub.de/](https://www.volleyb
 
 ## Calendar page
 The calendar page displays events from Piranha-managed `.ics` documents in Europe/Berlin time.
-“Vergangene Termine” covers the last six months; “Alle Termine” covers six months before
-and after the current time. Upcoming events are searched up to six months ahead.
+“Vergangene Termine” covers the last six months; “Alle Termine” covers two months before
+to ten months after the current time. Upcoming events are searched up to ten months ahead.
 
 For performance, the service expands at most 2,000 occurrences per calendar and returns
 at most 300 events across calendars, sorted by start time. Both limits apply before team,

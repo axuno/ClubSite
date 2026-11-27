@@ -127,8 +127,8 @@ public class CalendarPageModel : SinglePage<Models.CalendarPage>
         var (rangeStart, rangeEnd) = Mode switch
         {
             CalendarDisplayMode.Past => (now.AddMonths(-6), now),
-            CalendarDisplayMode.All => (now.AddMonths(-6), now.AddMonths(6)),
-            _ => (now.AddMonths(-1), now.AddMonths(6))
+            CalendarDisplayMode.All => (now.AddMonths(-2), now.AddMonths(10)),
+            _ => (now.AddMonths(-1), now.AddMonths(10))
         };
 
         var loadResult = await _calendarService.LoadEventsAsync(mediaDocuments, rangeStart, rangeEnd);
