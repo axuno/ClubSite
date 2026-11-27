@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Ical.Net;
@@ -155,12 +156,6 @@ public class CalendarService : ICalendarService
 
     private async Task<IReadOnlyList<Calendar>> GetOrLoadCalendarsAsync(Media media)
     {
-        var cacheKey = BuildCacheKey(media);
-        if (_memoryCache.TryGetValue(cacheKey, out IReadOnlyList<Calendar>? cached) && cached != null)
-        {
-            return cached;
-        }
-
         try
         {
             if (media.Size > MaxCalendarFileBytes)
@@ -188,7 +183,17 @@ public class CalendarService : ICalendarService
             }
 
             memoryStream.Position = 0;
-            using var reader = new StreamReader(memoryStream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
+            var contentBytes = memoryStream.ToArray();
+            var contentHash = Convert.ToHexString(SHA256.HashData(contentBytes));
+            var cacheKey = BuildCacheKey(media, contentHash);
+
+            if (_memoryCache.TryGetValue(cacheKey, out IReadOnlyList<Calendar>? cached) && cached != null)
+            {
+                return cached;
+            }
+
+            using var reader = new StreamReader(new MemoryStream(contentBytes, writable: false), Encoding.UTF8,
+                detectEncodingFromByteOrderMarks: true);
             var icsContent = await reader.ReadToEndAsync().ConfigureAwait(false);
 
             var calendars = CalendarSerializer.DeserializeCollection<Calendar>(icsContent)?.ToList() ?? [];
@@ -240,8 +245,8 @@ public class CalendarService : ICalendarService
         return true;
     }
 
-    private static string BuildCacheKey(Media media) =>
-        $"ClubSite:Calendar:{media.Id:N}:{media.LastModified.Ticks}:{media.Size}:{media.Filename}";
+    private static string BuildCacheKey(Media media, string contentHash) =>
+        $"ClubSite:Calendar:{media.Id:N}:{contentHash}";
 
     private sealed record ExpansionResult(
         List<CalendarEventItem> Events,

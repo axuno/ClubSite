@@ -342,14 +342,61 @@ public class CalendarServiceTests
 
         first.Events[0].Title.Should().Be("Termin Alt");
         secondCached.Events[0].Title.Should().Be("Termin Alt");
-        storage.ReadCount.Should().Be(1, "unchanged media version should be served from memory cache");
+        storage.ReadCount.Should().Be(2, "storage content is read to verify its hash; unchanged content is served from the parsed-calendar cache");
 
         // Simulate Piranha Manager replacing the file in-place (same Media.Id, newer LastModified)
         var mediaV2 = CreateMedia(mediaId, "events.ics", new DateTime(2026, 6, 2, 11, 0, 0), v2, storage);
         var afterUpdate = await service.LoadEventsAsync([mediaV2], new DateTime(2026, 6, 1, 0, 0, 0), new DateTime(2026, 7, 1, 0, 0, 0));
 
         afterUpdate.Events[0].Title.Should().Be("Termin Neu");
-        storage.ReadCount.Should().Be(2, "updated media metadata must trigger reload without app restart");
+        storage.ReadCount.Should().Be(3, "updated media content must trigger parsing again without app restart");
+    }
+
+    [Test]
+    public async Task LoadEventsAsync_InvalidatesCacheWhenContentChangesButMediaMetadataIsUnchanged()
+    {
+        var storage = new InMemoryStorage();
+        using var cache = new MemoryCache(new MemoryCacheOptions());
+        var mediaId = Guid.NewGuid();
+        var lastModified = new DateTime(2026, 6, 1, 10, 0, 0);
+        var v1 = """
+            BEGIN:VCALENDAR
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:same-metadata
+            DTSTART;TZID=Europe/Berlin:20260612T180000
+            DTEND;TZID=Europe/Berlin:20260612T190000
+            SUMMARY:Termin Alt
+            END:VEVENT
+            END:VCALENDAR
+            """;
+        var v2 = """
+            BEGIN:VCALENDAR
+            VERSION:2.0
+            BEGIN:VEVENT
+            UID:same-metadata
+            DTSTART;TZID=Europe/Berlin:20260612T180000
+            DTEND;TZID=Europe/Berlin:20260612T190000
+            SUMMARY:Termin Neu
+            END:VEVENT
+            END:VCALENDAR
+            """;
+
+        v1.Length.Should().Be(v2.Length, "test data should have equal metadata-relevant size");
+
+        var mediaV1 = CreateMedia(mediaId, "events.ics", lastModified, v1, storage);
+        var service = new CalendarService(storage, cache, NullLogger<CalendarService>.Instance,
+            new FixedClock(Instant.FromUtc(2026, 6, 1, 12, 0)));
+
+        var first = await service.LoadEventsAsync([mediaV1], new DateTime(2026, 6, 1, 0, 0, 0), new DateTime(2026, 7, 1, 0, 0, 0));
+        var mediaV2 = CreateMedia(mediaId, "events.ics", lastModified, v2, storage);
+        var afterUpdate = await service.LoadEventsAsync([mediaV2], new DateTime(2026, 6, 1, 0, 0, 0), new DateTime(2026, 7, 1, 0, 0, 0));
+
+        first.Events[0].Title.Should().Be("Termin Alt");
+        afterUpdate.Events[0].Title.Should().Be("Termin Neu");
+        mediaV2.Size.Should().Be(mediaV1.Size);
+        mediaV2.LastModified.Should().Be(mediaV1.LastModified);
+        storage.ReadCount.Should().Be(2);
     }
 
     [Test]
